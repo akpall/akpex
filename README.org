@@ -1,0 +1,5 @@
+* Adding flatcar signing key
+#+begin_src
+$ make flatcar-signing-key
+$ gpg --import files/Flatcar_Image_Signing_Key.asc
+#+end_src

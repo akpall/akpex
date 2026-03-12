@@ -1,0 +1,46 @@
+---
+variant: flatcar
+version: 1.1.0
+
+passwd:
+  users:
+    - name: core
+      ssh_authorized_keys:
+        - ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIOpw3cIAdtWOYUkb6UOAIcLuRzItoo4oZMzr/hzZYq4E openpgp:0xFAAA0172
+
+storage:
+  files:
+    - path: /etc/systemd/network/00-eth0.network
+      contents:
+        inline: |
+          [Match]
+          Name=eth0
+
+          [Network]
+          Address=192.168.100.254/24
+          Gateway=192.168.100.1
+          DNS=1.1.1.1 1.0.0.1 2606:4700:4700::1111 2606:4700:4700::1001
+
+systemd:
+  units:
+    - name: matchbox.service
+      enabled: true
+      contents: |
+        [Unit]
+        Description=matchbox service
+        After=docker.service
+        Requires=docker.service
+        [Service]
+        ExecStartPre=-/usr/bin/docker rm --force matchbox
+        ExecStartPre=/usr/bin/mkdir -p /etc/matchbox
+        ExecStartPre=/usr/bin/mkdir -p /var/lib/matchbox/assets
+        ExecStart=/usr/bin/docker run \
+                  --rm \
+                  -v /var/lib/matchbox:/var/lib/matchbox:Z \
+                  -p 8080:8080 \
+                  quay.io/poseidon/matchbox \
+                  -address=0.0.0.0:8080 \
+                  -log-level=debug
+        ExecStop=/usr/bin/docker stop matchbox
+        [Install]
+        WantedBy=multi-user.target
