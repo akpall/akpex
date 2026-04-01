@@ -32,7 +32,7 @@ resource "libvirt_domain" "flatcar_node" {
     interfaces = [
       {
         boot = {
-          order = 2
+          order = 3
         }
         model = {
           type = "virtio"
@@ -50,7 +50,7 @@ resource "libvirt_domain" "flatcar_node" {
     disks = [
       {
         boot = {
-          order = 1
+          order = 2
         }
         source = {
           volume = {
@@ -61,6 +61,16 @@ resource "libvirt_domain" "flatcar_node" {
         target = {
           dev = "vda"
           bus = "virtio"
+        }
+      },
+      {
+      boot = {
+      order = 1
+      }
+        device = "cdrom"
+        target = {
+          dev = "sda"
+          bus = "sata"
         }
       }
     ]
