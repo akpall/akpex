@@ -1,3 +1,16 @@
+resource "libvirt_volume" "flatcar_disk" {
+  count = var.disk_capacity_bytes != null ? 1 : 0
+
+  name     = "${var.vm_name}-data.qcow2"
+  pool     = "default"
+  capacity = var.disk_capacity_bytes
+  target = {
+    format = {
+      type = "qcow2"
+    }
+  }
+}
+
 resource "libvirt_domain" "flatcar_node" {
   name        = var.vm_name
   memory      = var.memory_mib
@@ -33,14 +46,12 @@ resource "libvirt_domain" "flatcar_node" {
         }
       }
     ]
-
     consoles = [
       {
         type        = "pty"
         target_type = "virtio"
       }
     ]
-
     graphics = [
       {
         spice = {

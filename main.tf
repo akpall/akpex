@@ -20,7 +20,8 @@ module "flatcar-etcd" {
   source   = "./modules/flatcar-node"
   for_each = local.etcd-nodes
 
-  vm_name = each.key
+  disk_capacity_bytes = 20 * 1024 * 1024 * 1024
+  vm_name             = each.key
 }
 
 module "flatcar-nodes" {
