@@ -58,15 +58,18 @@ resource "libvirt_domain" "flatcar_node" {
             volume = resource.libvirt_volume.flatcar_disk.name
           }
         }
+        driver = {
+          type = "qcow2"
+        }
         target = {
           dev = "vda"
           bus = "virtio"
         }
       },
       {
-      boot = {
-      order = 1
-      }
+        boot = {
+          order = 1
+        }
         device = "cdrom"
         target = {
           dev = "sda"
