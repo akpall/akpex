@@ -1,6 +1,6 @@
 locals {
   etcd-nodes = { for i in range(1, 3) : "flatcar-node${i}" => "" }
-  nodes = { for i in range(3, 8) : "flatcar-node${i}" => "" }
+  nodes      = { for i in range(3, 8) : "flatcar-node${i}" => "" }
 }
 
 module "flatcar-network" {
