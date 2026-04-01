@@ -1,10 +1,10 @@
 terraform {
   required_providers {
     libvirt = {
-      source  = "dmacvicar/libvirt"
+      source = "dmacvicar/libvirt"
     }
     ct = {
-      source  = "poseidon/ct"
+      source = "poseidon/ct"
     }
   }
 }
