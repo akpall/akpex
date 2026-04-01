@@ -31,6 +31,9 @@ resource "libvirt_domain" "flatcar_node" {
   devices = {
     interfaces = [
       {
+        boot = {
+          order = 2
+        }
         model = {
           type = "virtio"
         }
@@ -46,6 +49,9 @@ resource "libvirt_domain" "flatcar_node" {
     ]
     disks = [
       {
+        boot = {
+          order = 1
+        }
         source = {
           volume = {
             pool   = resource.libvirt_volume.flatcar_disk.pool

@@ -20,6 +20,9 @@ resource "libvirt_domain" "flatcar_node" {
   devices = {
     interfaces = [
       {
+        boot = {
+          order = 1
+        }
         model = {
           type = "virtio"
         }
