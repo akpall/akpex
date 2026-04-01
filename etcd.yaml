@@ -25,6 +25,18 @@ storage:
     - path: /etc/sysupdate.d/noop.conf
       contents:
         source: https://extensions.flatcar.org/extensions/noop.conf
+    # /etc/systemd/network/00-eth0.network
+    - path: /etc/systemd/network/00-eth0.network
+      contents:
+        inline: |
+          [Match]
+          Name=eth0
+
+          [Network]
+          DNS=1.1.1.1
+          Address=192.168.100.2
+          Gateway=192.168.100.1
+
 systemd:
   units:
     - name: systemd-sysupdate.timer
