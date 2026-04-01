@@ -63,8 +63,7 @@ systemd:
         After=network-online.target
         ConditionPathExists=!/etc/kubernetes/kubelet.conf
         [Service]
-        ExecStartPre=/usr/bin/kubeadm init \
-                      --skip-phases=addon/kube-proxy
+        ExecStartPre=/usr/bin/kubeadm init
         ExecStartPre=/usr/bin/mkdir /home/core/.kube
         ExecStartPre=/usr/bin/cp /etc/kubernetes/admin.conf /home/core/.kube/config
         ExecStart=/usr/bin/chown -R core:core /home/core/.kube
