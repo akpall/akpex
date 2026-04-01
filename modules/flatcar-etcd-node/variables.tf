@@ -19,5 +19,5 @@ variable "vcpu" {
 variable "disk_capacity_bytes" {
   description = "System disk capacity in bytes (default 20 GiB)"
   type        = number
-  default     = null
+  default     = 20 * 1024 * 1024 * 1024
 }

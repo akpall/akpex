@@ -1,6 +1,4 @@
 resource "libvirt_volume" "flatcar_disk" {
-  count = var.disk_capacity_bytes != null ? 1 : 0
-
   name     = "${var.vm_name}-data.qcow2"
   pool     = "default"
   capacity = var.disk_capacity_bytes
@@ -43,6 +41,20 @@ resource "libvirt_domain" "flatcar_node" {
               order = 1
             }
           }
+        }
+      }
+    ]
+    disks = [
+      {
+        source = {
+          volume = {
+            pool   = resource.libvirt_volume.flatcar_disk.pool
+            volume = resource.libvirt_volume.flatcar_disk.name
+          }
+        }
+        target = {
+          dev = "vda"
+          bus = "virtio"
         }
       }
     ]
