@@ -36,11 +36,13 @@ systemd:
         ExecStart=/usr/bin/docker run \
                   --name matchbox \
                   --rm \
-                  -v /etc/matchbox:/etc/matchbox:Z \
+                  -v /etc/matchbox:/etc/matchbox:Z,ro \
                   -v /var/lib/matchbox:/var/lib/matchbox:Z \
                   -p 8080:8080 \
+                  -p 8081:8081 \
                   quay.io/poseidon/matchbox \
                   -address=0.0.0.0:8080 \
+                  -rpc-address=0.0.0.0:8081 \
                   -log-level=debug
         ExecStop=/usr/bin/docker stop matchbox
         [Install]
@@ -50,8 +52,8 @@ systemd:
       contents: |
         [Unit]
         Description=matchbox service
-        After=docker.service
-        Requires=docker.service
+        After=docker.service matchbox.service
+        Requires=docker.service matchbox.service
         [Service]
         ExecStart=/usr/bin/docker run \
                   --name dnsmasq \
