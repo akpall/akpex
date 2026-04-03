@@ -33,3 +33,21 @@ variable "release" {
   type        = string
   default     = "4459.2.4"
 }
+
+variable "server-certificate" {
+  description = "Server certificate for matchbox"
+  type        = string
+  sensitive   = true
+}
+
+variable "server-private-key" {
+  description = "Server certificate private key for matchbox"
+  type        = string
+  sensitive   = true
+}
+
+variable "ca-certificate" {
+  description = "CA certificate for matchbox"
+  type        = string
+  sensitive   = true
+}

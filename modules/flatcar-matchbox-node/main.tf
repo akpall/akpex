@@ -1,6 +1,10 @@
 data "ct_config" "flatcar_matchbox" {
-  content = file("${path.module}/flatcar-matchbox.yaml")
-  strict  = true
+  content = templatefile("${path.module}/flatcar-matchbox.yaml", {
+    server-certificate = var.server-certificate
+    server-private-key = var.server-private-key
+    ca-certificate     = var.ca-certificate
+  })
+  strict = true
 }
 
 resource "libvirt_ignition" "flatcar_matchbox" {
