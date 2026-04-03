@@ -4,15 +4,19 @@ locals {
 }
 
 module "flatcar-network" {
-  source                     = "./modules/flatcar-network"
-  network_name               = "flatcar_network"
+  source                       = "./modules/flatcar-network"
+  network_name                 = "flatcar_network"
   network_ip_dhcp_ranges_start = "192.168.100.5"
-  network_ip_dhcp_ranges_end = "192.168.100.253"
+  network_ip_dhcp_ranges_end   = "192.168.100.253"
 }
 
 module "flatcar-matchbox-node" {
-  source   = "./modules/flatcar-matchbox-node"
+  source  = "./modules/flatcar-matchbox-node"
   vm_name = "flatcar-matchbox-node"
+
+  server-certificate = "${path.root}/scripts/tls/server.crt"
+  server-private-key = "${path.root}/scripts/tls/server.key"
+  ca-certificate     = "${path.root}/scripts/tls/ca.crt"
 }
 
 module "flatcar-etcd-nodes" {
