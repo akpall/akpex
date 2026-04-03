@@ -1,0 +1,17 @@
+/scripts/tls/ca.crt
+/scripts/tls/ca.key
+/scripts/tls/client.crt
+/scripts/tls/client.key
+/scripts/tls/index.txt
+/scripts/tls/index.txt.attr
+/scripts/tls/index.txt.attr.old
+/scripts/tls/index.txt.old
+/scripts/tls/newcerts/
+/scripts/tls/serial
+/scripts/tls/serial.old
+/scripts/tls/server.crt
+/scripts/tls/server.key
+/terraform.tfstate
+/terraform.tfstate.backup
+/.terraform.lock.hcl
+/.terraform/
