@@ -10,6 +10,11 @@ module "flatcar-network" {
   network_ip_dhcp_ranges_end = "192.168.100.253"
 }
 
+module "flatcar-matchbox-node" {
+  source   = "./modules/flatcar-matchbox-node"
+  vm_name = "flatcar-matchbox-node"
+}
+
 module "flatcar-etcd-nodes" {
   source   = "./modules/flatcar-etcd-node"
   for_each = local.flatcar-etcd-nodes
