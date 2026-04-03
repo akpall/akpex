@@ -22,6 +22,9 @@ resource "libvirt_domain" "flatcar_node" {
     type         = "hvm"
     type_arch    = "x86_64"
     type_machine = "q35"
+    bios = {
+      reboot_timeout = 0
+    }
   }
 
   features = {
