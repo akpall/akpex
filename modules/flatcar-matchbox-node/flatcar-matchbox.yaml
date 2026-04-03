@@ -48,7 +48,7 @@ systemd:
         Requires=docker.service
         [Service]
         ExecStartPre=/usr/bin/mkdir -p /etc/matchbox
-        ExecStartPre=/usr/bin/mkdir -p /var/lib/matchbox
+        ExecStartPre=/usr/bin/mkdir -p /var/lib/matchbox/assets
         ExecStart=/usr/bin/docker run \
                   --name matchbox \
                   --rm \
