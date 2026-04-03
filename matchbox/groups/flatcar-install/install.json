@@ -1,0 +1,6 @@
+{
+  "id": "stage-0",
+  "name": "Flatcar Linux install",
+  "profile": "flatcar-install",
+  "metadata": {}
+}
