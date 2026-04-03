@@ -31,10 +31,10 @@ systemd:
         After=docker.service
         Requires=docker.service
         [Service]
-        ExecStartPre=-/usr/bin/docker rm --force matchbox
         ExecStartPre=/usr/bin/mkdir -p /etc/matchbox
         ExecStartPre=/usr/bin/mkdir -p /var/lib/matchbox/assets
         ExecStart=/usr/bin/docker run \
+                  --name matchbox \
                   --rm \
                   -v /var/lib/matchbox:/var/lib/matchbox:Z \
                   -p 8080:8080 \
@@ -42,5 +42,34 @@ systemd:
                   -address=0.0.0.0:8080 \
                   -log-level=debug
         ExecStop=/usr/bin/docker stop matchbox
+        [Install]
+        WantedBy=multi-user.target
+    - name: dnsmasq.service
+      enabled: true
+      contents: |
+        [Unit]
+        Description=matchbox service
+        After=docker.service
+        Requires=docker.service
+        [Service]
+        ExecStart=/usr/bin/docker run \
+                  --name dnsmasq \
+                  --rm \
+                  --cap-add=NET_ADMIN \
+                  --net=host \
+                  quay.io/poseidon/dnsmasq:v0.5.0-47-g28ff327 \
+                  -d \
+                  -q \
+                  --dhcp-range=192.168.100.254,proxy,255.255.255.0 \
+                  --enable-tftp --tftp-root=/var/lib/tftpboot \
+                  --dhcp-userclass=set:ipxe,iPXE \
+                  --pxe-service=tag:#ipxe,x86PC,"PXE chainload to iPXE",undionly.kpxe \
+                  --pxe-service=tag:ipxe,x86PC,"iPXE",http://192.168.100.254:8080/boot.ipxe \
+                  --pxe-service=tag:#ipxe,X86-64_EFI,"PXE chainload to iPXE UEFI",ipxe.efi \
+                  --pxe-service=tag:ipxe,X86-64_EFI,"iPXE UEFI",http:///192.168.100.254:8080/boot.ipxe \
+                  --log-queries \
+                  --log-dhcp \
+                  --port=0
+        ExecStop=/usr/bin/docker stop dnsmasq
         [Install]
         WantedBy=multi-user.target
