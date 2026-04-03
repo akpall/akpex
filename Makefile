@@ -5,7 +5,12 @@ TLS_FILES := $(TLS_SCRIPT_PATH)/ca.crt \
 
 export SAN := IP.1:192.168.100.254
 
-certificate: $(TLS_FILES)
+default:
+	$(MAKE) certificate
+.PHONY: default
 
-$(TLS_FILES) tls:
+certificate: $(TLS_FILES)
+.PHONY: certificate
+
+$(TLS_FILES):
 	cd scripts/tls && ./cert-gen
