@@ -33,15 +33,10 @@ systemd:
         [Service]
         ExecStartPre=/usr/bin/mkdir -p /etc/matchbox
         ExecStartPre=/usr/bin/mkdir -p /var/lib/matchbox
-        ExecStartPre=/usr/bin/curl \
-                     -L \
-                     -o /tmp/matchbox-configs.tar.gz \
-                     https://github.com/akpall/akpex/raw/refs/heads/master/matchbox/matchbox-configs.tar.gz
-        ExecStartPre=/usr/bin/tar -xzvf /tmp/matchbox-configs.tar.gz -C /var/lib/matchbox
-        ExecStartPre=/usr/bin/sh -c "cd /var/lib/matchbox && ./get-flatcar"
         ExecStart=/usr/bin/docker run \
                   --name matchbox \
                   --rm \
+                  -v /etc/matchbox:/etc/matchbox:Z \
                   -v /var/lib/matchbox:/var/lib/matchbox:Z \
                   -p 8080:8080 \
                   quay.io/poseidon/matchbox \
