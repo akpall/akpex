@@ -15,7 +15,8 @@ export SAN := IP.1:$(MATCHBOX_HOST)
 default:
 	$(MAKE) certificate
 	$(MAKE) libvirt
-	$(MAKE) matchbox-assets
+	$(MAKE) matchbox-assets-download
+	$(MAKE) matchbox-assets-upload
 	$(MAKE) matchbox
 .PHONY: default
 
@@ -30,7 +31,7 @@ matchbox-assets-download: flatcar-version
 	echo "$(FLATCAR_VERSION)" > flatcar-version.txt
 .PHONY: matchbox-assets-download
 
-matchbox-assets:
+matchbox-assets-upload:
 	until \
 	  rsync -rvz \
 	  --rsync-path="sudo rsync" \
@@ -40,7 +41,7 @@ matchbox-assets:
 	do \
 	  sleep 1; \
 	done
-.PHONY: matchbox-assets
+.PHONY: matchbox-assets-upload
 
 libvirt:
 	tofu apply
