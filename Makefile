@@ -9,6 +9,9 @@ export SAN := IP.1:$(MATCHBOX_HOST)
 
 default:
 	$(MAKE) certificate
+	tofu apply
+	$(MAKE) matchbox-assets
+	cd matchbox && tofu apply
 .PHONY: default
 
 certificate: $(TLS_FILES)
