@@ -18,9 +18,13 @@ $(TLS_FILES):
 	cd scripts/tls && ./cert-gen
 
 matchbox-assets:
-	rsync -rvz \
+	until \
+	  rsync -rvz \
 	  --rsync-path="sudo rsync" \
 	  --delete \
 	  assets \
-	  core@$(MATCHBOX_HOST):/var/lib/matchbox/
+	  core@$(MATCHBOX_HOST):/var/lib/matchbox/; \
+	do \
+	  sleep 1; \
+	done
 .PHONY: matchbox-assets
