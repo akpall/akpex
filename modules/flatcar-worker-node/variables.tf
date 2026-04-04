@@ -15,3 +15,8 @@ variable "vcpu" {
   type        = number
   default     = 2
 }
+
+variable "mac_address" {
+  description = "MAC address of the network interface"
+  type        = string
+}

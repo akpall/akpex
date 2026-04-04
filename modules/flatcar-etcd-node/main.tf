@@ -48,6 +48,9 @@ resource "libvirt_domain" "flatcar_node" {
             }
           }
         }
+        mac = {
+          address = "${var.mac_address}"
+        }
       }
     ]
     disks = [

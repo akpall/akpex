@@ -21,3 +21,8 @@ variable "disk_capacity_bytes" {
   type        = number
   default     = 20 * 1024 * 1024 * 1024
 }
+
+variable "mac_address" {
+  description = "MAC address of the network interface"
+  type        = string
+}
