@@ -24,6 +24,7 @@ storage:
           curl --retry 10 "${matchbox_http_endpoint}/ignition?os=installed" -o ignition.json
           flatcar-install \
             -d /dev/vda \
+            -b ${matchbox_http_endpoint}/assets/flatcar \
             -i ignition.json
           udevadm settle
           systemctl reboot

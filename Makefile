@@ -3,8 +3,6 @@ MATCHBOX_HOST ?= 192.168.100.254
 FLATCAR_CHANNEL ?= stable
 FLATCAR_VERSION ?= current
 
-FLATCAR_BASE_URL = https://$(FLATCAR_CHANNEL).release.flatcar-linux.net/amd64-usr/$(FLATCAR_VERSION)
-
 TLS_SCRIPT_PATH := scripts/tls
 TLS_FILES := $(TLS_SCRIPT_PATH)/ca.crt \
 	     $(TLS_SCRIPT_PATH)/server.crt \
@@ -28,7 +26,6 @@ $(TLS_FILES):
 
 matchbox-assets-download: flatcar-version
 	./get-flatcar $(FLATCAR_CHANNEL) $(FLATCAR_VERSION)
-	echo "$(FLATCAR_VERSION)" > flatcar-version.txt
 .PHONY: matchbox-assets-download
 
 matchbox-assets-upload:
@@ -54,12 +51,3 @@ clean:
 matchbox:
 	$(MAKE) -C matchbox
 .PHONY: matchbox
-
-flatcar-version:
-ifeq ($(FLATCAR_VERSION),current)
-	$(eval FLATCAR_VERSION := $(shell \
-	  curl -L -s "$(FLATCAR_BASE_URL)/version.txt" | \
-	    awk -F'=' '/FLATCAR_VERSION=/{print $$2}'))
-	$(if $(FLATCAR_VERSION),,$(error "No flatcar version found"))
-endif
-.PHONY: flatcar-version
