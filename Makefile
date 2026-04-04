@@ -45,6 +45,7 @@ libvirt:
 .PHONY: libvirt
 
 clean:
+	$(MAKE) -C matchbox clean
 	tofu destroy
 .PHONY: clean
 

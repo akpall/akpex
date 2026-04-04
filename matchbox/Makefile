@@ -10,3 +10,6 @@ certificate: $(TLS_FILES)
 
 $(TLS_FILES):
 	cd tls && ./cert-gen
+
+clean:
+	tofu destroy
