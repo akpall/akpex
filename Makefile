@@ -31,3 +31,7 @@ matchbox-assets:
 	  sleep 1; \
 	done
 .PHONY: matchbox-assets
+
+clean:
+	tofu destroy
+.PHONY: clean
