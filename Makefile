@@ -24,7 +24,7 @@ certificate: $(TLS_FILES)
 $(TLS_FILES):
 	cd scripts/tls && ./cert-gen
 
-matchbox-assets-download: flatcar-version
+matchbox-assets-download:
 	./get-flatcar $(FLATCAR_CHANNEL) $(FLATCAR_VERSION)
 .PHONY: matchbox-assets-download
 
