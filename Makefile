@@ -25,6 +25,11 @@ certificate: $(TLS_FILES)
 $(TLS_FILES):
 	cd scripts/tls && ./cert-gen
 
+matchbox-assets-download: flatcar-version
+	./get-flatcar $(FLATCAR_CHANNEL) $(FLATCAR_VERSION)
+	echo "$(FLATCAR_VERSION)" > flatcar-version.txt
+.PHONY: matchbox-assets-download
+
 matchbox-assets:
 	until \
 	  rsync -rvz \
