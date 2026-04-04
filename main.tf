@@ -1,6 +1,6 @@
 locals {
-  flatcar-etcd-nodes   = { for i in range(0, 3) : "flatcar-node${i}" => "" }
-  flatcar-worker-nodes = { for i in range(3, 8) : "flatcar-node${i}" => "" }
+  flatcar-etcd-nodes   = { for i in range(0, 3) : "${i}" => "flatcar-node${i}" }
+  flatcar-worker-nodes = { for i in range(3, 8) : "${i}" => "flatcar-node${i}" }
 }
 
 module "flatcar-network" {
@@ -22,11 +22,16 @@ module "flatcar-matchbox-node" {
 module "flatcar-etcd-nodes" {
   source   = "./modules/flatcar-etcd-node"
   for_each = local.flatcar-etcd-nodes
-  vm_name  = each.key
+  vm_name  = each.value
+
+  mac_address = format("52:54:00:00:00:%02x", each.key)
+
 }
 
 module "flatcar-worker-nodes" {
   source   = "./modules/flatcar-worker-node"
   for_each = local.flatcar-worker-nodes
-  vm_name  = each.key
+  vm_name  = each.value
+
+  mac_address = format("52:54:00:00:00:%02x", each.key)
 }
