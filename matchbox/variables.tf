@@ -25,6 +25,24 @@ variable "flatcar_version" {
   default     = "current"
 }
 
+variable "kubernetes_version" {
+  type        = string
+  description = "Kubernetes version"
+  default     = "1.35.3"
+}
+
+variable "kubernetes_config" {
+  type        = string
+  description = "Kubernetes config version"
+  default     = "1.35"
+}
+
+variable "cilium_version" {
+  type        = string
+  description = "Cilium version"
+  default     = "0.19.2"
+}
+
 locals {
   flatcar_kernel = "/assets/flatcar/${var.flatcar_version}/flatcar_production_pxe.vmlinuz"
   flatcar_initrd = "/assets/flatcar/${var.flatcar_version}/flatcar_production_pxe_image.cpio.gz"

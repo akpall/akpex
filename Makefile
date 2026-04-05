@@ -1,6 +1,11 @@
 export FLATCAR_CHANNEL ?= stable
 export FLATCAR_VERSION ?= current
 
+export KUBERNETES_VERSION ?= 1.35.3
+export KUBERNETES_CONFIG ?= 1.35
+
+export CILIUM_VERSION ?= 0.19.2
+
 ifeq ($(FLATCAR_VERSION),current)
 FLATCAR_VERSION := $(shell curl -L -s https://stable.release.flatcar-linux.net/amd64-usr/current/version.txt \
 			   | awk -F'=' '/FLATCAR_VERSION=/{print $$2}')
