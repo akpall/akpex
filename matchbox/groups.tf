@@ -6,8 +6,8 @@ resource "matchbox_group" "flatcar-worker" {
 resource "matchbox_group" "flatcar-etcd-install-stage-0" {
   for_each = local.flatcar_etcd_nodes
 
-  name    = "${each.key}-install"
-  profile = matchbox_profile.flatcar-etcd-install.name
+  name    = "${each.key}-install-stage-0"
+  profile = matchbox_profile.flatcar-etcd-install-stage-0.name
 
   selector = {
     "mac" : each.value.mac
@@ -17,11 +17,14 @@ resource "matchbox_group" "flatcar-etcd-install-stage-0" {
 resource "matchbox_group" "flatcar-etcd-install-stage-1" {
   for_each = local.flatcar_etcd_nodes
 
-  name    = each.key
-  profile = matchbox_profile.flatcar-worker.name
+  name    = "${each.key}-install-stage-1"
+  profile = matchbox_profile.flatcar-etcd-install-stage-1.name
 
   selector = {
-    mac : each.value.mac
     etcd-install = true
+  }
+
+  metadata = {
+    hostname = each.key
   }
 }
