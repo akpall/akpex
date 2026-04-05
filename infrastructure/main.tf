@@ -1,6 +1,6 @@
 locals {
-  flatcar-etcd-nodes   = { for i in range(0, 3) : "${i}" => "flatcar-node${i}" }
-  flatcar-worker-nodes = { for i in range(3, 8) : "${i}" => "flatcar-node${i}" }
+  flatcar-etcd-nodes   = { for i in range(0, 3) : i => "flatcar-node${i}" }
+  flatcar-worker-nodes = { for i in range(3, 8) : i => "flatcar-node${i}" }
 }
 
 module "flatcar-network" {
