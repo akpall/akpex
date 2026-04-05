@@ -47,3 +47,7 @@ matchbox-assets-download:
 infrastructure:
 	$(MAKE) -C infrastructure
 .PHONY: infrastructure
+
+matchbox-assets-upload:
+	$(MAKE) -C matchbox assets-upload
+.PHONY: matchbox-assets-upload
