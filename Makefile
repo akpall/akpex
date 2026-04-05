@@ -1,5 +1,3 @@
-MATCHBOX_HOST ?= 192.168.100.254
-
 FLATCAR_CHANNEL ?= stable
 FLATCAR_VERSION ?= current
 
@@ -8,18 +6,20 @@ TLS_FILES := $(TLS_SCRIPT_PATH)/ca.crt \
 	     $(TLS_SCRIPT_PATH)/server.crt \
 	     $(TLS_SCRIPT_PATH)/server.key
 
+export MATCHBOX_HOST ?= 192.168.100.254
+
 export SAN := IP.1:$(MATCHBOX_HOST)
 
 default:
-	$(MAKE) certificate
-	$(MAKE) libvirt
 	$(MAKE) matchbox-assets-download
 	$(MAKE) matchbox-assets-upload
 	$(MAKE) matchbox
+	$(MAKE) certificates
+	$(MAKE) -C infrastructure
 .PHONY: default
 
-certificate: $(TLS_FILES)
-.PHONY: certificate
+certificates: $(TLS_FILES)
+.PHONY: certificates
 
 $(TLS_FILES):
 	cd scripts/tls && ./cert-gen
@@ -46,7 +46,7 @@ libvirt:
 
 clean:
 	$(MAKE) -C matchbox clean
-	tofu destroy
+	$(MAKE) -C infrastructure clean
 .PHONY: clean
 
 matchbox:

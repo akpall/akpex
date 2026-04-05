@@ -20,3 +20,8 @@
 /matchbox/.terraform/
 /matchbox/terraform.tfstate
 /matchbox/terraform.tfstate.backup
+/matchbox/assets/flatcar/
+/infrastructure/.terraform.lock.hcl
+/infrastructure/.terraform/
+/infrastructure/terraform.tfstate
+/infrastructure/terraform.tfstate.backup
