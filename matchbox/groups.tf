@@ -3,7 +3,7 @@ resource "matchbox_group" "flatcar-worker" {
   profile = matchbox_profile.flatcar-worker.name
 }
 
-resource "matchbox_group" "flatcar-etcd-install" {
+resource "matchbox_group" "flatcar-etcd-install-stage-0" {
   for_each = local.flatcar_etcd_nodes
 
   name    = "${each.key}-install"
@@ -14,7 +14,7 @@ resource "matchbox_group" "flatcar-etcd-install" {
   }
 }
 
-resource "matchbox_group" "flatcar-etcd-stage-1" {
+resource "matchbox_group" "flatcar-etcd-install-stage-1" {
   for_each = local.flatcar_etcd_nodes
 
   name    = each.key
