@@ -14,14 +14,14 @@ resource "matchbox_group" "flatcar-etcd-install" {
   }
 }
 
-resource "matchbox_group" "flatcar-etcd" {
+resource "matchbox_group" "flatcar-etcd-stage-1" {
   for_each = local.flatcar_etcd_nodes
 
   name    = each.key
   profile = matchbox_profile.flatcar-worker.name
 
   selector = {
-    "mac" : each.value.mac
-    "etcd-install" = true
+    mac : each.value.mac
+    etcd-install = true
   }
 }

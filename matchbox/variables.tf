@@ -19,18 +19,6 @@ variable "flatcar_version" {
   default     = "current"
 }
 
-variable "flatcar_kernel" {
-  type        = string
-  description = "Flatcar Container Linux kernel"
-  default     = ""
-}
-
-variable "flatcar_initrd" {
-  type        = string
-  description = "Flatcar Container Linux initrd"
-  default     = ""
-}
-
 locals {
   flatcar_kernel = "/assets/flatcar/${var.flatcar_version}/flatcar_production_pxe.vmlinuz"
   flatcar_initrd = "/assets/flatcar/${var.flatcar_version}/flatcar_production_pxe_image.cpio.gz"

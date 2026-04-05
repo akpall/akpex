@@ -41,7 +41,7 @@ resource "matchbox_profile" "flatcar-etcd-install" {
 
 data "ct_config" "flatcar-etcd-install" {
   content = templatefile("butane/flatcar-etcd-install.yaml", {
-    ssh_authorized_key = var.ssh_authorized_key
+    ssh_authorized_key     = var.ssh_authorized_key
     matchbox_http_endpoint = var.matchbox_http_endpoint
   })
   strict = true
