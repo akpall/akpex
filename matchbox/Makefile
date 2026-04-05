@@ -1,3 +1,6 @@
+FLATCAR_CHANNEL ?=
+FLATCAR_VERSION ?=
+
 default:
 	$(MAKE) assets-upload
 	tofu apply
