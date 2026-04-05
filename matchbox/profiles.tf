@@ -15,7 +15,7 @@ resource "matchbox_profile" "flatcar-worker" {
 }
 
 data "ct_config" "flatcar-worker" {
-  content = templatefile("butane/flatcar.yaml", {
+  content = templatefile("butane/flatcar-worker.yaml", {
     ssh_authorized_key = var.ssh_authorized_key
   })
   strict = true
