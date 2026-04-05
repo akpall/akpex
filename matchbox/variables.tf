@@ -34,4 +34,16 @@ variable "flatcar_initrd" {
 locals {
   flatcar_kernel = "/assets/flatcar/${var.flatcar_version}/flatcar_production_pxe.vmlinuz"
   flatcar_initrd = "/assets/flatcar/${var.flatcar_version}/flatcar_production_pxe_image.cpio.gz"
+
+  flatcar_etcd_nodes = {
+    "flatcar-node0" = {
+      mac = "52:54:00:00:00:00"
+    }
+    "flatcar-node1" = {
+      mac = "52:54:00:00:00:01"
+    }
+    "flatcar-node2" = {
+      mac = "52:54:00:00:00:02"
+    }
+  }
 }
