@@ -21,8 +21,8 @@ export SAN := IP.1:$(MATCHBOX_HOST)
 
 default:
 	$(MAKE) certificates
-	$(MAKE) -C infrastructure
-	$(MAKE) -C matchbox
+	$(MAKE) infrastructure
+	$(MAKE) matchbox
 .PHONY: default
 
 certificates: $(TLS_FILES)
@@ -42,3 +42,8 @@ matchbox:
 
 matchbox-assets-download:
 	$(MAKE) -C matchbox assets-download
+.PHONY: matchbox-assets-download
+
+infrastructure:
+	$(MAKE) -C infrastructure
+.PHONY: infrastructure
