@@ -1,9 +1,10 @@
-// Create a flatcar-install profile
-resource "matchbox_profile" "flatcar-install" {
-  name   = "flatcar-install"
-  kernel = "${local.flatcar_kernel}"
+resource "matchbox_profile" "flatcar-worker" {
+  name         = "flatcar-worker"
+  raw_ignition = data.ct_config.flatcar-worker.rendered
+
+  kernel = local.flatcar_kernel
   initrd = [
-    "${local.flatcar_initrd}",
+    local.flatcar_initrd,
   ]
 
   args = [
@@ -11,26 +12,9 @@ resource "matchbox_profile" "flatcar-install" {
     "flatcar.config.url=${var.matchbox_http_endpoint}/ignition?uuid=$${uuid}&mac=$${mac:hexhyp}",
     "flatcar.first_boot=yes",
   ]
-
-  raw_ignition = data.ct_config.install.rendered
 }
 
-data "ct_config" "install" {
-  content = templatefile("butane/flatcar-install.yaml", {
-    matchbox_http_endpoint = var.matchbox_http_endpoint
-    ssh_authorized_key     = var.ssh_authorized_key
-  })
-  strict = true
-}
-
-
-// Profile to set an SSH authorized key on first boot from disk
-resource "matchbox_profile" "worker" {
-  name         = "worker"
-  raw_ignition = data.ct_config.worker.rendered
-}
-
-data "ct_config" "worker" {
+data "ct_config" "flatcar-worker" {
   content = templatefile("butane/flatcar.yaml", {
     ssh_authorized_key = var.ssh_authorized_key
   })
