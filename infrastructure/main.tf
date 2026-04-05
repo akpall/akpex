@@ -25,7 +25,6 @@ module "flatcar-etcd-nodes" {
   vm_name  = each.value
 
   mac_address = format("52:54:00:00:00:%02x", each.key)
-
 }
 
 module "flatcar-worker-nodes" {
