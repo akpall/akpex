@@ -1,5 +1,5 @@
-FLATCAR_CHANNEL ?= stable
-FLATCAR_VERSION ?= current
+export FLATCAR_CHANNEL ?= stable
+export FLATCAR_VERSION ?= current
 
 ifeq ($(FLATCAR_VERSION),current)
 FLATCAR_VERSION := $(shell curl -L -s https://stable.release.flatcar-linux.net/amd64-usr/current/version.txt \
