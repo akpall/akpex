@@ -22,6 +22,7 @@ export SAN := IP.1:$(MATCHBOX_HOST)
 default:
 	$(MAKE) certificates
 	$(MAKE) infrastructure
+	$(MAKE) matchbox-assets-upload
 	$(MAKE) matchbox
 .PHONY: default
 
