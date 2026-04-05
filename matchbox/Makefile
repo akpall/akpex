@@ -1,15 +1,23 @@
-TLS_FILES := tls/ca.crt tls/server.crt tls/server.key
-
-export SAN := IP.1:192.168.100.254
-
 default:
+	$(MAKE) assets-upload
 	tofu apply
 .PHONY: default
 
-certificate: $(TLS_FILES)
-
-$(TLS_FILES):
-	cd tls && ./cert-gen
-
 clean:
 	tofu destroy
+
+assets-download:
+	./get-flatcar $(FLATCAR_CHANNEL) $(FLATCAR_VERSION)
+.PHONY: matchbox-assets-download
+
+assets-upload:
+	until \
+	  rsync -rvz \
+	  --rsync-path="sudo rsync" \
+	  --delete \
+	  assets \
+	  core@$(MATCHBOX_HOST):/var/lib/matchbox/; \
+	do \
+	  sleep 1; \
+	done
+.PHONY: matchbox-assets-upload
