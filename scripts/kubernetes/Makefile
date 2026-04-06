@@ -1,18 +1,30 @@
 SHELL := /bin/bash
 
-MASTER_IP ?= 192.168.100.2
-MASTER_CLUSTER_IP ?= 192.168.100.253
+MASTER_IP ?= 192.168.100.253
+MASTER_CLUSTER_IP ?= 10.96.0.1
 
-test:
-	# Generate the token
-	TOKEN=$(echo "$(tr -dc 'a-z0-9' < /dev/urandom | head -c 6).$(tr -dc 'a-z0-9' < /dev/urandom | head -c 16)"); \
-	# Generate Kubernetes CA (used for cluster signing)
-	openssl req -x509 -newkey rsa:2048 -keyout "ca.key" -out "ca.crt" -days 365 -nodes -subj "/CN=kubernetes"; \
-	# Generate Front Proxy CA (used for API server aggregation)
-	openssl req -x509 -newkey rsa:2048 -keyout "front-proxy-ca.key" -out "front-proxy-ca.crt" -days 365 -nodes -subj "/CN=front-proxy-ca"; \
-	# Generate Service Account Signing Key
-	openssl genrsa -out "sa.key" 2048; \
-	openssl rsa -in "sa.key" -pubout -out "sa.pub"; \
-	# Generate API server certificate (signed by Kubernetes CA)
-	openssl req -new -newkey rsa:2048 -keyout "apiserver.key" -out "apiserver.csr" -nodes -subj "/CN=kube-apiserver"; \
-	openssl x509 -req -in "apiserver.csr" -CA "ca.crt" -CAkey "ca.key" -CAcreateserial -out "apiserver.crt" -days 365
+ca.key:
+	openssl genrsa -out ca.key 2048
+
+ca.crt: ca.key
+	openssl req -x509 -new -noenc -key ca.key -subj "/CN=$(MASTER_IP)" -days 10000 -out ca.crt
+
+server.key: ca.crt
+	openssl genrsa -out server.key 2048
+
+csr.conf: csr.conf.template
+	sed \
+	  -e 's/<MASTER_IP>/$(MASTER_IP)/g' \
+	  -e 's/<MASTER_CLUSTER_IP>/$(MASTER_CLUSTER_IP)/g' \
+	  csr.conf.template > csr.conf
+
+server.csr: server.key csr.conf
+	openssl req -new -key server.key -out server.csr -config csr.conf
+
+server.crt: server.csr ca.crt ca.key csr.conf
+	openssl x509 -req -in server.csr -CA ca.crt -CAkey ca.key \
+	  -CAcreateserial -out server.crt -days 10000 \
+	  -extensions v3_ext -extfile csr.conf -sha256
+
+ca_hash: ca.crt
+	openssl x509 -pubkey -in ca.crt | openssl rsa -pubin -outform der 2>/dev/null | openssl dgst -sha256 -hex | awk '{print "sha256:"$$2}' > ca_hash
