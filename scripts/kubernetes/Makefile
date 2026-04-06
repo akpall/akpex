@@ -3,6 +3,11 @@ SHELL := /bin/bash
 MASTER_IP ?= 192.168.100.253
 MASTER_CLUSTER_IP ?= 10.96.0.1
 
+default:
+	$(MAKE) server.crt
+	$(MAKE) ca_hash
+.PHONY: default
+
 ca.key:
 	openssl genrsa -out ca.key 2048
 
