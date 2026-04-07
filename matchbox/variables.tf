@@ -43,6 +43,24 @@ variable "cilium_version" {
   default     = "0.19.2"
 }
 
+variable "kube_vip_version" {
+  type        = string
+  description = "Kube-vip version"
+  default     = "1.1.2"
+}
+
+variable "kube_vip_interface" {
+  type        = string
+  description = "Kube-vip interface"
+  default     = "eth0"
+}
+
+variable "ha_ip" {
+  type        = string
+  description = "Kubernetes HA IP"
+  default     = "192.168.100.253"
+}
+
 locals {
   flatcar_kernel = "/assets/flatcar/${var.flatcar_version}/flatcar_production_pxe.vmlinuz"
   flatcar_initrd = "/assets/flatcar/${var.flatcar_version}/flatcar_production_pxe_image.cpio.gz"

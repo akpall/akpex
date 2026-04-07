@@ -1,7 +1,4 @@
-SHELL := /bin/bash
-
-MASTER_IP ?= 192.168.100.253
-MASTER_CLUSTER_IP ?= 10.96.0.1
+HA_IP ?=
 
 default:
 	$(MAKE) server.crt

@@ -6,6 +6,13 @@ export KUBERNETES_CONFIG ?= 1.35
 
 export CILIUM_VERSION ?= 0.19.2
 
+export KUBE_VIP_VERSION ?= 1.1.2
+export KUBE_VIP_INTERFACE ?= eth0
+
+export HA_IP ?= 192.168.100.253
+export MATCHBOX_HOST ?= 192.168.100.254
+export SAN := IP.1:$(MATCHBOX_HOST)
+
 ifeq ($(FLATCAR_VERSION),current)
 FLATCAR_VERSION := $(shell curl -L -s https://stable.release.flatcar-linux.net/amd64-usr/current/version.txt \
 			   | awk -F'=' '/FLATCAR_VERSION=/{print $$2}')
@@ -19,10 +26,6 @@ TLS_SCRIPT_PATH := scripts/tls
 TLS_FILES := $(TLS_SCRIPT_PATH)/ca.crt \
 	     $(TLS_SCRIPT_PATH)/server.crt \
 	     $(TLS_SCRIPT_PATH)/server.key
-
-export MATCHBOX_HOST ?= 192.168.100.254
-
-export SAN := IP.1:$(MATCHBOX_HOST)
 
 default:
 	$(MAKE) certificates

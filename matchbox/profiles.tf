@@ -72,6 +72,9 @@ data "ct_config" "flatcar-etcd-install-stage-1" {
     KUBERNETES_VERSION     = var.kubernetes_version
     KUBERNETES_CONFIG      = var.kubernetes_config
     CILIUM_VERSION         = var.cilium_version
+    KUBE_VIP_VERSION       = var.kube_vip_version
+    KUBE_VIP_INTERFACE     = var.kube_vip_interface
+    HA_IP                  = var.ha_ip
   })
   strict = true
 }
