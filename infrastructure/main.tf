@@ -7,7 +7,7 @@ module "flatcar-network" {
   source                       = "./modules/flatcar-network"
   network_name                 = "flatcar_network"
   network_ip_dhcp_ranges_start = "192.168.100.5"
-  network_ip_dhcp_ranges_end   = "192.168.100.253"
+  network_ip_dhcp_ranges_end   = "192.168.100.252"
 }
 
 module "flatcar-matchbox-node" {
