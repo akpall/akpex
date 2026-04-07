@@ -21,7 +21,7 @@ storage:
       contents:
         inline: |
           #!/bin/bash -ex
-          curl --retry 10 "${matchbox_http_endpoint}/ignition?etcd-install=true" -o ignition.json
+          curl --retry 10 "${matchbox_http_endpoint}/ignition?etcd_init=true" -o ignition.json
           flatcar-install \
             -d /dev/vda \
             -b ${matchbox_http_endpoint}/assets/flatcar \

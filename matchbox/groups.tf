@@ -23,7 +23,7 @@ resource "matchbox_group" "flatcar-etcd-init-stage-1" {
   profile = matchbox_profile.flatcar-etcd-init-stage-1.name
 
   selector = {
-    etcd-install = true
+    etcd_init = true
   }
 
   metadata = {
@@ -51,7 +51,7 @@ resource "matchbox_group" "flatcar-etcd-join-stage-1" {
   profile = matchbox_profile.flatcar-etcd-join-stage-1.name
 
   selector = {
-    etcd-install = true
+    etcd_join = true
   }
 
   metadata = {
