@@ -28,6 +28,7 @@ resource "matchbox_group" "flatcar-etcd-init-stage-1" {
 
   metadata = {
     hostname = each.key
+    etcd_type = "init"
   }
 }
 
@@ -55,5 +56,6 @@ resource "matchbox_group" "flatcar-etcd-join-stage-1" {
 
   metadata = {
     hostname = each.key
+    etcd_type = "join"
   }
 }
