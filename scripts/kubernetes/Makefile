@@ -17,19 +17,11 @@ ca.crt: ca.key
 server.key: ca.crt
 	openssl genrsa -out server.key 2048
 
-csr.conf: csr.conf.template
-	sed \
-	  -e 's/<MASTER_IP>/$(MASTER_IP)/g' \
-	  -e 's/<MASTER_CLUSTER_IP>/$(MASTER_CLUSTER_IP)/g' \
-	  csr.conf.template > csr.conf
-
-server.csr: server.key csr.conf
-	openssl req -new -key server.key -out server.csr -config csr.conf
-
-server.crt: server.csr ca.crt ca.key csr.conf
-	openssl x509 -req -in server.csr -CA ca.crt -CAkey ca.key \
-	  -CAcreateserial -out server.crt -days 10000 \
-	  -extensions v3_ext -extfile csr.conf -sha256
-
 ca_hash: ca.crt
 	openssl x509 -pubkey -in ca.crt | openssl rsa -pubin -outform der 2>/dev/null | openssl dgst -sha256 -hex | awk '{print "sha256:"$$2}' > ca_hash
+
+# init
+#core@localhost ~ $ sudo kubeadm init --token abcdef.0123456789abcdef --upload-certs --control-plane-endpoint 192.168.100.253 --certificate-key 3206e0f0238e2f62eb2eb1d356b34f5210ed5a48a01d685684059267d734e1d0
+
+# join
+#core@localhost ~ $ sudo kubeadm join 192.168.100.253:6443 --token abcdef.0123456789abcdef --discovery-token-ca-cert-hash sha256:29c1feb22fa28ea54433b2a04eee6be705530a88a3c953efabda69cdc620c947 --control-plane --certificate-key 3206e0f0238e2f62eb2eb1d356b34f5210ed5a48a01d685684059267d734e1d0
