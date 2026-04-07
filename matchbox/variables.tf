@@ -65,10 +65,13 @@ locals {
   flatcar_kernel = "/assets/flatcar/${var.flatcar_version}/flatcar_production_pxe.vmlinuz"
   flatcar_initrd = "/assets/flatcar/${var.flatcar_version}/flatcar_production_pxe_image.cpio.gz"
 
-  flatcar_etcd_nodes = {
+  flatcar_etcd_init_node = {
     "flatcar-node0" = {
       mac = "52:54:00:00:00:00"
     }
+  }
+
+  flatcar_etcd_join_nodes = {
     "flatcar-node1" = {
       mac = "52:54:00:00:00:01"
     }
