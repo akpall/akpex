@@ -93,24 +93,6 @@ systemd:
                     --services \
                     --arp \
                     --leaderElection \
-                    --k8sConfigPath=/etc/kubernetes/super-admin.conf \
                     > /etc/kubernetes/manifests/kube-vip.yaml'
-        [Install]
-        WantedBy=multi-user.target
-    - name: kubeadm.service
-      enabled: true
-      contents: |
-        [Unit]
-        Description=Kubeadm service
-        Requires=containerd.service
-        After=containerd.service
-        After=network-online.target
-        ConditionPathExists=!/etc/kubernetes/kubelet.conf
-        [Service]
-        ExecStartPre=/usr/bin/kubeadm init \
-                      --skip-phases=addon/kube-proxy
-        ExecStartPre=/usr/bin/mkdir /home/core/.kube
-        ExecStartPre=/usr/bin/cp /etc/kubernetes/admin.conf /home/core/.kube/config
-        ExecStart=/usr/bin/chown -R core:core /home/core/.kube
         [Install]
         WantedBy=multi-user.target
