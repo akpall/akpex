@@ -72,6 +72,31 @@ systemd:
             ExecStartPre=/usr/lib/systemd/systemd-sysupdate -C cilium update
             ExecStartPost=/usr/bin/sh -c "readlink --canonicalize /etc/extensions/cilium.raw > /tmp/cilium-new"
             ExecStartPost=/usr/bin/sh -c "if ! cmp --silent /tmp/cilium /tmp/cilium-new; then touch /run/reboot-required; fi"
+    - name: kube-vip.service
+      enabled: true
+      contents: |
+        [Unit]
+        Description=kube-vip control plane VIP
+        After=network-online.target docker.service
+        Requires=network-online.target docker.service
+        Before=kubelet.service
+        [Service]
+        ExecStart=sh -c '\
+                    /usr/bin/docker run \
+                    --network host \
+                    --rm \
+                    ghcr.io/kube-vip/kube-vip:v${KUBE_VIP_VERSION} \
+                    manifest pod \
+                    --interface ${KUBE_VIP_INTERFACE} \
+                    --address ${HA_IP} \
+                    --controlplane \
+                    --services \
+                    --arp \
+                    --leaderElection \
+                    --k8sConfigPath=/etc/kubernetes/super-admin.conf \
+                    > /etc/kubernetes/manifests/kube-vip.yaml'
+        [Install]
+        WantedBy=multi-user.target
     - name: kubeadm.service
       enabled: true
       contents: |
