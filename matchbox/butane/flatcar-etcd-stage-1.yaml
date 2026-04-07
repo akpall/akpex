@@ -9,6 +9,20 @@ passwd:
         - ${ssh_authorized_key}
 
 storage:
+  directories:
+    - path: /etc/kubernetes
+      mode: 0755
+      user:
+        name: root
+      group:
+        name: root
+    - path: /etc/kubernetes/manifests
+      mode: 0700
+      user:
+        name: root
+      group:
+        name: root
+
   files:
     # noop
     - path: /etc/sysupdate.d/noop.conf

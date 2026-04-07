@@ -1,7 +1,7 @@
 HA_IP ?=
 
 default:
-	$(MAKE) server.crt
+	$(MAKE) ca.crt
 	$(MAKE) ca_hash
 .PHONY: default
 
@@ -9,10 +9,7 @@ ca.key:
 	openssl genrsa -out ca.key 2048
 
 ca.crt: ca.key
-	openssl req -x509 -new -noenc -key ca.key -subj "/CN=$(MASTER_IP)" -days 10000 -out ca.crt
-
-server.key: ca.crt
-	openssl genrsa -out server.key 2048
+	openssl req -x509 -new -noenc -key ca.key -subj "/CN=$(HA_IP)" -days 10000 -out ca.crt
 
 ca_hash: ca.crt
 	openssl x509 -pubkey -in ca.crt | openssl rsa -pubin -outform der 2>/dev/null | openssl dgst -sha256 -hex | awk '{print "sha256:"$$2}' > ca_hash

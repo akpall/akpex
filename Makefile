@@ -29,6 +29,7 @@ TLS_FILES := $(TLS_SCRIPT_PATH)/ca.crt \
 
 default:
 	$(MAKE) certificates
+	$(MAKE) kubernetes
 	$(MAKE) infrastructure
 	$(MAKE) matchbox-assets-upload
 	$(MAKE) matchbox
@@ -60,3 +61,7 @@ infrastructure:
 matchbox-assets-upload:
 	$(MAKE) -C matchbox assets-upload
 .PHONY: matchbox-assets-upload
+
+kubernetes:
+	$(MAKE) -C scripts/kubernetes
+.PHONY: kubernetes
