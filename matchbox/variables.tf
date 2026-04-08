@@ -67,7 +67,12 @@ locals {
 
   flatcar_etcd_init_node = {
     "flatcar-node0" = {
-      mac = "52:54:00:00:00:00"
+      mac       = "52:54:00:00:00:00"
+      interface = "eth0"
+      ip        = "192.168.100.2"
+      cidr      = 24
+      dns       = "192.168.100.1"
+      gateway   = "192.168.100.1"
     }
   }
 

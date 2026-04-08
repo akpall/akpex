@@ -28,6 +28,17 @@ storage:
     - path: /etc/hostname
       contents:
         inline: ${HOSTNAME}
+    # 00-eth0.network
+    - path: /etc/systemd/network/00-${INTERFACE}.network
+      contents:
+        inline: |
+          [Match]
+          Name=${INTERFACE}
+
+          [Network]
+          DNS=${DNS}
+          Address=${IP}/${CIDR}
+          Gateway=${GATEWAY}
     # noop
     - path: /etc/sysupdate.d/noop.conf
       contents:
