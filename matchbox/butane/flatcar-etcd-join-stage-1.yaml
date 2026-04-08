@@ -33,6 +33,11 @@ storage:
           DNS=${DNS}
           Address=${IP}/${CIDR}
           Gateway=${GATEWAY}
+    - path: /etc/sysctl.d/99-haproxy.conf
+      mode: 0644
+      contents:
+        inline: |
+          net.ipv4.ip_nonlocal_bind = 1
     # /etc/keepalived/check_apiserver.sh
     - path: /etc/keepalived/check_apiserver.sh
       mode: 0755
@@ -81,30 +86,23 @@ storage:
             daemon
 
           defaults
-            mode                    http
+            mode                    tcp
             log                     global
-            option                  httplog
+            option                  tcplog
             option                  dontlognull
-            option http-server-close
-            option forwardfor       except 127.0.0.0/8
             option                  redispatch
             retries                 1
-            timeout http-request    10s
             timeout queue           20s
             timeout connect         5s
             timeout client          35s
             timeout server          35s
-            timeout http-keep-alive 10s
             timeout check           10s
 
           frontend apiserver
             bind ${HA_IP}:6444
-            mode tcp
-            option tcplog
             default_backend apiserverbackend
 
           backend apiserverbackend
-            mode tcp
             balance     roundrobin
 
             ${indent(12, HAPROXY_CFG_BACKEND)}
@@ -196,5 +194,7 @@ systemd:
                   -v /etc/haproxy/haproxy.cfg:/usr/local/etc/haproxy/haproxy.cfg:ro \
                   haproxy:alpine
         ExecStop=/usr/bin/docker stop haproxy
+        Restart=on-failure
+        RestartSec=5s
         [Install]
         WantedBy=multi-user.target

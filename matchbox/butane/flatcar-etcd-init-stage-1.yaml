@@ -39,6 +39,11 @@ storage:
           DNS=${DNS}
           Address=${IP}/${CIDR}
           Gateway=${GATEWAY}
+    - path: /etc/sysctl.d/99-haproxy.conf
+      mode: 0644
+      contents:
+        inline: |
+          net.ipv4.ip_nonlocal_bind = 1
     - path: /etc/kubernetes/pki/ca.crt
       mode: 0644
       contents:
@@ -228,5 +233,22 @@ systemd:
                   -v /etc/haproxy/haproxy.cfg:/usr/local/etc/haproxy/haproxy.cfg:ro \
                   haproxy:alpine
         ExecStop=/usr/bin/docker stop haproxy
+        Restart=on-failure
+        RestartSec=5s
+        [Install]
+        WantedBy=multi-user.target
+    - name: cilium.service
+      enabled: true
+      contents: |
+        [Unit]
+        Description=Install cilium to running k8s cluster
+        Documentation=https://docs.cilium.io/en/stable
+        Wants=network-online.target kubeadm.service
+        Requires=network-online.target kubeadm.service
+        After=network-online.target kubeadm.service
+        [Service]
+        Environment=KUBECONFIG='/home/core/.kube/config'
+        ExecStart=/usr/local/bin/cilium install --set kubeProxyReplacement=true --namespace=kube-system
+        Restart=always
         [Install]
         WantedBy=multi-user.target
