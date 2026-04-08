@@ -74,7 +74,7 @@ data "ct_config" "flatcar-etcd-init-stage-1" {
     GATEWAY                = each.value.gateway
     KEEPALIVED_PRIORITY    = each.value.keepalived_priority
     KEEPALIVED_PASSWORD    = local.keepalived_password
-    HAPROXY_CFG_BACKEND = local.haproxy_cfg_backend
+    HAPROXY_CFG_BACKEND    = local.haproxy_cfg_backend
   })
   strict = true
 }
@@ -132,6 +132,7 @@ data "ct_config" "flatcar-etcd-join-stage-1" {
     GATEWAY                = each.value.gateway
     KEEPALIVED_PRIORITY    = each.value.keepalived_priority
     KEEPALIVED_PASSWORD    = local.keepalived_password
+    HAPROXY_CFG_BACKEND    = local.haproxy_cfg_backend
   })
   strict = true
 }

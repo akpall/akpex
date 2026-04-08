@@ -200,3 +200,22 @@ systemd:
         ExecStart=/usr/bin/chown -R core:core /home/core/.kube
         [Install]
         WantedBy=multi-user.target
+    - name: keepalived.service
+      enabled: true
+    - name: haproxy.service
+      enabled: true
+      contents: |
+        [Unit]
+        Description=The Reliable, High Performance TCP/HTTP Load Balancer
+        After=docker.service keepalived.service
+        Requires=docker.service keepalived.service
+        [Service]
+        ExecStart=/usr/bin/docker run \
+                  --name haproxy \
+                  --net=host \
+                  --rm \
+                  -v /etc/haproxy/haproxy.cfg:/etc/haproxy/haproxy.cfg:ro \
+                  haproxy:alpine
+        ExecStop=/usr/bin/docker stop haproxy
+        [Install]
+        WantedBy=multi-user.target

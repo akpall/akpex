@@ -46,6 +46,7 @@ storage:
         inline: |
           #!/bin/bash
           curl --silent --max-time 2 --insecure https://localhost:6443/healthz -o /dev/null || exit 1
+    # /etc/keepalived/keepalived.conf
     - path: /etc/keepalived/keepalived.conf
       mode: 0644
       contents:
@@ -78,6 +79,41 @@ storage:
               check_apiserver
             }
           }
+    - path: /etc/haproxy/haproxy.cfg
+      contents:
+        inline: |
+          global
+            log stdout format raw local0
+            daemon
+
+          defaults
+            mode                    http
+            log                     global
+            option                  httplog
+            option                  dontlognull
+            option http-server-close
+            option forwardfor       except 127.0.0.0/8
+            option                  redispatch
+            retries                 1
+            timeout http-request    10s
+            timeout queue           20s
+            timeout connect         5s
+            timeout client          35s
+            timeout server          35s
+            timeout http-keep-alive 10s
+            timeout check           10s
+
+          frontend apiserver
+            bind ${HA_IP}:6444
+            mode tcp
+            option tcplog
+            default_backend apiserverbackend
+
+          backend apiserverbackend
+            mode tcp
+            balance     roundrobin
+
+            ${indent(12, HAPROXY_CFG_BACKEND)}
     # noop
     - path: /etc/sysupdate.d/noop.conf
       contents:
@@ -129,3 +165,22 @@ systemd:
             ExecStartPre=/usr/lib/systemd/systemd-sysupdate -C keepalived update
             ExecStartPost=/usr/bin/sh -c "readlink --canonicalize /etc/extensions/keepalived.raw > /tmp/keepalived-new"
             ExecStartPost=/usr/bin/sh -c "if ! cmp --silent /tmp/keepalived /tmp/keepalived-new; then touch /run/reboot-required; fi"
+    - name: keepalived.service
+      enabled: true
+    - name: haproxy.service
+      enabled: true
+      contents: |
+        [Unit]
+        Description=The Reliable, High Performance TCP/HTTP Load Balancer
+        After=docker.service keepalived.service
+        Requires=docker.service keepalived.service
+        [Service]
+        ExecStart=/usr/bin/docker run \
+                  --name haproxy \
+                  --net=host \
+                  --rm \
+                  -v /etc/haproxy/haproxy.cfg:/etc/haproxy/haproxy.cfg:ro \
+                  haproxy:alpine
+        ExecStop=/usr/bin/docker stop haproxy
+        [Install]
+        WantedBy=multi-user.target
