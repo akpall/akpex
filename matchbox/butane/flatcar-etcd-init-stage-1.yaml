@@ -16,8 +16,8 @@ storage:
         name: root
       group:
         name: root
-    - path: /etc/kubernetes/manifests
-      mode: 0700
+    - path: /etc/kubernetes/pki
+      mode: 0755
       user:
         name: root
       group:
@@ -39,6 +39,16 @@ storage:
           DNS=${DNS}
           Address=${IP}/${CIDR}
           Gateway=${GATEWAY}
+    - path: /etc/kubernetes/pki/ca.crt
+      mode: 0644
+      contents:
+        inline: |
+          ${indent(10, KUBERNETES_CA_CRT)}
+    - path: /etc/kubernetes/pki/ca.key
+      mode: 0600
+      contents:
+        inline: |
+          ${indent(10, KUBERNETES_CA_KEY)}
     # /etc/keepalived/check_apiserver.sh
     - path: /etc/keepalived/check_apiserver.sh
       mode: 0755
@@ -194,7 +204,8 @@ systemd:
                       --skip-phases=addon/kube-proxy \
                       --upload-certs \
                       --control-plane-endpoint ${HA_IP}:6443 \
-                      --token abcdef.0123456789abcdef
+                      --token ${KUBERNETES_TOKEN} \
+                      --certificate-key ${KUBERNETES_CERTIFICATE_KEY}
         ExecStartPre=/usr/bin/mkdir /home/core/.kube
         ExecStartPre=/usr/bin/cp /etc/kubernetes/admin.conf /home/core/.kube/config
         ExecStart=/usr/bin/chown -R core:core /home/core/.kube
