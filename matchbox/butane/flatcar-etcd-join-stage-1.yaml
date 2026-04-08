@@ -39,19 +39,22 @@ storage:
     - path: /etc/sysupdate.kubernetes.d/kubernetes-v${KUBERNETES_CONFIG}.conf
       contents:
         source: https://extensions.flatcar.org/extensions/kubernetes/kubernetes-v${KUBERNETES_CONFIG}.conf
-    #cilium
-    - path: /opt/extensions/cilium/cilium-v${CILIUM_VERSION}-x86-64.raw
+    # keepalived
+    - path: /opt/extensions/keepalived/keepalived-v${KEEPALIVED_VERSION}-x86-64.raw
       contents:
-        source: https://extensions.flatcar.org/extensions/cilium-v${CILIUM_VERSION}-x86-64.raw
-    - path: /etc/sysupdate.cilium.d/cilium.conf
+        source: https://extensions.flatcar.org/extensions/keepalived-v${KEEPALIVED_VERSION}-x86-64.raw
+    - path: /etc/sysupdate.keepalived.d/keepalived.conf
       contents:
-        source: https://extensions.flatcar.org/extensions/cilium.conf
+        source: https://extensions.flatcar.org/extensions/keepalived.conf
   links:
     - path: /etc/extensions/kubernetes.raw
       target: /opt/extensions/kubernetes/kubernetes-v${KUBERNETES_VERSION}-x86-64.raw
       hard: false
     - path: /etc/extensions/cilium.raw
       target: /opt/extensions/cilium/cilium-v${CILIUM_VERSION}-x86-64.raw
+      hard: false
+    - target: /opt/extensions/keepalived/keepalived-v${KEEPALIVED_VERSION}-x86-64.raw
+      path: /etc/extensions/keepalived.raw
       hard: false
 
 systemd:
@@ -69,34 +72,10 @@ systemd:
             ExecStartPre=/usr/lib/systemd/systemd-sysupdate -C kubernetes update
             ExecStartPost=/usr/bin/sh -c "readlink --canonicalize /etc/extensions/kubernetes.raw > /tmp/kubernetes-new"
             ExecStartPost=/usr/bin/sh -c "if ! cmp --silent /tmp/kubernetes /tmp/kubernetes-new; then touch /run/reboot-required; fi"
-        - name: cilium.conf
+        - name: keepalived.conf
           contents: |
             [Service]
-            ExecStartPre=/usr/bin/sh -c "readlink --canonicalize /etc/extensions/cilium.raw > /tmp/cilium"
-            ExecStartPre=/usr/lib/systemd/systemd-sysupdate -C cilium update
-            ExecStartPost=/usr/bin/sh -c "readlink --canonicalize /etc/extensions/cilium.raw > /tmp/cilium-new"
-            ExecStartPost=/usr/bin/sh -c "if ! cmp --silent /tmp/cilium /tmp/cilium-new; then touch /run/reboot-required; fi"
-    - name: kube-vip.service
-      enabled: true
-      contents: |
-        [Unit]
-        Description=kube-vip control plane VIP
-        After=network-online.target docker.service
-        Requires=network-online.target docker.service
-        Before=kubelet.service
-        [Service]
-        ExecStart=sh -c '\
-                    /usr/bin/docker run \
-                    --network host \
-                    --rm \
-                    ghcr.io/kube-vip/kube-vip:v${KUBE_VIP_VERSION} \
-                    manifest pod \
-                    --interface ${KUBE_VIP_INTERFACE} \
-                    --address ${HA_IP} \
-                    --controlplane \
-                    --services \
-                    --arp \
-                    --leaderElection \
-                    > /etc/kubernetes/manifests/kube-vip.yaml'
-        [Install]
-        WantedBy=multi-user.target
+            ExecStartPre=/usr/bin/sh -c "readlink --canonicalize /etc/extensions/keepalived.raw > /tmp/keepalived"
+            ExecStartPre=/usr/lib/systemd/systemd-sysupdate -C keepalived update
+            ExecStartPost=/usr/bin/sh -c "readlink --canonicalize /etc/extensions/keepalived.raw > /tmp/keepalived-new"
+            ExecStartPost=/usr/bin/sh -c "if ! cmp --silent /tmp/keepalived /tmp/keepalived-new; then touch /run/reboot-required; fi"
