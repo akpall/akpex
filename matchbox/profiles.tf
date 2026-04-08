@@ -72,6 +72,8 @@ data "ct_config" "flatcar-etcd-init-stage-1" {
     DNS                    = each.value.dns
     CIDR                   = each.value.cidr
     GATEWAY                = each.value.gateway
+    KEEPALIVED_PRIORITY    = each.value.keepalived_priority
+    KEEPALIVED_PASSWORD    = local.keepalived_password
   })
   strict = true
 }
@@ -122,6 +124,13 @@ data "ct_config" "flatcar-etcd-join-stage-1" {
     KEEPALIVED_VERSION     = var.keepalived_version
     HA_IP                  = var.ha_ip
     HOSTNAME               = each.key
+    IP                     = each.value.ip
+    INTERFACE              = each.value.interface
+    DNS                    = each.value.dns
+    CIDR                   = each.value.cidr
+    GATEWAY                = each.value.gateway
+    KEEPALIVED_PRIORITY    = each.value.keepalived_priority
+    KEEPALIVED_PASSWORD    = local.keepalived_password
   })
   strict = true
 }
