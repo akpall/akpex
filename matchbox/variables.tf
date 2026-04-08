@@ -98,5 +98,12 @@ locals {
     }
   }
 
+  flatcar_all_nodes = merge(local.flatcar_etcd_init_node, local.flatcar_etcd_join_nodes)
+
+  haproxy_cfg_backend = join("\n", [
+    for key, value in local.flatcar_all_nodes :
+    "server ${key} ${value.ip}:6443 check verify none"
+  ])
+
   keepalived_password = "12345678"
 }
