@@ -79,6 +79,41 @@ storage:
               check_apiserver
             }
           }
+    - path: /etc/haproxy/haproxy.cfg
+      contents:
+        inline: |
+          global
+            log stdout format raw local0
+            daemon
+
+          defaults
+            mode                    http
+            log                     global
+            option                  httplog
+            option                  dontlognull
+            option http-server-close
+            option forwardfor       except 127.0.0.0/8
+            option                  redispatch
+            retries                 1
+            timeout http-request    10s
+            timeout queue           20s
+            timeout connect         5s
+            timeout client          35s
+            timeout server          35s
+            timeout http-keep-alive 10s
+            timeout check           10s
+
+          frontend apiserver
+            bind ${HA_IP}:6444
+            mode tcp
+            option tcplog
+            default_backend apiserverbackend
+
+          backend apiserverbackend
+            mode tcp
+            balance     roundrobin
+
+            ${indent(12, HAPROXY_CFG_BACKEND)}
     # noop
     - path: /etc/sysupdate.d/noop.conf
       contents:
