@@ -53,17 +53,6 @@ resource "matchbox_profile" "flatcar-etcd-init-stage-1" {
 
   name         = "${each.key}-etcd-init-stage-1"
   raw_ignition = data.ct_config.flatcar-etcd-init-stage-1[each.key].rendered
-
-  kernel = local.flatcar_kernel
-  initrd = [
-    local.flatcar_initrd,
-  ]
-
-  args = [
-    "initrd=flatcar_production_pxe_image.cpio.gz",
-    "flatcar.config.url=${var.matchbox_http_endpoint}/ignition?uuid=$${uuid}&mac=$${mac:hexhyp}",
-    "flatcar.first_boot=yes",
-  ]
 }
 
 data "ct_config" "flatcar-etcd-init-stage-1" {
@@ -115,17 +104,6 @@ resource "matchbox_profile" "flatcar-etcd-join-stage-1" {
 
   name         = "${each.key}-etcd-join-stage-1"
   raw_ignition = data.ct_config.flatcar-etcd-join-stage-1[each.key].rendered
-
-  kernel = local.flatcar_kernel
-  initrd = [
-    local.flatcar_initrd,
-  ]
-
-  args = [
-    "initrd=flatcar_production_pxe_image.cpio.gz",
-    "flatcar.config.url=${var.matchbox_http_endpoint}/ignition?uuid=$${uuid}&mac=$${mac:hexhyp}",
-    "flatcar.first_boot=yes",
-  ]
 }
 
 data "ct_config" "flatcar-etcd-join-stage-1" {

@@ -26,10 +26,6 @@ resource "matchbox_group" "flatcar-etcd-init-stage-1" {
     mac        = each.value.mac
     os_install = true
   }
-
-  metadata = {
-    hostname = each.key
-  }
 }
 
 # join nodes
@@ -53,9 +49,5 @@ resource "matchbox_group" "flatcar-etcd-join-stage-1" {
   selector = {
     mac        = each.value.mac
     os_install = true
-  }
-
-  metadata = {
-    hostname = each.key
   }
 }
