@@ -6,8 +6,7 @@ KUBERNETES_CONFIG ?=
 
 CILIUM_VERSION ?=
 
-KUBE_VIP_VERSION ?=
-KUBE_VIP_INTERFACE ?=
+KEEPALIVED_VERSION ?=
 
 HA_IP ?=
 
@@ -17,8 +16,7 @@ TERRAFORM_VARS := \
   -var="kubernetes_version=$(KUBERNETES_VERSION)" \
   -var="kubernetes_config=$(KUBERNETES_CONFIG)" \
   -var="cilium_version=$(CILIUM_VERSION)" \
-  -var="kube_vip_version=$(KUBE_VIP_VERSION)" \
-  -var="kube_vip_interface=$(KUBE_VIP_INTERFACE)" \
+  -var="keepalived_version=$(KEEPALIVED_VERSION)" \
   -var="ha_ip=$(HA_IP)"
 
 default:

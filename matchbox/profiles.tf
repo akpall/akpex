@@ -64,8 +64,7 @@ data "ct_config" "flatcar-etcd-init-stage-1" {
     KUBERNETES_VERSION     = var.kubernetes_version
     KUBERNETES_CONFIG      = var.kubernetes_config
     CILIUM_VERSION         = var.cilium_version
-    KUBE_VIP_VERSION       = var.kube_vip_version
-    KUBE_VIP_INTERFACE     = var.kube_vip_interface
+    KEEPALIVED_VERSION     = var.keepalived_version
     HA_IP                  = var.ha_ip
     HOSTNAME               = each.key
   })
@@ -115,8 +114,7 @@ data "ct_config" "flatcar-etcd-join-stage-1" {
     KUBERNETES_VERSION     = var.kubernetes_version
     KUBERNETES_CONFIG      = var.kubernetes_config
     CILIUM_VERSION         = var.cilium_version
-    KUBE_VIP_VERSION       = var.kube_vip_version
-    KUBE_VIP_INTERFACE     = var.kube_vip_interface
+    KEEPALIVED_VERSION     = var.keepalived_version
     HA_IP                  = var.ha_ip
     HOSTNAME               = each.key
   })

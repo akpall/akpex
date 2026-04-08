@@ -49,16 +49,10 @@ variable "cilium_version" {
   default     = "0.19.2"
 }
 
-variable "kube_vip_version" {
+variable "keepalived_version" {
   type        = string
-  description = "Kube-vip version"
-  default     = "1.1.2"
-}
-
-variable "kube_vip_interface" {
-  type        = string
-  description = "Kube-vip interface"
-  default     = "eth0"
+  description = "Keepalived version"
+  default     = "2.3.4"
 }
 
 variable "ha_ip" {
