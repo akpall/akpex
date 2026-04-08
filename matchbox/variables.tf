@@ -109,7 +109,7 @@ locals {
 
   kubernetes_ca_crt      = file("../scripts/kubernetes/ca.crt")
   kubernetes_ca_key      = file("../scripts/kubernetes/ca.key")
-  kubernetes_ca_crt_hash = file("../scripts/kubernetes/ca.crt.hash")
+  kubernetes_ca_crt_hash = trimspace(file("../scripts/kubernetes/ca.crt.hash"))
   kubernetes_token       = "abcdef.0123456789abcdef"
   # openssl rand -hex 32
   kubernetes_certificate_key = "7192c6140750450dae767c0faa7edf4c7f93af78b31105b3c2eac55c791791e8"

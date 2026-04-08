@@ -137,6 +137,9 @@ data "ct_config" "flatcar-etcd-join-stage-1" {
     KEEPALIVED_PRIORITY    = each.value.keepalived_priority
     KEEPALIVED_PASSWORD    = local.keepalived_password
     HAPROXY_CFG_BACKEND    = local.haproxy_cfg_backend
+    KUBERNETES_CERTIFICATE_KEY = local.kubernetes_certificate_key
+    KUBERNETES_CA_CRT_HASH = local.kubernetes_ca_crt_hash
+    KUBERNETES_TOKEN = local.kubernetes_token
   })
   strict = true
 }

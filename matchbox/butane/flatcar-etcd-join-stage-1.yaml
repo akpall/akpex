@@ -16,12 +16,6 @@ storage:
         name: root
       group:
         name: root
-    - path: /etc/kubernetes/manifests
-      mode: 0700
-      user:
-        name: root
-      group:
-        name: root
 
   files:
     # /etc/hostname
@@ -165,6 +159,26 @@ systemd:
             ExecStartPre=/usr/lib/systemd/systemd-sysupdate -C keepalived update
             ExecStartPost=/usr/bin/sh -c "readlink --canonicalize /etc/extensions/keepalived.raw > /tmp/keepalived-new"
             ExecStartPost=/usr/bin/sh -c "if ! cmp --silent /tmp/keepalived /tmp/keepalived-new; then touch /run/reboot-required; fi"
+    - name: kubeadm.service
+      enabled: true
+      contents: |
+        [Unit]
+        Description=Kubeadm service
+        Requires=containerd.service
+        After=containerd.service
+        After=network-online.target
+        ConditionPathExists=!/etc/kubernetes/kubelet.conf
+        [Service]
+        ExecStartPre=/usr/bin/kubeadm join ${HA_IP}:6444 \
+                      --certificate-key ${KUBERNETES_CERTIFICATE_KEY} \
+                      --control-plane \
+                      --discovery-token-ca-cert-hash ${KUBERNETES_CA_CRT_HASH} \
+                      --token ${KUBERNETES_TOKEN}
+        ExecStartPre=/usr/bin/mkdir /home/core/.kube
+        ExecStartPre=/usr/bin/cp /etc/kubernetes/admin.conf /home/core/.kube/config
+        ExecStart=/usr/bin/chown -R core:core /home/core/.kube
+        [Install]
+        WantedBy=multi-user.target
     - name: keepalived.service
       enabled: true
     - name: haproxy.service
