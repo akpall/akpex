@@ -49,8 +49,10 @@ data "ct_config" "flatcar-etcd-init-stage-0" {
 
 # flatcar-etcd-init-stage-1
 resource "matchbox_profile" "flatcar-etcd-init-stage-1" {
-  name         = "flatcar-etcd-init-stage-1"
-  raw_ignition = data.ct_config.flatcar-etcd-init-stage-1.rendered
+  for_each = local.flatcar_etcd_init_node
+
+  name         = "${each.key}-etcd-init-stage-1"
+  raw_ignition = data.ct_config.flatcar-etcd-init-stage-1[each.key].rendered
 
   kernel = local.flatcar_kernel
   initrd = [
@@ -65,6 +67,8 @@ resource "matchbox_profile" "flatcar-etcd-init-stage-1" {
 }
 
 data "ct_config" "flatcar-etcd-init-stage-1" {
+  for_each = local.flatcar_etcd_init_node
+
   content = templatefile("butane/flatcar-etcd-init-stage-1.yaml", {
     ssh_authorized_key     = var.ssh_authorized_key
     matchbox_http_endpoint = var.matchbox_http_endpoint
@@ -74,6 +78,7 @@ data "ct_config" "flatcar-etcd-init-stage-1" {
     KUBE_VIP_VERSION       = var.kube_vip_version
     KUBE_VIP_INTERFACE     = var.kube_vip_interface
     HA_IP                  = var.ha_ip
+    HOSTNAME               = each.key
   })
   strict = true
 }
@@ -106,8 +111,10 @@ data "ct_config" "flatcar-etcd-join-stage-0" {
 
 # flatcar-etcd-join-stage-1
 resource "matchbox_profile" "flatcar-etcd-join-stage-1" {
-  name         = "flatcar-etcd-join-stage-1"
-  raw_ignition = data.ct_config.flatcar-etcd-join-stage-1.rendered
+  for_each = local.flatcar_etcd_join_nodes
+
+  name         = "${each.key}-etcd-join-stage-1"
+  raw_ignition = data.ct_config.flatcar-etcd-join-stage-1[each.key].rendered
 
   kernel = local.flatcar_kernel
   initrd = [
@@ -122,6 +129,8 @@ resource "matchbox_profile" "flatcar-etcd-join-stage-1" {
 }
 
 data "ct_config" "flatcar-etcd-join-stage-1" {
+  for_each = local.flatcar_etcd_join_nodes
+
   content = templatefile("butane/flatcar-etcd-join-stage-1.yaml", {
     ssh_authorized_key     = var.ssh_authorized_key
     matchbox_http_endpoint = var.matchbox_http_endpoint
@@ -131,6 +140,7 @@ data "ct_config" "flatcar-etcd-join-stage-1" {
     KUBE_VIP_VERSION       = var.kube_vip_version
     KUBE_VIP_INTERFACE     = var.kube_vip_interface
     HA_IP                  = var.ha_ip
+    HOSTNAME               = each.key
   })
   strict = true
 }

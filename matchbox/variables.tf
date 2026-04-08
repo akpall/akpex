@@ -13,6 +13,12 @@ variable "ssh_authorized_key" {
   description = "SSH public key to set as an authorized_key on machines"
 }
 
+variable "hostname" {
+  type        = string
+  description = "Hostname"
+  default     = "localhost"
+}
+
 variable "flatcar_channel" {
   type        = string
   description = "Flatcar Container Linux channel"

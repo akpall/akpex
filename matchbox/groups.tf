@@ -20,15 +20,15 @@ resource "matchbox_group" "flatcar-etcd-init-stage-1" {
   for_each = local.flatcar_etcd_init_node
 
   name    = "${each.key}-init-stage-1"
-  profile = matchbox_profile.flatcar-etcd-init-stage-1.name
+  profile = matchbox_profile.flatcar-etcd-init-stage-1[each.key].name
 
   selector = {
-    etcd_init = true
+    mac        = each.value.mac
+    os_install = true
   }
 
   metadata = {
     hostname = each.key
-    etcd_type = "init"
   }
 }
 
@@ -48,14 +48,14 @@ resource "matchbox_group" "flatcar-etcd-join-stage-1" {
   for_each = local.flatcar_etcd_join_nodes
 
   name    = "${each.key}-join-stage-1"
-  profile = matchbox_profile.flatcar-etcd-join-stage-1.name
+  profile = matchbox_profile.flatcar-etcd-join-stage-1[each.key].name
 
   selector = {
-    etcd_join = true
+    mac        = each.value.mac
+    os_install = true
   }
 
   metadata = {
     hostname = each.key
-    etcd_type = "join"
   }
 }

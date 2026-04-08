@@ -24,6 +24,10 @@ storage:
         name: root
 
   files:
+    # /etc/hostname
+    - path: /etc/hostname
+      contents:
+        inline: ${HOSTNAME}
     # noop
     - path: /etc/sysupdate.d/noop.conf
       contents:
