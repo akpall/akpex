@@ -39,7 +39,7 @@ storage:
     - path: /etc/sysupdate.kubernetes.d/kubernetes-v${KUBERNETES_CONFIG}.conf
       contents:
         source: https://extensions.flatcar.org/extensions/kubernetes/kubernetes-v${KUBERNETES_CONFIG}.conf
-    #cilium
+    # cilium
     - path: /opt/extensions/cilium/cilium-v${CILIUM_VERSION}-x86-64.raw
       contents:
         source: https://extensions.flatcar.org/extensions/cilium-v${CILIUM_VERSION}-x86-64.raw
