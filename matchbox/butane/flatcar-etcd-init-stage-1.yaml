@@ -46,6 +46,7 @@ storage:
         inline: |
           #!/bin/bash
           curl --silent --max-time 2 --insecure https://localhost:6443/healthz -o /dev/null || exit 1
+    # /etc/keepalived/keepalived.conf
     - path: /etc/keepalived/keepalived.conf
       mode: 0644
       contents:
