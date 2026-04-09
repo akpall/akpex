@@ -11,7 +11,7 @@ resource "libvirt_volume" "flatcar_disk" {
 
 resource "libvirt_domain" "flatcar_node" {
   name        = var.vm_name
-  memory      = var.memory_mib
+  memory      = var.memory
   memory_unit = "MiB"
   vcpu        = var.vcpu
   type        = "kvm"

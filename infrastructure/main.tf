@@ -12,14 +12,6 @@ module "flatcar-matchbox-node" {
   ca-certificate     = file("${path.root}/../scripts/tls/ca.crt")
 }
 
-module "flatcar-etcd-nodes" {
-  source   = "./modules/flatcar-etcd-node"
-  for_each = local.flatcar-etcd-nodes
-  vm_name  = each.value
-
-  mac_address = format("52:54:00:00:00:%02x", each.key)
-}
-
 module "flatcar-worker-nodes" {
   source   = "./modules/flatcar-worker-node"
   for_each = local.flatcar-worker-nodes
