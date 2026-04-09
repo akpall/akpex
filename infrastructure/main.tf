@@ -3,13 +3,6 @@ locals {
   flatcar-worker-nodes = { for i in range(3, 8) : i => "flatcar-node${i}" }
 }
 
-module "flatcar-network" {
-  source                       = "./modules/flatcar-network"
-  network_name                 = "flatcar_network"
-  network_ip_dhcp_ranges_start = "192.168.100.5"
-  network_ip_dhcp_ranges_end   = "192.168.100.252"
-}
-
 module "flatcar-matchbox-node" {
   source  = "./modules/flatcar-matchbox-node"
   vm_name = "flatcar-matchbox-node"
