@@ -12,25 +12,27 @@ module "flatcar-network" {
 }
 
 module "flatcar-etcd-init_node" {
-  source   = "./flatcar-etcd-node"
   for_each = local.flatcar_etcd_init_nodes
-  vm_name  = each.key
 
-  mac_address = each.value.mac
+  source  = "./flatcar-etcd-node"
+  vm_name = each.key
+
   disk_capacity_bytes = each.value.disk_capacity_bytes
-  vcpu = each.value.vcpu
-  memory = 2048
+  mac_address         = each.value.mac_address
+  memory              = each.value.memory
+  vcpu                = each.value.vcpu
 }
 
 module "flatcar-etcd-join_node" {
-  source   = "./flatcar-etcd-node"
   for_each = local.flatcar_etcd_join_nodes
-  vm_name  = each.key
 
-  mac_address = each.value.mac
+  source  = "./flatcar-etcd-node"
+  vm_name = each.key
+
   disk_capacity_bytes = each.value.disk_capacity_bytes
-  vcpu = each.value.vcpu
-  memory = 2048
+  mac_address         = each.value.mac_address
+  memory              = each.value.memory
+  vcpu                = each.value.vcpu
 }
 
 module "flatcar-worker-nodes" {
