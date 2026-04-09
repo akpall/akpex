@@ -24,17 +24,17 @@ storage:
       mode: 0600
       contents:
         inline: |
-          ${indent(10, server-certificate)}
+          ${indent(10, server_certificate)}
     - path: /etc/matchbox/server.key
       mode: 0600
       contents:
         inline: |
-          ${indent(10, server-private-key)}
+          ${indent(10, server_private_key)}
     - path: /etc/matchbox/ca.crt
       mode: 0600
       contents:
         inline: |
-          ${indent(10, ca-certificate)}
+          ${indent(10, ca_certificate)}
 
 
 systemd:

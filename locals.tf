@@ -48,4 +48,12 @@ locals {
       vcpu        = 2
     }
   }
+
+  flatcar_matchbox_nodes = {
+    "flatcar-matchbox-node" = {
+      disk_capacity_bytes = 20 * 1024 * 1024 * 1024
+      vcpu                = 2
+      memory = 2048
+    }
+  }
 }

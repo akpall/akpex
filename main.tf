@@ -45,3 +45,19 @@ module "flatcar-worker-nodes" {
   memory      = each.value.memory
   vcpu        = each.value.vcpu
 }
+
+module "flatcar-matchbox-node" {
+  for_each = local.flatcar_matchbox_nodes
+
+  source  = "./flatcar-matchbox-node"
+  vm_name = each.key
+
+  ca_certificate      = file("${path.root}/scripts/tls/ca.crt")
+  disk_capacity_bytes = each.value.disk_capacity_bytes
+  flatcar_channel     = var.flatcar_channel
+  flatcar_release     = var.flatcar_release
+  memory              = each.value.memory
+  server_certificate  = file("${path.root}/scripts/tls/server.crt")
+  server_private_key  = file("${path.root}/scripts/tls/server.key")
+  vcpu                = each.value.vcpu
+}

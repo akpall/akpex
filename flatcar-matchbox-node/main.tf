@@ -1,8 +1,8 @@
 data "ct_config" "flatcar_matchbox" {
   content = templatefile("${path.module}/flatcar-matchbox.yaml", {
-    server-certificate = var.server-certificate
-    server-private-key = var.server-private-key
-    ca-certificate     = var.ca-certificate
+    server_certificate = var.server_certificate
+    server_private_key = var.server_private_key
+    ca_certificate     = var.ca_certificate
   })
   strict = true
 }
@@ -13,11 +13,11 @@ resource "libvirt_ignition" "flatcar_matchbox" {
 }
 
 resource "libvirt_volume" "flatcar_base" {
-  name = "flatcar-base-${var.channel}-${var.release}"
+  name = "flatcar-base-${var.flatcar_channel}-${var.flatcar_release}"
   pool = "default"
   create = {
     content = {
-      url = "https://${var.channel}.release.flatcar-linux.net/amd64-usr/${var.release}/flatcar_production_qemu_image.img"
+      url = "https://${var.flatcar_channel}.release.flatcar-linux.net/amd64-usr/${var.flatcar_release}/flatcar_production_qemu_image.img"
     }
   }
 
@@ -63,7 +63,7 @@ resource "libvirt_volume" "flatcar_matchbox_system" {
 
 resource "libvirt_domain" "flatcar_matchbox" {
   name        = var.vm_name
-  memory      = var.memory_mib
+  memory      = var.memory
   memory_unit = "MiB"
   vcpu        = var.vcpu
   type        = "kvm"

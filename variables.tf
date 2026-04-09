@@ -1,24 +1,10 @@
-variable "flatcar_network_ip_address" {
-  type = string
-}
-variable "flatcar_network_ip_dhcp_ranges_end" {
-  type = string
-}
-variable "flatcar_network_ip_dhcp_ranges_start" {
-  type = string
-}
-variable "flatcar_network_ip_netmask" {
-  type = string
-}
-variable "flatcar_network_mode" {
-  type = string
-}
-variable "flatcar_network_name" {
-  type = string
-}
-variable "flatcar_network_nat_ports_end" {
-  type = string
-}
-variable "flatcar_network_nat_ports_start" {
-  type = string
-}
+variable "flatcar_network_ip_address" {}
+variable "flatcar_network_ip_dhcp_ranges_end" {}
+variable "flatcar_network_ip_dhcp_ranges_start" {}
+variable "flatcar_network_ip_netmask" {}
+variable "flatcar_network_mode" {}
+variable "flatcar_network_name" {}
+variable "flatcar_network_nat_ports_end" {}
+variable "flatcar_network_nat_ports_start" {}
+variable "flatcar_release" {}
+variable "flatcar_channel" {}
