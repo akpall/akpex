@@ -32,3 +32,14 @@ module "flatcar-etcd-join_node" {
   vcpu = each.value.vcpu
   memory = 2048
 }
+
+module "flatcar-worker-nodes" {
+  for_each = local.flatcar_worker_nodes
+
+  source  = "./flatcar-worker-node"
+  vm_name = each.key
+
+  mac_address = each.value.mac_address
+  memory      = each.value.memory
+  vcpu        = each.value.vcpu
+}
