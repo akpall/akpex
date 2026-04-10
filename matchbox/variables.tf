@@ -1,16 +1,16 @@
-variable "matchbox_http_endpoint" {}
-variable "kubernetes_ha_ip" {}
-variable "keepalived_version" {}
 variable "cilium_version" {}
+variable "flatcar_version" {}
+variable "keepalived_version" {}
 variable "kubernetes_config_version" {}
+variable "kubernetes_ha_ip" {}
 variable "kubernetes_version" {}
-variable "matchbox_rpc_endpoint" {}
-variable "ssh_authorized_key" {}
-variable "matchbox_ip" {}
+variable "matchbox_ca_crt" {}
 variable "matchbox_client_crt" {}
 variable "matchbox_client_key" {}
-variable "matchbox_ca_crt" {}
-variable "flatcar_version" {}
+variable "matchbox_http_endpoint" {}
+variable "matchbox_ip" {}
+variable "matchbox_rpc_endpoint" {}
+variable "ssh_authorized_key" {}
 
 locals {
   flatcar_kernel = "/assets/flatcar/${var.flatcar_version}/flatcar_production_pxe.vmlinuz"

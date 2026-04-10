@@ -17,6 +17,9 @@ kubernetes_config_version = "1.35"
 kubernetes_ha_ip          = "192.168.100.253"
 kubernetes_version        = "1.35.3"
 
-matchbox_ip = "192.168.100.254"
+matchbox_ip          = "192.168.100.254"
+matchbox_cidr        = "24"
+matchbox_gateway     = "192.168.100.1"
+matchbox_dns_servers = "192.168.100.1"
 
 ssh_authorized_key = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIOpw3cIAdtWOYUkb6UOAIcLuRzItoo4oZMzr/hzZYq4E openpgp:0xFAAA0172"

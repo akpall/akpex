@@ -1,0 +1,13 @@
+variable "disk_capacity_bytes" {}
+variable "flatcar_channel" {}
+variable "flatcar_version" {}
+variable "matchbox_ca_crt" {}
+variable "matchbox_cidr" {}
+variable "matchbox_dns_servers" {}
+variable "matchbox_gateway" {}
+variable "matchbox_ip" {}
+variable "matchbox_server_crt" {}
+variable "matchbox_server_key" {}
+variable "memory" {}
+variable "vcpu" {}
+variable "vm_name" {}

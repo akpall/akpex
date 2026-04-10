@@ -17,24 +17,24 @@ storage:
           Name=eth0
 
           [Network]
-          Address=192.168.100.254/24
-          Gateway=192.168.100.1
-          DNS=1.1.1.1 1.0.0.1 2606:4700:4700::1111 2606:4700:4700::1001
+          Address=${MATCHBOX_IP}/${MATCHBOX_CIDR}
+          Gateway=${MATCHBOX_GATEWAY}
+          DNS=${MATCHBOX_DNS_SERVERS}
     - path: /etc/matchbox/server.crt
       mode: 0600
       contents:
         inline: |
-          ${indent(10, server_certificate)}
+          ${indent(10, MATCHBOX_SERVER_CRT)}
     - path: /etc/matchbox/server.key
       mode: 0600
       contents:
         inline: |
-          ${indent(10, server_private_key)}
+          ${indent(10, MATCHBOX_SERVER_KEY)}
     - path: /etc/matchbox/ca.crt
       mode: 0600
       contents:
         inline: |
-          ${indent(10, ca_certificate)}
+          ${indent(10, MATCHBOX_CA_CRT)}
 
 
 systemd:

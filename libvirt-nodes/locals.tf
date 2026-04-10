@@ -1,11 +1,7 @@
 locals {
-  matchbox_http_endpoint = "${var.matchbox_ip}:8080"
-  matchbox_rpc_endpoint  = "${var.matchbox_ip}:8081"
-  matchbox_server_crt    = file("scripts/tls/server.crt")
-  matchbox_ca_crt        = file("scripts/tls/ca.crt")
-  matchbox_client_crt    = file("scripts/tls/client.crt")
-  matchbox_client_key    = file("scripts/tls/client.key")
-  matchbox_server_key    = file("scripts/tls/server.key")
+  matchbox_ca_crt     = file("../scripts/tls/ca.crt")
+  matchbox_server_crt = file("../scripts/tls/server.crt")
+  matchbox_server_key = file("../scripts/tls/server.key")
 
   flatcar_etcd_init_nodes = {
     "flatcar-node0" = {

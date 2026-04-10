@@ -55,37 +55,17 @@ module "flatcar-matchbox-node" {
   source     = "./flatcar-matchbox-node"
   depends_on = [module.flatcar-network]
 
-  vm_name             = each.key
-  ca_certificate      = local.matchbox_ca_crt
-  disk_capacity_bytes = each.value.disk_capacity_bytes
-  flatcar_channel     = var.flatcar_channel
-  flatcar_version     = var.flatcar_version
-  memory              = each.value.memory
-  server_certificate  = local.matchbox_server_crt
-  server_private_key  = local.matchbox_server_key
-  vcpu                = each.value.vcpu
-}
-
-module "matchbox" {
-  source     = "./matchbox"
-  depends_on = [module.flatcar-matchbox-node]
-
-  ssh_authorized_key     = var.ssh_authorized_key
-  matchbox_http_endpoint = local.matchbox_http_endpoint
-  matchbox_rpc_endpoint  = local.matchbox_rpc_endpoint
-
-  matchbox_client_key = local.matchbox_client_crt
-  matchbox_ip         = var.matchbox_ip
-  matchbox_ca_crt     = local.matchbox_ca_crt
-  matchbox_client_crt = local.matchbox_client_crt
-
-  flatcar_version = var.flatcar_version
-
-  kubernetes_ha_ip = var.kubernetes_ha_ip
-
-  keepalived_version = var.keepalived_version
-
-  cilium_version            = var.cilium_version
-  kubernetes_config_version = var.kubernetes_config_version
-  kubernetes_version        = var.kubernetes_version
+  vm_name              = each.key
+  matchbox_ca_crt      = local.matchbox_ca_crt
+  disk_capacity_bytes  = each.value.disk_capacity_bytes
+  flatcar_channel      = var.flatcar_channel
+  flatcar_version      = var.flatcar_version
+  memory               = each.value.memory
+  matchbox_server_crt  = local.matchbox_server_crt
+  matchbox_server_key  = local.matchbox_server_key
+  matchbox_ip          = var.matchbox_ip
+  matchbox_cidr        = var.matchbox_cidr
+  matchbox_gateway     = var.matchbox_gateway
+  matchbox_dns_servers = var.matchbox_dns_servers
+  vcpu                 = each.value.vcpu
 }
