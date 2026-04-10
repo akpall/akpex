@@ -1,39 +1,25 @@
+FLATCAR_CHANNEL := $(shell awk -F'"' '/flatcar_channel/{print $$2}' terraform.tfvars)
+FLATCAR_VERSION := $(shell awk -F'"' '/flatcar_release/{print $$2}' terraform.tfvars)
 
 default:
-	$(MAKE) certificates
-	$(MAKE) kubernetes
-	$(MAKE) infrastructure
 	$(MAKE) matchbox-assets-upload
-	$(MAKE) matchbox
 .PHONY: default
 
-certificates: $(TLS_FILES)
-.PHONY: certificates
-
-$(TLS_FILES):
-	cd scripts/tls && ./cert-gen
-
 clean:
-	$(MAKE) -C matchbox clean
-	$(MAKE) -C infrastructure clean
+	tofu clean
 .PHONY: clean
 
-matchbox:
-	$(MAKE) -C matchbox
-.PHONY: matchbox
-
 matchbox-assets-download:
-	$(MAKE) -C matchbox assets-download
+	./get-flatcar $(FLATCAR_CHANNEL) $(FLATCAR_VERSION) matchbox-assets
 .PHONY: matchbox-assets-download
 
-infrastructure:
-	$(MAKE) -C infrastructure
-.PHONY: infrastructure
-
 matchbox-assets-upload:
-	$(MAKE) -C matchbox assets-upload
-.PHONY: matchbox-assets-upload
-
-kubernetes:
-	$(MAKE) -C scripts/kubernetes
-.PHONY: kubernetes
+	until \
+	  rsync -rvz \
+	  --rsync-path="sudo rsync" \
+	  --delete \
+	  assets \
+	  core@$(MATCHBOX_HOST):/var/lib/matchbox/; \
+	do \
+	  sleep 1; \
+	done
