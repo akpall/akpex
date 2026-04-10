@@ -1,5 +1,6 @@
-cilium_version ="0.19.2"
-flatcar_channel = "stable"
+cilium_version = "0.19.2"
+
+flatcar_channel                      = "stable"
 flatcar_network_ip_address           = "192.168.100.1"
 flatcar_network_ip_dhcp_ranges_end   = "192.168.100.252"
 flatcar_network_ip_dhcp_ranges_start = "192.168.100.5"
@@ -8,9 +9,14 @@ flatcar_network_mode                 = "nat"
 flatcar_network_name                 = "flatcar_network"
 flatcar_network_nat_ports_end        = "65535"
 flatcar_network_nat_ports_start      = "1024"
-flatcar_release                      = "4459.2.4"
+flatcar_version                      = "4459.2.4"
+
 keepalived_version = "2.3.4"
+
 kubernetes_config_version = "1.35"
-kubernetes_ha_ip = "192.168.100.253"
-kubernetes_version = "1.35.3"
+kubernetes_ha_ip          = "192.168.100.253"
+kubernetes_version        = "1.35.3"
+
 matchbox_ip = "192.168.100.254"
+
+ssh_authorized_key = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIOpw3cIAdtWOYUkb6UOAIcLuRzItoo4oZMzr/hzZYq4E openpgp:0xFAAA0172"

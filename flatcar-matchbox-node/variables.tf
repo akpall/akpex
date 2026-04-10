@@ -3,7 +3,7 @@ variable "flatcar_channel" {}
 variable "ca_certificate" {}
 variable "server_certificate" {}
 variable "server_private_key" {}
-variable "flatcar_release" {}
+variable "flatcar_version" {}
 variable "memory" {}
 variable "vcpu" {}
 variable "vm_name" {}

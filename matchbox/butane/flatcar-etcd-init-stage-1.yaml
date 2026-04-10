@@ -6,7 +6,7 @@ passwd:
   users:
     - name: core
       ssh_authorized_keys:
-        - ${ssh_authorized_key}
+        - ${SSH_AUTHORIZED_KEY}
 
 storage:
   directories:
@@ -88,7 +88,7 @@ storage:
               auth_pass ${KEEPALIVED_PASSWORD}
             }
             virtual_ipaddress {
-              ${HA_IP}/${CIDR}
+              ${KUBERNETES_HA_IP}/${CIDR}
             }
             track_script {
               check_apiserver
@@ -119,7 +119,7 @@ storage:
             timeout check           10s
 
           frontend apiserver
-            bind ${HA_IP}:6444
+            bind ${KUBERNETES_HA_IP}:6444
             mode tcp
             option tcplog
             default_backend apiserverbackend
@@ -137,9 +137,9 @@ storage:
     - path: /opt/extensions/kubernetes/kubernetes-v${KUBERNETES_VERSION}-x86-64.raw
       contents:
         source: https://extensions.flatcar.org/extensions/kubernetes-v${KUBERNETES_VERSION}-x86-64.raw
-    - path: /etc/sysupdate.kubernetes.d/kubernetes-v${KUBERNETES_CONFIG}.conf
+    - path: /etc/sysupdate.kubernetes.d/kubernetes-v${KUBERNETES_CONFIG_VERSION}.conf
       contents:
-        source: https://extensions.flatcar.org/extensions/kubernetes/kubernetes-v${KUBERNETES_CONFIG}.conf
+        source: https://extensions.flatcar.org/extensions/kubernetes/kubernetes-v${KUBERNETES_CONFIG_VERSION}.conf
     # cilium
     - path: /opt/extensions/cilium/cilium-v${CILIUM_VERSION}-x86-64.raw
       contents:
@@ -208,7 +208,7 @@ systemd:
         ExecStartPre=/usr/bin/kubeadm init \
                       --skip-phases=addon/kube-proxy \
                       --upload-certs \
-                      --control-plane-endpoint ${HA_IP}:6443 \
+                      --control-plane-endpoint ${KUBERNETES_HA_IP}:6443 \
                       --token ${KUBERNETES_TOKEN} \
                       --certificate-key ${KUBERNETES_CERTIFICATE_KEY}
         ExecStartPre=/usr/bin/mkdir /home/core/.kube

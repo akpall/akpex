@@ -13,11 +13,11 @@ resource "libvirt_ignition" "flatcar_matchbox" {
 }
 
 resource "libvirt_volume" "flatcar_base" {
-  name = "flatcar-base-${var.flatcar_channel}-${var.flatcar_release}"
+  name = "flatcar-base-${var.flatcar_channel}-${var.flatcar_version}"
   pool = "default"
   create = {
     content = {
-      url = "https://${var.flatcar_channel}.release.flatcar-linux.net/amd64-usr/${var.flatcar_release}/flatcar_production_qemu_image.img"
+      url = "https://${var.flatcar_channel}.release.flatcar-linux.net/amd64-usr/${var.flatcar_version}/flatcar_production_qemu_image.img"
     }
   }
 

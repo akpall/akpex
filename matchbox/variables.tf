@@ -1,65 +1,16 @@
-variable "matchbox_http_endpoint" {
-  type        = string
-  description = "Matchbox HTTP read-only endpoint (e.g. http://matchbox.example.com:8080)"
-}
-
-variable "matchbox_rpc_endpoint" {
-  type        = string
-  description = "Matchbox gRPC API endpoint, without the protocol (e.g. matchbox.example.com:8081)"
-}
-
-variable "ssh_authorized_key" {
-  type        = string
-  description = "SSH public key to set as an authorized_key on machines"
-}
-
-variable "hostname" {
-  type        = string
-  description = "Hostname"
-  default     = "localhost"
-}
-
-variable "flatcar_channel" {
-  type        = string
-  description = "Flatcar Container Linux channel"
-  default     = "stable"
-}
-
-variable "flatcar_version" {
-  type        = string
-  description = "Flatcar Container Linux version"
-  default     = "current"
-}
-
-variable "kubernetes_version" {
-  type        = string
-  description = "Kubernetes version"
-  default     = "1.35.3"
-}
-
-variable "kubernetes_config" {
-  type        = string
-  description = "Kubernetes config version"
-  default     = "1.35"
-}
-
-variable "cilium_version" {
-  type        = string
-  description = "Cilium version"
-  default     = "0.19.2"
-}
-
-variable "keepalived_version" {
-  type        = string
-  description = "Keepalived version"
-  default     = "2.3.4"
-}
-
-variable "ha_ip" {
-  type        = string
-  description = "Kubernetes HA IP"
-  default     = "192.168.100.253"
-}
+variable "matchbox_http_endpoint" {}
+variable "kubernetes_ha_ip" {}
+variable "keepalived_version" {}
+variable "cilium_version" {}
+variable "kubernetes_config_version" {}
+variable "kubernetes_version" {}
+variable "matchbox_rpc_endpoint" {}
+variable "ssh_authorized_key" {}
+variable "matchbox_ip" {}
+variable "matchbox_client_crt" {}
+variable "matchbox_client_key" {}
+variable "matchbox_ca_crt" {}
+variable "flatcar_version" {}
 
 locals {
   flatcar_kernel = "/assets/flatcar/${var.flatcar_version}/flatcar_production_pxe.vmlinuz"
@@ -107,9 +58,9 @@ locals {
 
   keepalived_password = "12345678"
 
-  kubernetes_ca_crt      = file("../scripts/kubernetes/ca.crt")
-  kubernetes_ca_key      = file("../scripts/kubernetes/ca.key")
-  kubernetes_ca_crt_hash = trimspace(file("../scripts/kubernetes/ca.crt.hash"))
+  kubernetes_ca_crt      = file("./scripts/kubernetes/ca.crt")
+  kubernetes_ca_key      = file("./scripts/kubernetes/ca.key")
+  kubernetes_ca_crt_hash = trimspace(file("./scripts/kubernetes/ca.crt.hash"))
   kubernetes_token       = "abcdef.0123456789abcdef"
   # openssl rand -hex 32
   kubernetes_certificate_key = "7192c6140750450dae767c0faa7edf4c7f93af78b31105b3c2eac55c791791e8"

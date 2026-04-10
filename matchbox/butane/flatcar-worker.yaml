@@ -5,4 +5,4 @@ passwd:
   users:
     - name: core
       ssh_authorized_keys:
-        - ${ssh_authorized_key}
+        - ${SSH_AUTHORIZED_KEY}

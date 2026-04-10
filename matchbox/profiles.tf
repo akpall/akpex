@@ -16,8 +16,8 @@ resource "matchbox_profile" "flatcar-worker" {
 }
 
 data "ct_config" "flatcar-worker" {
-  content = templatefile("butane/flatcar-worker.yaml", {
-    ssh_authorized_key = var.ssh_authorized_key
+  content = templatefile("${path.module}/butane/flatcar-worker.yaml", {
+    SSH_AUTHORIZED_KEY = var.ssh_authorized_key
   })
   strict = true
 }
@@ -40,9 +40,9 @@ resource "matchbox_profile" "flatcar-etcd-init-stage-0" {
 }
 
 data "ct_config" "flatcar-etcd-init-stage-0" {
-  content = templatefile("butane/flatcar-etcd-init-stage-0.yaml", {
-    ssh_authorized_key     = var.ssh_authorized_key
-    matchbox_http_endpoint = var.matchbox_http_endpoint
+  content = templatefile("${path.module}/butane/flatcar-etcd-init-stage-0.yaml", {
+    SSH_AUTHORIZED_KEY     = var.ssh_authorized_key
+    MATCHBOX_HTTP_ENDPOINT = var.matchbox_http_endpoint
   })
   strict = true
 }
@@ -58,14 +58,14 @@ resource "matchbox_profile" "flatcar-etcd-init-stage-1" {
 data "ct_config" "flatcar-etcd-init-stage-1" {
   for_each = local.flatcar_etcd_init_node
 
-  content = templatefile("butane/flatcar-etcd-init-stage-1.yaml", {
-    ssh_authorized_key         = var.ssh_authorized_key
-    matchbox_http_endpoint     = var.matchbox_http_endpoint
+  content = templatefile("${path.module}/butane/flatcar-etcd-init-stage-1.yaml", {
+    SSH_AUTHORIZED_KEY         = var.ssh_authorized_key
+    MATCHBOX_HTTP_ENDPOINT     = var.matchbox_http_endpoint
     KUBERNETES_VERSION         = var.kubernetes_version
-    KUBERNETES_CONFIG          = var.kubernetes_config
+    KUBERNETES_CONFIG_VERSION          = var.kubernetes_config_version
     CILIUM_VERSION             = var.cilium_version
     KEEPALIVED_VERSION         = var.keepalived_version
-    HA_IP                      = var.ha_ip
+    KUBERNETES_HA_IP                      = var.kubernetes_ha_ip
     HOSTNAME                   = each.key
     IP                         = each.value.ip
     INTERFACE                  = each.value.interface
@@ -102,9 +102,9 @@ resource "matchbox_profile" "flatcar-etcd-join-stage-0" {
 }
 
 data "ct_config" "flatcar-etcd-join-stage-0" {
-  content = templatefile("butane/flatcar-etcd-join-stage-0.yaml", {
-    ssh_authorized_key     = var.ssh_authorized_key
-    matchbox_http_endpoint = var.matchbox_http_endpoint
+  content = templatefile("${path.module}/butane/flatcar-etcd-join-stage-0.yaml", {
+    SSH_AUTHORIZED_KEY     = var.ssh_authorized_key
+    MATCHBOX_HTTP_ENDPOINT = var.matchbox_http_endpoint
   })
   strict = true
 }
@@ -120,14 +120,14 @@ resource "matchbox_profile" "flatcar-etcd-join-stage-1" {
 data "ct_config" "flatcar-etcd-join-stage-1" {
   for_each = local.flatcar_etcd_join_nodes
 
-  content = templatefile("butane/flatcar-etcd-join-stage-1.yaml", {
-    ssh_authorized_key     = var.ssh_authorized_key
-    matchbox_http_endpoint = var.matchbox_http_endpoint
+  content = templatefile("${path.module}/butane/flatcar-etcd-join-stage-1.yaml", {
+    SSH_AUTHORIZED_KEY     = var.ssh_authorized_key
+    MATCHBOX_HTTP_ENDPOINT = var.matchbox_http_endpoint
     KUBERNETES_VERSION     = var.kubernetes_version
-    KUBERNETES_CONFIG      = var.kubernetes_config
+    KUBERNETES_CONFIG_VERSION          = var.kubernetes_config_version
     CILIUM_VERSION         = var.cilium_version
     KEEPALIVED_VERSION     = var.keepalived_version
-    HA_IP                  = var.ha_ip
+    KUBERNETES_HA_IP                  = var.kubernetes_ha_ip
     HOSTNAME               = each.key
     IP                     = each.value.ip
     INTERFACE              = each.value.interface

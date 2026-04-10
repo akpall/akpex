@@ -6,7 +6,7 @@ passwd:
   users:
     - name: core
       ssh_authorized_keys:
-        - ${ssh_authorized_key}
+        - ${SSH_AUTHORIZED_KEY}
 
 storage:
   directories:
@@ -72,7 +72,7 @@ storage:
               auth_pass ${KEEPALIVED_PASSWORD}
             }
             virtual_ipaddress {
-              ${HA_IP}/${CIDR}
+              ${KUBERNETES_HA_IP}/${CIDR}
             }
             track_script {
               check_apiserver
@@ -99,7 +99,7 @@ storage:
             timeout check           10s
 
           frontend apiserver
-            bind ${HA_IP}:6444
+            bind ${KUBERNETES_HA_IP}:6444
             default_backend apiserverbackend
 
           backend apiserverbackend
@@ -114,9 +114,9 @@ storage:
     - path: /opt/extensions/kubernetes/kubernetes-v${KUBERNETES_VERSION}-x86-64.raw
       contents:
         source: https://extensions.flatcar.org/extensions/kubernetes-v${KUBERNETES_VERSION}-x86-64.raw
-    - path: /etc/sysupdate.kubernetes.d/kubernetes-v${KUBERNETES_CONFIG}.conf
+    - path: /etc/sysupdate.kubernetes.d/kubernetes-v${KUBERNETES_CONFIG_VERSION}.conf
       contents:
-        source: https://extensions.flatcar.org/extensions/kubernetes/kubernetes-v${KUBERNETES_CONFIG}.conf
+        source: https://extensions.flatcar.org/extensions/kubernetes/kubernetes-v${KUBERNETES_CONFIG_VERSION}.conf
     # keepalived
     - path: /opt/extensions/keepalived/keepalived-v${KEEPALIVED_VERSION}-x86-64.raw
       contents:
@@ -167,7 +167,7 @@ systemd:
         After=network-online.target
         ConditionPathExists=!/etc/kubernetes/kubelet.conf
         [Service]
-        ExecStartPre=/usr/bin/kubeadm join ${HA_IP}:6444 \
+        ExecStartPre=/usr/bin/kubeadm join ${KUBERNETES_HA_IP}:6444 \
                       --certificate-key ${KUBERNETES_CERTIFICATE_KEY} \
                       --control-plane \
                       --discovery-token-ca-cert-hash ${KUBERNETES_CA_CRT_HASH} \
