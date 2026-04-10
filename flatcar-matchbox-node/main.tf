@@ -1,8 +1,8 @@
 data "ct_config" "flatcar_matchbox" {
   content = templatefile("${path.module}/flatcar-matchbox.yaml", {
-    server_certificate = var.server_certificate
-    server_private_key = var.server_private_key
-    ca_certificate     = var.ca_certificate
+    server_certificate =     var.server_certificate
+    server_private_key =     var.server_private_key
+    ca_certificate     =     var.ca_certificate
   })
   strict = true
 }

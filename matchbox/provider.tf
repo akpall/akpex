@@ -1,9 +1,9 @@
 // Configure the matchbox provider
 provider "matchbox" {
   endpoint    = var.matchbox_rpc_endpoint
-  client_cert = file("../scripts/tls/client.crt")
-  client_key  = file("../scripts/tls/client.key")
-  ca          = file("../scripts/tls/ca.crt")
+  client_cert = tls_locally_signed_cert.matchbox_client_crt
+  client_key  = tls_private_key.matchbox_client_key
+  ca          = tls_self_signed_cert.matchbox_ca_crt
 }
 
 terraform {

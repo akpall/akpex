@@ -28,3 +28,4 @@
 /scripts/kubernetes/ca.crt
 /scripts/kubernetes/ca.crt.hash
 /scripts/kubernetes/ca.key
+/matchbox-assets/flatcar/

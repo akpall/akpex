@@ -52,12 +52,89 @@ module "flatcar-matchbox-node" {
   source  = "./flatcar-matchbox-node"
   vm_name = each.key
 
-  ca_certificate      = file("${path.root}/scripts/tls/ca.crt")
+  ca_certificate      = tls_self_signed_cert.matchbox_ca_crt.cert_pem
   disk_capacity_bytes = each.value.disk_capacity_bytes
   flatcar_channel     = var.flatcar_channel
   flatcar_release     = var.flatcar_release
   memory              = each.value.memory
-  server_certificate  = file("${path.root}/scripts/tls/server.crt")
-  server_private_key  = file("${path.root}/scripts/tls/server.key")
+  server_certificate  = tls_locally_signed_cert.matchbox_server_crt.cert_pem
+  server_private_key  = tls_private_key.matchbox_server_key.private_key_pem
   vcpu                = each.value.vcpu
+}
+
+resource "tls_private_key" "matchbox_ca_key" {
+  algorithm = "ED25519"
+}
+
+resource "tls_self_signed_cert" "matchbox_ca_crt" {
+  private_key_pem = resource.tls_private_key.matchbox_ca_key.private_key_pem
+
+  subject {
+    common_name  = "MATCHBOX-CA"
+  }
+
+  validity_period_hours = 3650 * 24
+
+is_ca_certificate = true
+
+  allowed_uses = [
+    "digital_signature",
+    "cert_signing",
+    "crl_signing",
+  ]
+}
+
+resource "tls_private_key" "matchbox_server_key" {
+  algorithm = "ED25519"
+}
+
+resource "tls_cert_request" "matchbox_server_csr" {
+  private_key_pem = tls_private_key.matchbox_server_key.private_key_pem
+
+  subject {
+    common_name = "MATCHBOX-SERVER"
+  }
+
+  ip_addresses = [var.matchbox_ip]
+}
+
+resource "tls_locally_signed_cert" "matchbox_server_crt" {
+  cert_request_pem   = tls_cert_request.matchbox_server_csr.cert_request_pem
+  ca_private_key_pem = tls_private_key.matchbox_ca_key.private_key_pem
+  ca_cert_pem        = tls_self_signed_cert.matchbox_ca_crt.cert_pem
+
+  validity_period_hours = 365 * 24
+
+  allowed_uses = [
+    "digital_signature",
+    "key_encipherment",
+    "server_auth",
+  ]
+}
+
+resource "tls_private_key" "matchbox_client_key" {
+  algorithm = "ED25519"
+}
+
+resource "tls_cert_request" "matchbox_client_csr" {
+  private_key_pem = tls_private_key.matchbox_client_key.private_key_pem
+
+  subject {
+    common_name = "MATCHBOX-CLIENT"
+  }
+}
+
+resource "tls_locally_signed_cert" "matchbox_client_crt" {
+  cert_request_pem   = tls_cert_request.matchbox_client_csr.cert_request_pem
+  ca_private_key_pem = tls_private_key.matchbox_ca_key.private_key_pem
+  ca_cert_pem        = tls_self_signed_cert.matchbox_ca_crt.cert_pem
+
+  validity_period_hours = 365 * 24
+
+  allowed_uses = [
+    "digital_signature",
+    "key_encipherment",
+    "content_commitment", # nonRepudiation
+    "client_auth",
+  ]
 }
