@@ -1,3 +1,5 @@
+variable "cilium_version" {}
+variable "flatcar_channel" {}
 variable "flatcar_network_ip_address" {}
 variable "flatcar_network_ip_dhcp_ranges_end" {}
 variable "flatcar_network_ip_dhcp_ranges_start" {}
@@ -7,4 +9,8 @@ variable "flatcar_network_name" {}
 variable "flatcar_network_nat_ports_end" {}
 variable "flatcar_network_nat_ports_start" {}
 variable "flatcar_release" {}
-variable "flatcar_channel" {}
+variable "keepalived_version" {}
+variable "kubernetes_config_version" {}
+variable "kubernetes_ha_ip" {}
+variable "kubernetes_version" {}
+variable "matchbox_ip" {}
