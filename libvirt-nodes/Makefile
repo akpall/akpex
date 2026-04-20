@@ -1,14 +1,15 @@
 default:
+	$(MAKE) apply
 .PHONY: default
 
-apply:
-	tofu apply $(VAR_FILES)
+init:
+	tofu init
+.PHONY: init
+
+apply: init
+	tofu apply
 .PHONY: apply
 
-plan:
-	tofu plan $(VAR_FILES)
-.PHONY: plan
-
-destroy:
-	tofu destroy $(VAR_FILES)
+destroy: init
+	tofu destroy
 .PHONY: destroy
