@@ -1,5 +1,7 @@
 TLS_FILES := ca.crt server.crt server.key
 
+export SAN := IP.1:$(TF_VAR_matchbox_ip)
+
 default:
 	$(MAKE) $(TLS_FILES)
 
