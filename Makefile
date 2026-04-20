@@ -1,7 +1,3 @@
-FLATCAR_CHANNEL := $(shell awk -F'"' '/flatcar_channel/{print $$2}' terraform.tfvars)
-FLATCAR_VERSION := $(shell awk -F'"' '/flatcar_version/{print $$2}' terraform.tfvars)
-MATCHBOX_IP := $(shell awk -F'"' '/matchbox_ip/{print $$2}' terraform.tfvars)
-
 TLS_SCRIPT_PATH := scripts/tls
 TLS_FILES := $(TLS_SCRIPT_PATH)/ca.crt \
 	     $(TLS_SCRIPT_PATH)/server.crt \
