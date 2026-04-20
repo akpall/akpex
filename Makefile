@@ -21,7 +21,7 @@ export TF_VAR_matchbox_cidr := 24
 export TF_VAR_matchbox_dns_servers := 192.168.100.1
 export TF_VAR_matchbox_gateway := 192.168.100.1
 export TF_VAR_matchbox_ip := 192.168.100.254
-export TF_VAR_matchbox_http_endpoint := $(TF_VAR_matchbox_ip):8080
+export TF_VAR_matchbox_http_endpoint := http://$(TF_VAR_matchbox_ip):8080
 export TF_VAR_matchbox_rpc_endpoint := $(TF_VAR_matchbox_ip):8081
 
 export TF_VAR_ssh_authorized_key := ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIOpw3cIAdtWOYUkb6UOAIcLuRzItoo4oZMzr/hzZYq4E openpgp:0xFAAA0172
@@ -37,15 +37,18 @@ export TF_VAR_kubernetes_ca_key_path := $(shell realpath scripts/kubernetes-cert
 export TF_VAR_kubernetes_ca_crt_hash_path := $(shell realpath scripts/kubernetes-certificates/ca.crt.hash)
 
 default:
-	$(MAKE) certificates
+	$(MAKE) matchbox-certificates
+	$(MAKE) kubernetes-certificates
 	$(MAKE) libvirt-nodes-apply
 	$(MAKE) matchbox-assets-upload
-	$(MAKE) matchbox
+	$(MAKE) matchbox-apply
 .PHONY: default
 
 clean:
 	$(MAKE) matchbox-destroy
 	$(MAKE) libvirt-nodes-destroy
+	$(MAKE) kubernetes-certificates-clean
+	$(MAKE) matchbox-certificates-clean
 .PHONY: clean
 
 libvirt-nodes-apply:
