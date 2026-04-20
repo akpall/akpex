@@ -1,6 +1,10 @@
 default:
-	tofu apply
+	$(MAKE) apply
 .PHONY: default
+
+apply:
+	tofu apply
+.PHONY: apply
 
 clean:
 	tofu destroy
