@@ -33,6 +33,26 @@ locals {
       memory      = 4096
       vcpu        = 2
     }
+    "flatcar-node4" = {
+      mac_address = "52:54:00:00:00:04"
+      memory      = 4096
+      vcpu        = 2
+    }
+    "flatcar-node5" = {
+      mac_address = "52:54:00:00:00:05"
+      memory      = 4096
+      vcpu        = 2
+    }
+    "flatcar-node6" = {
+      mac_address = "52:54:00:00:00:06"
+      memory      = 4096
+      vcpu        = 2
+    }
+    "flatcar-node7" = {
+      mac_address = "52:54:00:00:00:07"
+      memory      = 4096
+      vcpu        = 2
+    }
   }
 
   flatcar_matchbox_nodes = {

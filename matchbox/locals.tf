@@ -40,6 +40,22 @@ locals {
       mac                 = "52:54:00:00:00:03"
       interface           = "eth0"
     }
+    "flatcar-node4" = {
+      mac                 = "52:54:00:00:00:04"
+      interface           = "eth0"
+    }
+    "flatcar-node5" = {
+      mac                 = "52:54:00:00:00:05"
+      interface           = "eth0"
+    }
+    "flatcar-node6" = {
+      mac                 = "52:54:00:00:00:06"
+      interface           = "eth0"
+    }
+    "flatcar-node7" = {
+      mac                 = "52:54:00:00:00:07"
+      interface           = "eth0"
+    }
   }
 
   flatcar_all_nodes = merge(local.flatcar_etcd_init_node, local.flatcar_etcd_join_nodes)
