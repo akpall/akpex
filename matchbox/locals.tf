@@ -44,10 +44,14 @@ locals {
 
   keepalived_password = "12345678"
 
-  kubernetes_ca_crt      = file("./scripts/kubernetes/ca.crt")
-  kubernetes_ca_key      = file("./scripts/kubernetes/ca.key")
-  kubernetes_ca_crt_hash = trimspace(file("./scripts/kubernetes/ca.crt.hash"))
+  kubernetes_ca_crt      = file(var.kubernetes_ca_crt_path)
+  kubernetes_ca_crt_hash = trimspace(file(var.kubernetes_ca_crt_hash_path))
+  kubernetes_ca_key      = file(var.kubernetes_ca_key_path)
   kubernetes_token       = "abcdef.0123456789abcdef"
   # openssl rand -hex 32
   kubernetes_certificate_key = "7192c6140750450dae767c0faa7edf4c7f93af78b31105b3c2eac55c791791e8"
+
+  matchbox_ca_crt     = file(var.matchbox_ca_crt_path)
+  matchbox_client_crt = file(var.matchbox_client_crt_path)
+  matchbox_client_key = file(var.matchbox_client_key_path)
 }
