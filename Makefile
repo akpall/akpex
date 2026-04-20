@@ -50,8 +50,25 @@ default:
 .PHONY: default
 
 clean:
-	tofu clean
+	$(MAKE) matchbox-destroy
+	$(MAKE) libvirt-nodes-destroy
 .PHONY: clean
+
+libvirt-nodes-apply:
+	$(MAKE) -C libvirt-nodes apply
+.PHONY: libvirt-nodes-apply
+
+libvirt-nodes-destroy:
+	$(MAKE) -C libvirt-nodes destroy
+.PHONY: libvirt-nodes-destroy
+
+matchbox-apply:
+	$(MAKE) -C matchbox apply
+.PHONY: matchbox-apply
+
+matchbox-destroy:
+	$(MAKE) -C matchbox destroy
+.PHONY: matchbox-destroy
 
 matchbox-assets-download:
 	./get-flatcar $(FLATCAR_CHANNEL) $(FLATCAR_VERSION) matchbox-assets
@@ -68,20 +85,8 @@ matchbox-assets-upload:
 	  sleep 1; \
 	done
 
-matchbox:
-	$(MAKE) -C matchbox apply
-.PHONY: matchbox
-
 certificates: $(TLS_FILES)
 .PHONY: certificates
 
 $(TLS_FILES):
 	cd scripts/tls && ./cert-gen
-
-libvirt-nodes-apply:
-	$(MAKE) -C libvirt-nodes apply
-.PHONY: libvirt-nodes-apply
-
-libvirt-nodes-destroy:
-	$(MAKE) -C libvirt-nodes destroy
-.PHONY: libvirt-nodes-destroy

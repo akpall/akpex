@@ -6,8 +6,9 @@ apply:
 	tofu apply
 .PHONY: apply
 
-clean:
+destroy:
 	tofu destroy
+.PHONY: destroy
 
 assets-download:
 	./get-flatcar $(FLATCAR_CHANNEL) $(FLATCAR_VERSION)
