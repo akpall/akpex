@@ -96,5 +96,10 @@ kubernetes-certificates-clean:
 	$(MAKE) -C scripts/kubernetes-certificates clean
 .PHONY: kubernetes-certificates-clean
 
-$(TLS_FILES):
-	cd scripts/tls && ./cert-gen
+matchbox-certificates:
+	$(MAKE) -C scripts/matchbox-certificates
+.PHONY: matchbox-certificates
+
+matchbox-certificates-clean:
+	$(MAKE) -C scripts/matchbox-certificates clean
+.PHONY: matchbox-certificates-clean
