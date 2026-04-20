@@ -167,6 +167,12 @@ systemd:
         After=network-online.target
         ConditionPathExists=!/etc/kubernetes/kubelet.conf
         [Service]
+        TimeoutStartSec=infinity
+        ExecStartPre=/usr/bin/kubeadm config images pull
+        ExecStartPre=/usr/bin/bash -c '\
+          until nc -z ${KUBERNETES_HA_IP} 6444 2>/dev/null; do \
+            sleep 5; \
+          done'
         ExecStartPre=/usr/bin/kubeadm join ${KUBERNETES_HA_IP}:6444 \
                       --certificate-key ${KUBERNETES_CERTIFICATE_KEY} \
                       --control-plane \

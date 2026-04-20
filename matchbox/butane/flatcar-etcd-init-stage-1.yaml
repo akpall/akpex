@@ -205,6 +205,8 @@ systemd:
         After=network-online.target
         ConditionPathExists=!/etc/kubernetes/kubelet.conf
         [Service]
+        TimeoutStartSec=infinity
+        ExecStartPre=/usr/bin/kubeadm config images pull
         ExecStartPre=/usr/bin/kubeadm init \
                       --skip-phases=addon/kube-proxy \
                       --upload-certs \
@@ -248,7 +250,10 @@ systemd:
         After=network-online.target kubeadm.service
         [Service]
         Environment=KUBECONFIG='/home/core/.kube/config'
+        ExecStartPre=/usr/bin/bash -c '\
+          until nc -z ${KUBERNETES_HA_IP} 6444 2>/dev/null; do \
+            sleep 5; \
+          done'
         ExecStart=/usr/local/bin/cilium install --set kubeProxyReplacement=true --namespace=kube-system
-        Restart=always
         [Install]
         WantedBy=multi-user.target
