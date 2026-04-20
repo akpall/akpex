@@ -88,5 +88,13 @@ matchbox-assets-upload:
 certificates: $(TLS_FILES)
 .PHONY: certificates
 
+kubernetes-certificates:
+	$(MAKE) -C scripts/kubernetes-certificates
+.PHONY: kubernetes-certificates
+
+kubernetes-certificates-clean:
+	$(MAKE) -C scripts/kubernetes-certificates clean
+.PHONY: kubernetes-certificates-clean
+
 $(TLS_FILES):
 	cd scripts/tls && ./cert-gen
