@@ -26,15 +26,15 @@ export TF_VAR_matchbox_rpc_endpoint := $(TF_VAR_matchbox_ip):8081
 
 export TF_VAR_ssh_authorized_key := ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIOpw3cIAdtWOYUkb6UOAIcLuRzItoo4oZMzr/hzZYq4E openpgp:0xFAAA0172
 
-export TF_VAR_matchbox_ca_crt_path     := $(shell realpath scripts/tls/ca.crt)
-export TF_VAR_matchbox_client_crt_path := $(shell realpath scripts/tls/client.crt)
-export TF_VAR_matchbox_client_key_path := $(shell realpath scripts/tls/client.key)
-export TF_VAR_matchbox_server_crt_path := $(shell realpath scripts/tls/server.crt)
-export TF_VAR_matchbox_server_key_path := $(shell realpath scripts/tls/server.key)
+export TF_VAR_matchbox_ca_crt_path     := $(shell realpath scripts/matchbox-certificates/ca.crt)
+export TF_VAR_matchbox_client_crt_path := $(shell realpath scripts/matchbox-certificates/client.crt)
+export TF_VAR_matchbox_client_key_path := $(shell realpath scripts/matchbox-certificates/client.key)
+export TF_VAR_matchbox_server_crt_path := $(shell realpath scripts/matchbox-certificates/server.crt)
+export TF_VAR_matchbox_server_key_path := $(shell realpath scripts/matchbox-certificates/server.key)
 
-export TF_VAR_kubernetes_ca_crt_path := $(shell realpath scripts/kubernetes/ca.crt)
-export TF_VAR_kubernetes_ca_key_path := $(shell realpath scripts/kubernetes/ca.key)
-export TF_VAR_kubernetes_ca_crt_hash_path := $(shell realpath scripts/kubernetes/ca.crt.hash)
+export TF_VAR_kubernetes_ca_crt_path := $(shell realpath scripts/kubernetes-certificates/ca.crt)
+export TF_VAR_kubernetes_ca_key_path := $(shell realpath scripts/kubernetes-certificates/ca.key)
+export TF_VAR_kubernetes_ca_crt_hash_path := $(shell realpath scripts/kubernetes-certificates/ca.crt.hash)
 
 TLS_SCRIPT_PATH := scripts/tls
 TLS_FILES := $(TLS_SCRIPT_PATH)/ca.crt \
