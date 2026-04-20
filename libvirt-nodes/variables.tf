@@ -1,15 +1,17 @@
-variable "flatcar_network_ip_address" { type = string }
-variable "flatcar_network_ip_dhcp_ranges_end" { type = string }
-variable "flatcar_network_ip_dhcp_ranges_start" { type = string }
-variable "flatcar_network_ip_netmask" { type = string }
-variable "flatcar_network_mode" { type = string }
-variable "flatcar_network_name" { type = string }
-variable "flatcar_network_nat_ports_end" { type = string }
-variable "flatcar_network_nat_ports_start" { type = string }
-variable "flatcar_version" { type = string }
-variable "flatcar_channel" { type = string }
-
-variable "matchbox_ip" { type = string }
-variable "matchbox_cidr" { type = string }
-variable "matchbox_gateway" { type = string }
-variable "matchbox_dns_servers" { type = string }
+variable "flatcar_channel" {}
+variable "flatcar_network_ip_address" {}
+variable "flatcar_network_ip_dhcp_ranges_end" {}
+variable "flatcar_network_ip_dhcp_ranges_start" {}
+variable "flatcar_network_ip_netmask" {}
+variable "flatcar_network_mode" {}
+variable "flatcar_network_name" {}
+variable "flatcar_network_nat_ports_end" {}
+variable "flatcar_network_nat_ports_start" {}
+variable "flatcar_version" {}
+variable "matchbox_ca_crt_path" {}
+variable "matchbox_cidr" {}
+variable "matchbox_dns_servers" {}
+variable "matchbox_gateway" {}
+variable "matchbox_ip" {}
+variable "matchbox_server_crt_path" {}
+variable "matchbox_server_key_path" {}

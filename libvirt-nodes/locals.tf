@@ -1,7 +1,7 @@
 locals {
-  matchbox_ca_crt     = file("../scripts/tls/ca.crt")
-  matchbox_server_crt = file("../scripts/tls/server.crt")
-  matchbox_server_key = file("../scripts/tls/server.key")
+  matchbox_ca_crt     = file(var.matchbox_ca_crt_path)
+  matchbox_server_crt = file(var.matchbox_server_crt_path)
+  matchbox_server_key = file(var.matchbox_server_key_path)
 
   flatcar_etcd_init_nodes = {
     "flatcar-node0" = {
