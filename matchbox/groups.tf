@@ -1,7 +1,9 @@
 # worker nodes
 resource "matchbox_group" "flatcar-worker" {
+  for_each = local.flatcar_worker_nodes
+
   name    = "flatcar-worker"
-  profile = matchbox_profile.flatcar-worker.name
+  profile = matchbox_profile.flatcar-worker[each.key].name
 }
 
 # init nodes

@@ -1,7 +1,9 @@
 # flatcar-worker
 resource "matchbox_profile" "flatcar-worker" {
-  name         = "flatcar-worker"
-  raw_ignition = data.ct_config.flatcar-worker.rendered
+  for_each = local.flatcar_worker_nodes
+
+  name         = "${each.key}-worker"
+  raw_ignition = data.ct_config.flatcar-worker[each.key].rendered
 
   kernel = local.flatcar_kernel
   initrd = [
@@ -16,8 +18,18 @@ resource "matchbox_profile" "flatcar-worker" {
 }
 
 data "ct_config" "flatcar-worker" {
+  for_each = local.flatcar_worker_nodes
+
   content = templatefile("${path.module}/butane/flatcar-worker.yaml", {
     SSH_AUTHORIZED_KEY = var.ssh_authorized_key
+    HOSTNAME                   = each.key
+    INTERFACE                  = each.value.interface
+    KUBERNETES_VERSION         = var.kubernetes_version
+    KUBERNETES_CONFIG_VERSION          = var.kubernetes_config_version
+    KUBERNETES_HA_IP                      = var.kubernetes_ha_ip
+    KUBERNETES_CERTIFICATE_KEY = local.kubernetes_certificate_key
+    KUBERNETES_CA_CRT_HASH = local.kubernetes_ca_crt_hash
+    KUBERNETES_TOKEN           = local.kubernetes_token
   })
   strict = true
 }

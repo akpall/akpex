@@ -30,7 +30,7 @@ locals {
   flatcar_worker_nodes = {
     "flatcar-node3" = {
       mac_address = "52:54:00:00:00:03"
-      memory      = 2048
+      memory      = 4096
       vcpu        = 2
     }
   }

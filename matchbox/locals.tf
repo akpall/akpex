@@ -35,6 +35,13 @@ locals {
     }
   }
 
+  flatcar_worker_nodes = {
+    "flatcar-node3" = {
+      mac                 = "52:54:00:00:00:03"
+      interface           = "eth0"
+    }
+  }
+
   flatcar_all_nodes = merge(local.flatcar_etcd_init_node, local.flatcar_etcd_join_nodes)
 
   haproxy_cfg_backend = join("\n", [

@@ -6,3 +6,79 @@ passwd:
     - name: core
       ssh_authorized_keys:
         - ${SSH_AUTHORIZED_KEY}
+
+storage:
+  directories:
+    - path: /etc/kubernetes
+      mode: 0755
+      user:
+        name: root
+      group:
+        name: root
+
+  files:
+    # /etc/hostname
+    - path: /etc/hostname
+      contents:
+        inline: ${HOSTNAME}
+    # /etc/systemd/network/00-${INTERFACE}.network
+    - path: /etc/systemd/network/00-${INTERFACE}.network
+      contents:
+        inline: |
+          [Match]
+          Name=${INTERFACE}
+
+          [Network]
+          DHCP=yes
+    # noop
+    - path: /etc/sysupdate.d/noop.conf
+      contents:
+        source: https://extensions.flatcar.org/extensions/noop.conf
+    # k8s
+    - path: /opt/extensions/kubernetes/kubernetes-v${KUBERNETES_VERSION}-x86-64.raw
+      contents:
+        source: https://extensions.flatcar.org/extensions/kubernetes-v${KUBERNETES_VERSION}-x86-64.raw
+    - path: /etc/sysupdate.kubernetes.d/kubernetes-v${KUBERNETES_CONFIG_VERSION}.conf
+      contents:
+        source: https://extensions.flatcar.org/extensions/kubernetes/kubernetes-v${KUBERNETES_CONFIG_VERSION}.conf
+  links:
+    - path: /etc/extensions/kubernetes.raw
+      target: /opt/extensions/kubernetes/kubernetes-v${KUBERNETES_VERSION}-x86-64.raw
+
+systemd:
+  units:
+    - name: locksmithd.service
+      mask: true
+    - name: systemd-sysupdate.timer
+      enabled: true
+    - name: systemd-sysupdate.service
+      dropins:
+        - name: kubernetes.conf
+          contents: |
+            [Service]
+            ExecStartPre=/usr/bin/sh -c "readlink --canonicalize /etc/extensions/kubernetes.raw > /tmp/kubernetes"
+            ExecStartPre=/usr/lib/systemd/systemd-sysupdate -C kubernetes update
+            ExecStartPost=/usr/bin/sh -c "readlink --canonicalize /etc/extensions/kubernetes.raw > /tmp/kubernetes-new"
+            ExecStartPost=/usr/bin/sh -c "if ! cmp --silent /tmp/kubernetes /tmp/kubernetes-new; then touch /run/reboot-required; fi"
+    - name: kubeadm.service
+      enabled: true
+      contents: |
+        [Unit]
+        Description=Kubeadm service
+        Requires=containerd.service
+        After=containerd.service
+        After=network-online.target
+        ConditionPathExists=!/etc/kubernetes/kubelet.conf
+        [Service]
+        TimeoutStartSec=infinity
+        ExecStartPre=/usr/bin/kubeadm config images pull
+        ExecStartPre=/usr/bin/bash -c '\
+          until nc -z ${KUBERNETES_HA_IP} 6444 2>/dev/null; do \
+            sleep 5; \
+          done'
+        ExecStart=/usr/bin/kubeadm join ${KUBERNETES_HA_IP}:6444 \
+                      --certificate-key ${KUBERNETES_CERTIFICATE_KEY} \
+                      --discovery-token-ca-cert-hash ${KUBERNETES_CA_CRT_HASH} \
+                      --token ${KUBERNETES_TOKEN}
+        [Install]
+        WantedBy=multi-user.target
