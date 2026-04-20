@@ -36,12 +36,6 @@ export TF_VAR_kubernetes_ca_crt_path := $(shell realpath scripts/kubernetes-cert
 export TF_VAR_kubernetes_ca_key_path := $(shell realpath scripts/kubernetes-certificates/ca.key)
 export TF_VAR_kubernetes_ca_crt_hash_path := $(shell realpath scripts/kubernetes-certificates/ca.crt.hash)
 
-TLS_SCRIPT_PATH := scripts/tls
-TLS_FILES := $(TLS_SCRIPT_PATH)/ca.crt \
-	     $(TLS_SCRIPT_PATH)/server.crt \
-	     $(TLS_SCRIPT_PATH)/server.key
-export SAN := IP.1:$(TF_VAR_matchbox_ip)
-
 default:
 	$(MAKE) certificates
 	$(MAKE) libvirt-nodes-apply
