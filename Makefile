@@ -1,9 +1,3 @@
-TLS_SCRIPT_PATH := scripts/tls
-TLS_FILES := $(TLS_SCRIPT_PATH)/ca.crt \
-	     $(TLS_SCRIPT_PATH)/server.crt \
-	     $(TLS_SCRIPT_PATH)/server.key
-export SAN := IP.1:$(MATCHBOX_IP)
-
 export TF_VAR_cilium_version := 0.19.2
 
 export TF_VAR_flatcar_channel := stable
@@ -30,6 +24,12 @@ export TF_VAR_matchbox_ip := 192.168.100.254
 
 export TF_VAR_ssh_authorized_key := ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIOpw3cIAdtWOYUkb6UOAIcLuRzItoo4oZMzr/hzZYq4E openpgp:0xFAAA0172
 
+TLS_SCRIPT_PATH := scripts/tls
+TLS_FILES := $(TLS_SCRIPT_PATH)/ca.crt \
+	     $(TLS_SCRIPT_PATH)/server.crt \
+	     $(TLS_SCRIPT_PATH)/server.key
+export SAN := IP.1:$(TF_VAR_matchbox_ip)
+
 default:
 	$(MAKE) certificates
 	$(MAKE) libvirt-nodes-apply
@@ -51,7 +51,7 @@ matchbox-assets-upload:
 	  --rsync-path="sudo rsync" \
 	  --delete \
 	  matchbox-assets/ \
-	  core@$(MATCHBOX_IP):/var/lib/matchbox/assets; \
+	  core@$(TF_VAR_matchbox_ip):/var/lib/matchbox/assets; \
 	do \
 	  sleep 1; \
 	done
