@@ -9,6 +9,7 @@ TLS_FILES := $(TLS_SCRIPT_PATH)/ca.crt \
 export SAN := IP.1:$(MATCHBOX_IP)
 
 default:
+	$(MAKE) libvirt-nodes-apply
 	$(MAKE) matchbox-assets-upload
 .PHONY: default
 
@@ -41,3 +42,7 @@ certificates: $(TLS_FILES)
 
 $(TLS_FILES):
 	cd scripts/tls && ./cert-gen
+
+libvirt-nodes-apply:
+	$(MAKE) -C libvirt-nodes apply
+.PHONY: libvirt-nodes-apply
