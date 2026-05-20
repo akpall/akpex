@@ -9,13 +9,13 @@ export TF_VAR_flatcar_network_mode := nat
 export TF_VAR_flatcar_network_name := flatcar_network
 export TF_VAR_flatcar_network_nat_ports_end := 65535
 export TF_VAR_flatcar_network_nat_ports_start := 1024
-export TF_VAR_flatcar_version := 4459.2.4
+export TF_VAR_flatcar_version := 4593.2.1
 
 export TF_VAR_keepalived_version := 2.3.4
 
-export TF_VAR_kubernetes_config_version := 1.35
+export TF_VAR_kubernetes_config_version := 1.36
 export TF_VAR_kubernetes_ha_ip := 192.168.100.253
-export TF_VAR_kubernetes_version := 1.35.3
+export TF_VAR_kubernetes_version := 1.36.1
 
 export TF_VAR_matchbox_cidr := 24
 export TF_VAR_matchbox_dns_servers := 192.168.100.1
