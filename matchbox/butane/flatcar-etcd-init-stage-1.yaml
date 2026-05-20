@@ -54,6 +54,27 @@ storage:
       contents:
         inline: |
           ${indent(10, KUBERNETES_CA_KEY)}
+    - path: /etc/kubernetes/kubeadm-config.yaml
+      mode: 0600
+      contents:
+        inline: |
+          apiServer:
+            extraArgs:
+              - name: kubelet-certificate-authority
+                value: /etc/kubernetes/pki/ca.crt
+          apiVersion: kubeadm.k8s.io/v1beta4
+          controlPlaneEndpoint: ${KUBERNETES_HA_IP}:6443
+          kind: ClusterConfiguration
+          ---
+          apiVersion: kubeadm.k8s.io/v1beta4
+          kind: InitConfiguration
+          bootstrapTokens:
+            - token: "${KUBERNETES_TOKEN}"
+              ttl: "24h"
+              usages:
+                - signing
+                - authentication
+          certificateKey: "${KUBERNETES_CERTIFICATE_KEY}"
     # /etc/keepalived/check_apiserver.sh
     - path: /etc/keepalived/check_apiserver.sh
       mode: 0755
@@ -208,11 +229,9 @@ systemd:
         TimeoutStartSec=infinity
         ExecStartPre=/usr/bin/kubeadm config images pull
         ExecStartPre=/usr/bin/kubeadm init \
+                      --config /etc/kubernetes/kubeadm-config.yaml \
                       --skip-phases=addon/kube-proxy \
-                      --upload-certs \
-                      --control-plane-endpoint ${KUBERNETES_HA_IP}:6443 \
-                      --token ${KUBERNETES_TOKEN} \
-                      --certificate-key ${KUBERNETES_CERTIFICATE_KEY}
+                      --upload-certs
         ExecStartPre=/usr/bin/mkdir /home/core/.kube
         ExecStartPre=/usr/bin/cp /etc/kubernetes/admin.conf /home/core/.kube/config
         ExecStart=/usr/bin/chown -R core:core /home/core/.kube
