@@ -1,0 +1,34 @@
+* kube-bench run
+docker run \
+  --pid=host \
+  --rm \
+  -e KUBECONFIG=/.kube/config \
+  -it \
+  -v $(which kubectl):/usr/local/mount-from-host/bin/kubectl \
+  -v /etc:/etc:ro \
+  -v /usr/share/baselayout/passwd:/etc/passwd:ro \
+  -v /usr/share/baselayout/group:/etc/group:ro \
+  -v /var:/var:ro \
+  -v ~/.kube:/.kube \
+  -t docker.io/aquasec/kube-bench:latest run
+
+* kube-bench run inline
+docker run --pid=host --rm -e KUBECONFIG=/.kube/config -it -v $(which kubectl):/usr/local/mount-from-host/bin/kubectl -v /etc:/etc:ro -v /usr/share/baselayout/passwd:/etc/passwd:ro -v /usr/share/baselayout/group:/etc/group:ro -v /var:/var:ro -v ~/.kube:/.kube -t docker.io/aquasec/kube-bench:latest run
+
+* kube-bench run test
+docker run \
+  --entrypoint /bin/sh \
+  --pid=host \
+  --rm \
+  -e KUBECONFIG=/.kube/config \
+  -it \
+  -v $(which kubectl):/usr/local/mount-from-host/bin/kubectl \
+  -v /etc:/etc:ro \
+  -v /usr/share/baselayout/passwd:/etc/passwd:ro \
+  -v /usr/share/baselayout/group:/etc/group:ro \
+  -v /var:/var:ro \
+  -v ~/.kube:/.kube \
+  -t docker.io/aquasec/kube-bench:latest run
+
+* kube-bench run test inline
+docker run --entrypoint /bin/sh --pid=host --rm -e KUBECONFIG=/.kube/config -it -v $(which kubectl):/usr/local/mount-from-host/bin/kubectl -v /etc:/etc:ro -v /usr/share/baselayout/passwd:/etc/passwd:ro -v /usr/share/baselayout/group:/etc/group:ro -v /var:/var:ro -v ~/.kube:/.kube -t docker.io/aquasec/kube-bench:latest run
