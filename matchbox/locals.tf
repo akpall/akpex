@@ -37,24 +37,24 @@ locals {
 
   flatcar_worker_nodes = {
     "flatcar-node3" = {
-      mac                 = "52:54:00:00:00:03"
-      interface           = "eth0"
+      mac       = "52:54:00:00:00:03"
+      interface = "eth0"
     }
     "flatcar-node4" = {
-      mac                 = "52:54:00:00:00:04"
-      interface           = "eth0"
+      mac       = "52:54:00:00:00:04"
+      interface = "eth0"
     }
     "flatcar-node5" = {
-      mac                 = "52:54:00:00:00:05"
-      interface           = "eth0"
+      mac       = "52:54:00:00:00:05"
+      interface = "eth0"
     }
     "flatcar-node6" = {
-      mac                 = "52:54:00:00:00:06"
-      interface           = "eth0"
+      mac       = "52:54:00:00:00:06"
+      interface = "eth0"
     }
     "flatcar-node7" = {
-      mac                 = "52:54:00:00:00:07"
-      interface           = "eth0"
+      mac       = "52:54:00:00:00:07"
+      interface = "eth0"
     }
   }
 

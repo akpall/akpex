@@ -4,7 +4,7 @@ default:
 .PHONY: default
 
 ca.key:
-	openssl genrsa -out ca.key 2048
+	openssl genrsa -out ca.key 4096
 
 ca.crt: ca.key
 	openssl req -x509 -new -noenc -key ca.key -subj "/CN=$(TF_VAR_kubernetes_ha_ip)" -days 10000 -out ca.crt

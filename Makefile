@@ -68,7 +68,7 @@ matchbox-destroy:
 .PHONY: matchbox-destroy
 
 matchbox-assets-download:
-	./get-flatcar $(FLATCAR_CHANNEL) $(FLATCAR_VERSION) matchbox-assets
+	./get-flatcar $(TF_VAR_flatcar_channel) $(TF_VAR_flatcar_version) matchbox-assets
 .PHONY: matchbox-assets-download
 
 matchbox-assets-upload:
