@@ -62,6 +62,30 @@ storage:
             extraArgs:
               - name: kubelet-certificate-authority
                 value: /etc/kubernetes/pki/ca.crt
+              - name: profiling
+                value: "false"
+              - name: audit-log-path
+                value: /var/log/apiserver/audit.log
+              - name: audit-log-maxage
+                value: "30"
+              - name: audit-log-maxbackup
+                value: "10"
+              - name: audit-log-maxsize
+                value: "100"
+              - name: request-timeout
+                value: "300s"
+              - name: service-account-extend-token-expiration
+                value: "false"
+          controllerManager:
+            extraArgs:
+              - name: terminated-pod-gc-threshold
+                value: "10"
+              - name: profiling
+                value: "false"
+          scheduler:
+            extraArgs:
+              - name: profiling
+                value: "false"
           apiVersion: kubeadm.k8s.io/v1beta4
           controlPlaneEndpoint: ${KUBERNETES_HA_IP}:6443
           kind: ClusterConfiguration
@@ -237,6 +261,31 @@ systemd:
         ExecStart=/usr/bin/chown -R core:core /home/core/.kube
         [Install]
         WantedBy=multi-user.target
+    - name: kubelet-config-permissions.path
+      enabled: true
+      contents: |
+        [Unit]
+        Description=Watch kubelet config.yaml for changes
+
+        [Path]
+        PathExists=/var/lib/kubelet/config.yaml
+        PathChanged=/var/lib/kubelet/config.yaml
+        TriggerLimitIntervalSec=0
+
+        [Install]
+        WantedBy=multi-user.target
+
+    - name: kubelet-config-permissions.service
+      contents: |
+        [Unit]
+        Description=Fix kubelet config.yaml permissions
+        After=kubelet.service
+        StartLimitIntervalSec=0
+
+        [Service]
+        Type=oneshot
+        ExecStart=/bin/chmod 600 /var/lib/kubelet/config.yaml
+        RemainAfterExit=no
     - name: keepalived.service
       enabled: true
     - name: haproxy.service
