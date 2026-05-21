@@ -100,3 +100,18 @@ matchbox-certificates:
 matchbox-certificates-clean:
 	$(MAKE) -C scripts/matchbox-certificates clean
 .PHONY: matchbox-certificates-clean
+
+kube-bench:
+	ssh core@192.168.100.2 \
+	  'docker run \
+	    --pid=host \
+	    --rm \
+	    -e KUBECONFIG=/.kube/config \
+	    -v $$(which kubectl):/usr/local/mount-from-host/bin/kubectl \
+	    -v /etc:/etc:ro \
+	    -v /usr/share/baselayout/passwd:/etc/passwd:ro \
+	    -v /usr/share/baselayout/group:/etc/group:ro \
+	    -v /var:/var:ro \
+	    -v ~/.kube:/.kube \
+	    -t docker.io/aquasec/kube-bench:latest run --version $(TF_VAR_kubernetes_config_version)'
+.PHONY: kube-bench
