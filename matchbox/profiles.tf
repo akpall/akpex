@@ -91,6 +91,7 @@ data "ct_config" "flatcar-etcd-init-stage-1" {
     KUBERNETES_TOKEN           = local.kubernetes_token
     KUBERNETES_CERTIFICATE_KEY = local.kubernetes_certificate_key
     KUBERNETES_CA_KEY          = local.kubernetes_ca_key
+    KUBERNETES_ENCRYPTION_KEY = var.kubernetes_encryption_key
   })
   strict = true
 }

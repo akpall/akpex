@@ -35,6 +35,8 @@ export TF_VAR_matchbox_server_key_path := $(shell realpath scripts/matchbox-cert
 export TF_VAR_kubernetes_ca_crt_path := $(shell realpath scripts/kubernetes-certificates/ca.crt)
 export TF_VAR_kubernetes_ca_key_path := $(shell realpath scripts/kubernetes-certificates/ca.key)
 export TF_VAR_kubernetes_ca_crt_hash_path := $(shell realpath scripts/kubernetes-certificates/ca.crt.hash)
+# head -c 32 /dev/urandom | base64
+export TF_VAR_kubernetes_encryption_key := lxFLoK59RZmg/8FVskmmlY1by6qwg78sC5kcDZOUi+g=
 
 default:
 	$(MAKE) matchbox-certificates

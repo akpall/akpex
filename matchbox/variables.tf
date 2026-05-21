@@ -5,6 +5,7 @@ variable "kubernetes_ca_crt_hash_path" {}
 variable "kubernetes_ca_crt_path" {}
 variable "kubernetes_ca_key_path" {}
 variable "kubernetes_config_version" {}
+variable "kubernetes_encryption_key" {}
 variable "kubernetes_ha_ip" {}
 variable "kubernetes_version" {}
 variable "matchbox_ca_crt_path" {}
