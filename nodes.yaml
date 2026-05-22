@@ -25,18 +25,37 @@ flatcar-node2:
 flatcar-node3:
   mac: "52:54:00:00:00:03"
   interface: "eth0"
+  mac_address: "52:54:00:00:00:03"
+  memory: 8192
+  vcpu: 2
 flatcar-node4:
+  name: flatcar-node4
   mac: "52:54:00:00:00:04"
   interface: "eth0"
+  mac_address: "52:54:00:00:00:04"
+  memory: 8192
+  vcpu: 2
 flatcar-node5:
+  name: flatcar-node5
   mac: "52:54:00:00:00:05"
   interface: "eth0"
+  mac_address: "52:54:00:00:00:05"
+  memory: 8192
+  vcpu: 2
 flatcar-node6:
+  name: flatcar-node6
   mac: "52:54:00:00:00:06"
   interface: "eth0"
+  mac_address: "52:54:00:00:00:06"
+  memory: 8192
+  vcpu: 2
 flatcar-node7:
+  name: flatcar-node7
   mac: "52:54:00:00:00:07"
   interface: "eth0"
+  mac_address: "52:54:00:00:00:07"
+  memory: 8192
+  vcpu: 2
 flatcar-matchbox-node:
   name: "flatcar-matchbox-node"
   disk_capacity_gb: "20"

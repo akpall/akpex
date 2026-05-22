@@ -25,32 +25,4 @@ locals {
       vcpu                = 2
     }
   }
-
-  flatcar_worker_nodes = {
-    "flatcar-node3" = {
-      mac_address = "52:54:00:00:00:03"
-      memory      = 8192
-      vcpu        = 2
-    }
-    "flatcar-node4" = {
-      mac_address = "52:54:00:00:00:04"
-      memory      = 8192
-      vcpu        = 2
-    }
-    "flatcar-node5" = {
-      mac_address = "52:54:00:00:00:05"
-      memory      = 8192
-      vcpu        = 2
-    }
-    "flatcar-node6" = {
-      mac_address = "52:54:00:00:00:06"
-      memory      = 8192
-      vcpu        = 2
-    }
-    "flatcar-node7" = {
-      mac_address = "52:54:00:00:00:07"
-      memory      = 8192
-      vcpu        = 2
-    }
-  }
 }

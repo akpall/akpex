@@ -38,7 +38,10 @@ module "flatcar-etcd-join_node" {
 }
 
 module "flatcar-worker-nodes" {
-  for_each = local.flatcar_worker_nodes
+  for_each = {
+    for worker-node in local.nodes.flatcar_worker_nodes :
+    worker-node => local.nodes[worker-node]
+  }
 
   source     = "./flatcar-worker-node"
   depends_on = [module.flatcar-network]
