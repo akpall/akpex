@@ -35,7 +35,7 @@ resource "libvirt_volume" "flatcar_base" {
 resource "terraform_data" "system_volume" {
   triggers_replace = {
     vm_name  = var.vm_name
-    capacity = var.disk_capacity_bytes
+    capacity = var.disk_capacity_gb * 1024 * 1024 * 1024
     ignition = libvirt_ignition.flatcar_matchbox.id
     base     = libvirt_volume.flatcar_base.id
   }
@@ -44,7 +44,7 @@ resource "terraform_data" "system_volume" {
 resource "libvirt_volume" "flatcar_matchbox_system" {
   name     = "${var.vm_name}-system.qcow2"
   pool     = "default"
-  capacity = var.disk_capacity_bytes
+  capacity = var.disk_capacity_gb * 1024 * 1024 * 1024
 
   backing_store = {
     path = libvirt_volume.flatcar_base.path

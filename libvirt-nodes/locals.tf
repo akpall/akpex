@@ -1,7 +1,6 @@
 locals {
-  matchbox_ca_crt     = file(var.matchbox_ca_crt_path)
-  matchbox_server_crt = file(var.matchbox_server_crt_path)
-  matchbox_server_key = file(var.matchbox_server_key_path)
+  nodes     = yamldecode(file(var.NODES_PATH))
+  variables = yamldecode(file(var.VARIABLES_PATH))
 
   flatcar_etcd_init_nodes = {
     "flatcar-node0" = {
@@ -52,14 +51,6 @@ locals {
       mac_address = "52:54:00:00:00:07"
       memory      = 8192
       vcpu        = 2
-    }
-  }
-
-  flatcar_matchbox_nodes = {
-    "flatcar-matchbox-node" = {
-      disk_capacity_bytes = 20 * 1024 * 1024 * 1024
-      memory              = 2048
-      vcpu                = 2
     }
   }
 }

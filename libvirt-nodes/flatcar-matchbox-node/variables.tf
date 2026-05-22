@@ -1,4 +1,4 @@
-variable "disk_capacity_bytes" {}
+variable "disk_capacity_gb" {}
 variable "flatcar_channel" {}
 variable "flatcar_version" {}
 variable "matchbox_ca_crt" {}

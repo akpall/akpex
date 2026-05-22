@@ -1,42 +1,4 @@
-export TF_VAR_cilium_version := 0.19.2
-
-export TF_VAR_flatcar_channel := stable
-export TF_VAR_flatcar_network_ip_address := 192.168.100.1
-export TF_VAR_flatcar_network_ip_dhcp_ranges_end := 192.168.100.252
-export TF_VAR_flatcar_network_ip_dhcp_ranges_start := 192.168.100.5
-export TF_VAR_flatcar_network_ip_netmask := 255.255.255.0
-export TF_VAR_flatcar_network_mode := nat
-export TF_VAR_flatcar_network_name := flatcar_network
-export TF_VAR_flatcar_network_nat_ports_end := 65535
-export TF_VAR_flatcar_network_nat_ports_start := 1024
-export TF_VAR_flatcar_version := 4593.2.1
-
-export TF_VAR_keepalived_version := 2.3.4
-
-export TF_VAR_kubernetes_config_version := 1.36
-export TF_VAR_kubernetes_ha_ip := 192.168.100.253
-export TF_VAR_kubernetes_version := 1.36.1
-
-export TF_VAR_matchbox_cidr := 24
-export TF_VAR_matchbox_dns_servers := 192.168.100.1
-export TF_VAR_matchbox_gateway := 192.168.100.1
-export TF_VAR_matchbox_ip := 192.168.100.254
-export TF_VAR_matchbox_http_endpoint := http://$(TF_VAR_matchbox_ip):8080
-export TF_VAR_matchbox_rpc_endpoint := $(TF_VAR_matchbox_ip):8081
-
-export TF_VAR_ssh_authorized_key := ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIOpw3cIAdtWOYUkb6UOAIcLuRzItoo4oZMzr/hzZYq4E openpgp:0xFAAA0172
-
-export TF_VAR_matchbox_ca_crt_path     := $(shell realpath scripts/matchbox-certificates/ca.crt)
-export TF_VAR_matchbox_client_crt_path := $(shell realpath scripts/matchbox-certificates/client.crt)
-export TF_VAR_matchbox_client_key_path := $(shell realpath scripts/matchbox-certificates/client.key)
-export TF_VAR_matchbox_server_crt_path := $(shell realpath scripts/matchbox-certificates/server.crt)
-export TF_VAR_matchbox_server_key_path := $(shell realpath scripts/matchbox-certificates/server.key)
-
-export TF_VAR_kubernetes_ca_crt_path := $(shell realpath scripts/kubernetes-certificates/ca.crt)
-export TF_VAR_kubernetes_ca_key_path := $(shell realpath scripts/kubernetes-certificates/ca.key)
-export TF_VAR_kubernetes_ca_crt_hash_path := $(shell realpath scripts/kubernetes-certificates/ca.crt.hash)
-# head -c 32 /dev/urandom | base64
-export TF_VAR_kubernetes_encryption_key := lxFLoK59RZmg/8FVskmmlY1by6qwg78sC5kcDZOUi+g=
+include variables.mk
 
 default:
 	$(MAKE) matchbox-certificates
@@ -70,7 +32,7 @@ matchbox-destroy:
 .PHONY: matchbox-destroy
 
 matchbox-assets-download:
-	./get-flatcar $(TF_VAR_flatcar_channel) $(TF_VAR_flatcar_version) matchbox-assets
+	./get-flatcar $(flatcar_channel) $(flatcar_version) matchbox-assets
 .PHONY: matchbox-assets-download
 
 matchbox-assets-upload:
@@ -79,7 +41,7 @@ matchbox-assets-upload:
 	  --rsync-path="sudo rsync" \
 	  --delete \
 	  matchbox-assets/ \
-	  core@$(TF_VAR_matchbox_ip):/var/lib/matchbox/assets; \
+	  core@$(matchbox_ip):/var/lib/matchbox/assets; \
 	do \
 	  sleep 1; \
 	done
@@ -115,5 +77,40 @@ kube-bench:
 	    -v /usr/share/baselayout/group:/etc/group:ro \
 	    -v /var:/var:ro \
 	    -v ~/.kube:/.kube \
-	    -t docker.io/aquasec/kube-bench:latest run --version $(TF_VAR_kubernetes_config_version)'
+	    -t docker.io/aquasec/kube-bench:latest run --version $(kubernetes_config_version)'
 .PHONY: kube-bench
+
+variables.yaml: variables.mk
+	@printf '%s\n' \
+	  "cilium_version: \"${CILIUM_VERSION}\"" \
+	  "flatcar_channel: \"${FLATCAR_CHANNEL}\"" \
+	  "flatcar_network_ip_address: \"${FLATCAR_NETWORK_IP_ADDRESS}\"" \
+	  "flatcar_network_ip_dhcp_ranges_end: \"${FLATCAR_NETWORK_IP_DHCP_RANGES_END}\"" \
+	  "flatcar_network_ip_dhcp_ranges_start: \"${FLATCAR_NETWORK_IP_DHCP_RANGES_START}\"" \
+	  "flatcar_network_ip_netmask: \"${FLATCAR_NETWORK_IP_NETMASK}\"" \
+	  "flatcar_network_mode: \"${FLATCAR_NETWORK_MODE}\"" \
+	  "flatcar_network_name: \"${FLATCAR_NETWORK_NAME}\"" \
+	  "flatcar_network_nat_ports_end: \"${FLATCAR_NETWORK_NAT_PORTS_END}\"" \
+	  "flatcar_network_nat_ports_start: \"${FLATCAR_NETWORK_NAT_PORTS_START}\"" \
+	  "flatcar_version: \"${FLATCAR_VERSION}\"" \
+	  "keepalived_version: \"${KEEPALIVED_VERSION}\"" \
+	  "kubernetes_config_version: \"${KUBERNETES_CONFIG_VERSION}\"" \
+	  "kubernetes_ha_ip: \"${KUBERNETES_HA_IP}\"" \
+	  "kubernetes_version: \"${KUBERNETES_VERSION}\"" \
+	  "matchbox_cidr: \"${MATCHBOX_CIDR}\"" \
+	  "matchbox_dns_servers: \"${MATCHBOX_DNS_SERVERS}\"" \
+	  "matchbox_gateway: \"${MATCHBOX_GATEWAY}\"" \
+	  "matchbox_ip: \"${MATCHBOX_IP}\"" \
+	  "matchbox_http_endpoint: \"${MATCHBOX_HTTP_ENDPOINT}\"" \
+	  "matchbox_rpc_endpoint: \"${MATCHBOX_RPC_ENDPOINT}\"" \
+	  "ssh_authorized_key: \"${SSH_AUTHORIZED_KEY}\"" \
+	  "matchbox_ca_crt_path: \"${MATCHBOX_CA_CRT_PATH}\"" \
+	  "matchbox_client_crt_path: \"${MATCHBOX_CLIENT_CRT_PATH}\"" \
+	  "matchbox_client_key_path: \"${MATCHBOX_CLIENT_KEY_PATH}\"" \
+	  "matchbox_server_crt_path: \"${MATCHBOX_SERVER_CRT_PATH}\"" \
+	  "matchbox_server_key_path: \"${MATCHBOX_SERVER_KEY_PATH}\"" \
+	  "kubernetes_ca_crt_path: \"${KUBERNETES_CA_CRT_PATH}\"" \
+	  "kubernetes_ca_key_path: \"${KUBERNETES_CA_KEY_PATH}\"" \
+	  "kubernetes_ca_crt_hash_path: \"${KUBERNETES_CA_CRT_HASH_PATH}\"" \
+	  "kubernetes_encryption_key: \"${KUBERNETES_ENCRYPTION_KEY}\"" \
+	> $@

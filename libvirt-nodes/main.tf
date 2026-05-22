@@ -1,14 +1,14 @@
 module "flatcar-network" {
   source = "./flatcar-network"
 
-  flatcar_network_ip_address           = var.flatcar_network_ip_address
-  flatcar_network_ip_dhcp_ranges_end   = var.flatcar_network_ip_dhcp_ranges_end
-  flatcar_network_ip_dhcp_ranges_start = var.flatcar_network_ip_dhcp_ranges_start
-  flatcar_network_ip_netmask           = var.flatcar_network_ip_netmask
-  flatcar_network_mode                 = var.flatcar_network_mode
-  flatcar_network_name                 = var.flatcar_network_name
-  flatcar_network_nat_ports_end        = var.flatcar_network_nat_ports_end
-  flatcar_network_nat_ports_start      = var.flatcar_network_nat_ports_start
+  flatcar_network_ip_address           = local.variables.flatcar_network_ip_address
+  flatcar_network_ip_dhcp_ranges_end   = local.variables.flatcar_network_ip_dhcp_ranges_end
+  flatcar_network_ip_dhcp_ranges_start = local.variables.flatcar_network_ip_dhcp_ranges_start
+  flatcar_network_ip_netmask           = local.variables.flatcar_network_ip_netmask
+  flatcar_network_mode                 = local.variables.flatcar_network_mode
+  flatcar_network_name                 = local.variables.flatcar_network_name
+  flatcar_network_nat_ports_end        = local.variables.flatcar_network_nat_ports_end
+  flatcar_network_nat_ports_start      = local.variables.flatcar_network_nat_ports_start
 }
 
 module "flatcar-etcd-init_node" {
@@ -50,22 +50,20 @@ module "flatcar-worker-nodes" {
 }
 
 module "flatcar-matchbox-node" {
-  for_each = local.flatcar_matchbox_nodes
-
   source     = "./flatcar-matchbox-node"
   depends_on = [module.flatcar-network]
 
-  vm_name              = each.key
-  matchbox_ca_crt      = local.matchbox_ca_crt
-  disk_capacity_bytes  = each.value.disk_capacity_bytes
-  flatcar_channel      = var.flatcar_channel
-  flatcar_version      = var.flatcar_version
-  memory               = each.value.memory
-  matchbox_server_crt  = local.matchbox_server_crt
-  matchbox_server_key  = local.matchbox_server_key
-  matchbox_ip          = var.matchbox_ip
-  matchbox_cidr        = var.matchbox_cidr
-  matchbox_gateway     = var.matchbox_gateway
-  matchbox_dns_servers = var.matchbox_dns_servers
-  vcpu                 = each.value.vcpu
+  vm_name              = local.nodes.flatcar-matchbox-node.name
+  matchbox_ca_crt      = file(local.variables.matchbox_ca_crt_path)
+  disk_capacity_gb     = local.nodes.flatcar-matchbox-node.disk_capacity_gb
+  flatcar_channel      = local.variables.flatcar_channel
+  flatcar_version      = local.variables.flatcar_version
+  memory               = local.nodes.flatcar-matchbox-node.memory
+  matchbox_server_crt  = file(local.variables.matchbox_server_crt_path)
+  matchbox_server_key  = file(local.variables.matchbox_server_key_path)
+  matchbox_ip          = local.variables.matchbox_ip
+  matchbox_cidr        = local.variables.matchbox_cidr
+  matchbox_gateway     = local.variables.matchbox_gateway
+  matchbox_dns_servers = local.variables.matchbox_dns_servers
+  vcpu                 = local.nodes.flatcar-matchbox-node.vcpu
 }
