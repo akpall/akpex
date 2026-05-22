@@ -1,7 +1,7 @@
 resource "libvirt_volume" "flatcar_disk" {
   name     = "${var.vm_name}-data.qcow2"
   pool     = "default"
-  capacity = var.disk_capacity_bytes
+  capacity = var.disk_capacity_gb * 1024 * 1024 * 1024
   target = {
     format = {
       type = "qcow2"

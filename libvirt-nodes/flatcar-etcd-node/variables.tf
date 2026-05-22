@@ -1,4 +1,4 @@
-variable "disk_capacity_bytes" {}
+variable "disk_capacity_gb" {}
 variable "mac_address" {}
 variable "memory" {}
 variable "vcpu" {}

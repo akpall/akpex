@@ -1,28 +1,41 @@
 flatcar-node0:
-  mac: "52:54:00:00:00:00"
-  interface: "eth0"
-  ip: "192.168.100.2"
+  name: flatcar-node0
   cidr: "24"
+  disk_capacity_gb: 20
   dns: "192.168.100.1"
   gateway: "192.168.100.1"
+  interface: "eth0"
+  ip_address: "192.168.100.2"
   keepalived_priority: "100"
+  mac_address: "52:54:00:00:00:00"
+  memory: 2048
+  vcpu: 2
 flatcar-node1:
-  mac: "52:54:00:00:00:01"
-  interface: "eth0"
-  ip: "192.168.100.3"
+  name: flatcar-node1
   cidr: "24"
+  disk_capacity_gb: 20
   dns: "192.168.100.1"
   gateway: "192.168.100.1"
+  interface: "eth0"
+  ip_address: "192.168.100.3"
   keepalived_priority: "90"
+  mac_address: "52:54:00:00:00:01"
+  memory: 2048
+  vcpu: 2
 flatcar-node2:
-  mac: "52:54:00:00:00:02"
-  interface: "eth0"
-  ip: "192.168.100.4"
+  name: flatcar-node2
   cidr: "24"
+  disk_capacity_gb: 20
   dns: "192.168.100.1"
   gateway: "192.168.100.1"
+  interface: "eth0"
+  ip_address: "192.168.100.4"
   keepalived_priority: "80"
+  mac_address: "52:54:00:00:00:02"
+  memory: 2048
+  vcpu: 2
 flatcar-node3:
+  name: flatcar-node3
   mac: "52:54:00:00:00:03"
   interface: "eth0"
   mac_address: "52:54:00:00:00:03"
