@@ -13,7 +13,7 @@ terraform {
 }
 
 provider "matchbox" {
-  endpoint    = var.matchbox_rpc_endpoint
+  endpoint    = local.variables.matchbox_rpc_endpoint
   client_cert = local.matchbox_client_crt
   client_key  = local.matchbox_client_key
   ca          = local.matchbox_ca_crt

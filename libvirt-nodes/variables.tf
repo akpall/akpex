@@ -1,2 +1,2 @@
-variable "NODES_PATH" {}
-variable "VARIABLES_PATH" {}
+variable "nodes_path" {}
+variable "variables_path" {}

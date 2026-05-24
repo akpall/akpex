@@ -12,25 +12,20 @@ module "flatcar-network" {
 }
 
 module "flatcar-etcd-init_node" {
-  for_each = {
-    for init-node in local.nodes.flatcar_etcd_init_node :
-    init-node => local.nodes[init-node]
-  }
-
   source     = "./flatcar-etcd-node"
   depends_on = [module.flatcar-network]
 
-  vm_name             = each.value.name
-  disk_capacity_gb = each.value.disk_capacity_gb
-  mac_address         = each.value.mac_address
-  memory              = each.value.memory
-  vcpu                = each.value.vcpu
+  vm_name             = local.nodes.flatcar-node0.name
+  disk_capacity_gb = local.nodes.flatcar-node0.disk_capacity_gb
+  mac_address         = local.nodes.flatcar-node0.mac_address
+  memory              = local.nodes.flatcar-node0.memory
+  vcpu                = local.nodes.flatcar-node0.vcpu
 }
 
 module "flatcar-etcd-join_node" {
   for_each = {
-    for join-node in local.nodes.flatcar_etcd_join_nodes :
-    join-node => local.nodes[join-node]
+    for node in local.nodes.flatcar_etcd_join_nodes:
+    node.name => node
   }
 
   source     = "./flatcar-etcd-node"
@@ -45,8 +40,8 @@ module "flatcar-etcd-join_node" {
 
 module "flatcar-worker-nodes" {
   for_each = {
-    for worker-node in local.nodes.flatcar_worker_nodes :
-    worker-node => local.nodes[worker-node]
+    for node in local.nodes.flatcar_worker_nodes:
+    node.name => node
   }
 
   source     = "./flatcar-worker-node"
@@ -73,6 +68,6 @@ module "flatcar-matchbox-node" {
   matchbox_ip          = local.variables.matchbox_ip
   matchbox_cidr        = local.variables.matchbox_cidr
   matchbox_gateway     = local.variables.matchbox_gateway
-  matchbox_dns_servers = local.variables.matchbox_dns_servers
+  matchbox_dns_servers = local.variables.matchbox_dns_server
   vcpu                 = local.nodes.flatcar-matchbox-node.vcpu
 }
