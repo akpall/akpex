@@ -1,6 +1,6 @@
 locals {
-  nodes     = yamldecode(file(var.nodes_path))
-  variables = yamldecode(file(var.variables_path))
+  nodes     = jsondecode(file(var.nodes_path))
+  variables = jsondecode(file(var.variables_path))
 
   haproxy_cfg_backend = join("\n", [
     for etcd_node in local.nodes.flatcar_etcd_nodes:

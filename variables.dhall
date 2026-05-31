@@ -136,11 +136,11 @@ let kubernetes_certificate_key
 
 let nodes_path
     : Text
-    = env:ROOT_PATH as Text ++ "nodes.yaml"
+    = env:ROOT_PATH as Text ++ "nodes.json"
 
 let variables_path
     : Text
-    = env:ROOT_PATH as Text ++ "variables.yaml"
+    = env:ROOT_PATH as Text ++ "variables.json"
 
 let flatcar_kernel
     : Text

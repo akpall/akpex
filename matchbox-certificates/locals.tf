@@ -1,3 +1,3 @@
 locals {
-  variables = yamldecode(file(var.variables_path))
+  variables = jsondecode(file(var.variables_path))
 }

@@ -38,13 +38,13 @@ matchbox-assets-download: dhall-variables
 .PHONY: matchbox-assets-download
 
 matchbox-assets-upload: dhall-variables
-	$(eval MATCHBOX_IP := $(shell yq -r '.matchbox_ip' variables.yaml))
+	MATCHBOX_IP=$$(jq -r '.matchbox_ip' variables.json); \
 	until \
 	  rsync -rvz \
 	  --rsync-path="sudo rsync" \
 	  --delete \
 	  matchbox-assets/ \
-	  core@$(MATCHBOX_IP):/var/lib/matchbox/assets; \
+	  core@$${MATCHBOX_IP}:/var/lib/matchbox/assets; \
 	do \
 	  sleep 1; \
 	done
@@ -83,22 +83,17 @@ kube-bench: dhall-variables
 	    -t docker.io/aquasec/kube-bench:latest run --version $(kubernetes_config_version)'
 .PHONY: kube-bench
 
-nodes.yaml: nodes.dhall
-	dhall-to-yaml \
+nodes.json: nodes.dhall
+	dhall-to-json \
 	  --file nodes.dhall \
-	  --output nodes.yaml
+	  --output nodes.json
 
 variables.json: variables.dhall
 	dhall-to-json \
 	  --file variables.dhall \
 	  --output variables.json
 
-variables.yaml: variables.dhall
-	dhall-to-yaml \
-	  --file variables.dhall \
-	  --output variables.yaml
-
-dhall-variables: nodes.yaml variables.json variables.yaml
+dhall-variables: nodes.json variables.json
 	$(eval export TF_VAR_nodes_path := $(shell jq -r '.nodes_path' variables.json))
 	$(eval export TF_VAR_variables_path := $(shell jq -r '.variables_path' variables.json))
 .PHONY: dhall-variables
