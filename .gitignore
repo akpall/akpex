@@ -34,3 +34,10 @@
 /matchbox-certificates/.terraform.lock.hcl
 /matchbox-certificates/terraform.tfstate
 /matchbox-certificates/terraform.tfstate.backup
+/kubernetes-certificates/.terraform.lock.hcl
+/kubernetes-certificates/.terraform/
+/kubernetes-certificates/ca.crt
+/kubernetes-certificates/ca.crt.hash
+/kubernetes-certificates/ca.key
+/kubernetes-certificates/terraform.tfstate
+/kubernetes-certificates/terraform.tfstate.backup
