@@ -46,17 +46,6 @@ storage:
     - path: /etc/hostname
       contents:
         inline: ${HOSTNAME}
-    # /etc/systemd/network/00-${INTERFACE}.network
-    - path: /etc/systemd/network/00-${INTERFACE}.network
-      contents:
-        inline: |
-          [Match]
-          Name=${INTERFACE}
-
-          [Network]
-          DNS=${DNS}
-          Address=${IP}/${CIDR}
-          Gateway=${GATEWAY}
     - path: /etc/sysctl.d/99-haproxy.conf
       mode: 0644
       contents:
@@ -357,7 +346,6 @@ systemd:
             ExecStartPre=/usr/lib/systemd/systemd-sysupdate -C keepalived update
             ExecStartPost=/usr/bin/sh -c "readlink --canonicalize /etc/extensions/keepalived.raw > /tmp/keepalived-new"
             ExecStartPost=/usr/bin/sh -c "if ! cmp --silent /tmp/keepalived /tmp/keepalived-new; then touch /run/reboot-required; fi"
-
     - name: kubeadm.service
       enabled: true
       contents: |
@@ -436,10 +424,11 @@ systemd:
         After=network-online.target kubeadm.service
         [Service]
         Environment=KUBECONFIG='/home/core/.kube/config'
-        ExecStartPre=/usr/bin/bash -c '\
-          until nc -z ${KUBERNETES_HA_IP} 6444 2>/dev/null; do \
+        TimeoutStartSec=infinity
+        ExecStart=/usr/bin/bash -c '\
+          until (nc -z ${KUBERNETES_HA_IP} 6444 2>/dev/null && /usr/local/bin/cilium status) >/dev/null 2>&1 ; do \
             sleep 5; \
+            /usr/local/bin/cilium install --set kubeProxyReplacement=true --namespace=kube-system; \
           done'
-        ExecStart=/usr/local/bin/cilium install --set kubeProxyReplacement=true --namespace=kube-system
         [Install]
         WantedBy=multi-user.target

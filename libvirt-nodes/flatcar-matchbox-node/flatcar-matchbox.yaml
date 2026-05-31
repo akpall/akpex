@@ -10,16 +10,6 @@ passwd:
 
 storage:
   files:
-    - path: /etc/systemd/network/00-eth0.network
-      contents:
-        inline: |
-          [Match]
-          Name=eth0
-
-          [Network]
-          Address=${MATCHBOX_IP}/${MATCHBOX_CIDR}
-          Gateway=${MATCHBOX_GATEWAY}
-          DNS=${MATCHBOX_DNS_SERVERS}
     - path: /etc/matchbox/server.crt
       mode: 0600
       contents:
@@ -35,7 +25,6 @@ storage:
       contents:
         inline: |
           ${indent(10, MATCHBOX_CA_CRT)}
-
 
 systemd:
   units:

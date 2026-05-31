@@ -22,17 +22,6 @@ storage:
     - path: /etc/hostname
       contents:
         inline: ${HOSTNAME}
-    # /etc/systemd/network/00-${INTERFACE}.network
-    - path: /etc/systemd/network/00-${INTERFACE}.network
-      contents:
-        inline: |
-          [Match]
-          Name=${INTERFACE}
-
-          [Network]
-          DNS=${DNS}
-          Address=${IP}/${CIDR}
-          Gateway=${GATEWAY}
     - path: /etc/sysctl.d/99-haproxy.conf
       mode: 0644
       contents:

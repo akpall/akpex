@@ -23,7 +23,27 @@ resource "libvirt_network" "flatcar_network" {
             end   = var.flatcar_network_ip_dhcp_ranges_end
           }
         ]
+        hosts = [
+          for node in var.nodes.flatcar_all_nodes : {
+            ip   = node.ip_address
+            mac  = node.mac_address
+            name = node.name
+          }
+        ]
       }
     }
   ]
+  dns = {
+    enable = "yes"
+    host = [
+      for node in var.nodes.flatcar_all_nodes : {
+        ip = node.ip_address
+        hostnames = [
+          {
+            hostname = node.name
+          }
+        ]
+      }
+    ]
+  }
 }

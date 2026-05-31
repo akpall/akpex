@@ -6,3 +6,4 @@ variable "flatcar_network_mode" {}
 variable "flatcar_network_name" {}
 variable "flatcar_network_nat_ports_end" {}
 variable "flatcar_network_nat_ports_start" {}
+variable "nodes" {}

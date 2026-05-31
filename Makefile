@@ -38,7 +38,7 @@ matchbox-assets-download: dhall-variables
 .PHONY: matchbox-assets-download
 
 matchbox-assets-upload: dhall-variables
-	MATCHBOX_IP=$$(jq -r '.matchbox_ip' variables.json); \
+	MATCHBOX_IP=$$(jq -r '."flatcar-matchbox-node".ip_address' nodes.json); \
 	until \
 	  rsync -rvz \
 	  --rsync-path="sudo rsync" \

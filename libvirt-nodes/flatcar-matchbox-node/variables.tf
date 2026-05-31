@@ -1,6 +1,7 @@
 variable "disk_capacity_gb" {}
 variable "flatcar_channel" {}
 variable "flatcar_version" {}
+variable "mac_address" {}
 variable "matchbox_ca_crt" {}
 variable "matchbox_cidr" {}
 variable "matchbox_dns_servers" {}

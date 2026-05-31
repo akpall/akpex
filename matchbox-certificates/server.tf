@@ -10,7 +10,7 @@ resource "tls_cert_request" "server" {
     common_name = "matchbox-server"
   }
 
-  ip_addresses = [local.variables.matchbox_ip]
+  ip_addresses = [local.nodes.flatcar-matchbox-node.ip_address]
 }
 
 resource "tls_locally_signed_cert" "server" {

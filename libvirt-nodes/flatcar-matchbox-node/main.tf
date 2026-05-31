@@ -128,6 +128,9 @@ resource "libvirt_domain" "flatcar_matchbox" {
             network = "flatcar_network"
           }
         }
+        mac = {
+          address = var.mac_address
+        }
       }
     ]
 
