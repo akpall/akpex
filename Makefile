@@ -32,7 +32,9 @@ matchbox-clean: dhall-variables
 .PHONY: matchbox-clean
 
 matchbox-assets-download: dhall-variables
-	./get-flatcar $(FLATCAR_CHANNEL) $(FLATCAR_VERSION) matchbox-assets
+	FLATCAR_CHANNEL=$$(jq -r '.flatcar_channel' variables.json); \
+	FLATCAR_VERSION=$$(jq -r '.flatcar_version' variables.json); \
+	./get-flatcar $${FLATCAR_CHANNEL} $${FLATCAR_VERSION} matchbox-assets
 .PHONY: matchbox-assets-download
 
 matchbox-assets-upload: dhall-variables
@@ -99,7 +101,4 @@ variables.yaml: variables.dhall
 dhall-variables: nodes.yaml variables.json variables.yaml
 	$(eval export TF_VAR_nodes_path := $(shell jq -r '.nodes_path' variables.json))
 	$(eval export TF_VAR_variables_path := $(shell jq -r '.variables_path' variables.json))
-	$(eval export MATCHBOX_IP := $(shell jq -r '.matchbox_ip' variables.json))
-	$(eval export FLATCAR_CHANNEL := $(shell jq -r '.flatcar_channel' variables.json))
-	$(eval export FLATCAR_VERSION := $(shell jq -r '.flatcar_version' variables.json))
 .PHONY: dhall-variables
