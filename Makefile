@@ -69,6 +69,7 @@ matchbox-certificates-clean: dhall-variables
 .PHONY: matchbox-certificates-clean
 
 kube-bench: dhall-variables
+	KUBERNETES_VERSION=$$(jq -r '.kubernetes_config_version' variables.json); \
 	ssh core@192.168.100.2 \
 	  'docker run \
 	    --pid=host \
@@ -80,7 +81,7 @@ kube-bench: dhall-variables
 	    -v /usr/share/baselayout/group:/etc/group:ro \
 	    -v /var:/var:ro \
 	    -v ~/.kube:/.kube \
-	    -t docker.io/aquasec/kube-bench:latest run --version $(kubernetes_config_version)'
+	    -t docker.io/aquasec/kube-bench:latest run --version' "$${KUBERNETES_VERSION}"
 .PHONY: kube-bench
 
 nodes.json: nodes.dhall
