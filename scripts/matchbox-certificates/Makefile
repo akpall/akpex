@@ -1,25 +1,12 @@
-TLS_FILES := ca.crt server.crt server.key
-
-export SAN := IP.1:$(MATCHBOX_IP)
-
 default:
-	$(MAKE) $(TLS_FILES)
+	$(MAKE) init
+	$(MAKE) apply
 
-$(TLS_FILES):
-	./cert-gen
+apply:
+	tofu apply
+
+init:
+	tofu init
 
 clean:
-	-rm -r \
-	  ca.crt \
-	  ca.key \
-	  client.crt \
-	  client.key \
-	  index.txt \
-	  index.txt.attr \
-	  index.txt.attr.old \
-	  index.txt.old \
-	  newcerts \
-	  serial \
-	  serial.old \
-	  server.crt \
-	  server.key
+	tofu destroy
