@@ -24,3 +24,13 @@
 /scripts/matchbox-certificates/server.crt
 /scripts/matchbox-certificates/server.key
 /variables.yaml
+/matchbox-certificates/ca.crt
+/matchbox-certificates/ca.key
+/matchbox-certificates/client.crt
+/matchbox-certificates/client.key
+/matchbox-certificates/server.crt
+/matchbox-certificates/server.key
+/matchbox-certificates/.terraform/
+/matchbox-certificates/.terraform.lock.hcl
+/matchbox-certificates/terraform.tfstate
+/matchbox-certificates/terraform.tfstate.backup
