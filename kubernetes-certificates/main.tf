@@ -21,28 +21,18 @@ resource "tls_self_signed_cert" "ca" {
   ]
 }
 
-locals {
-  pubkey_b64 = replace(
-    replace(
-      replace(tls_private_key.ca.public_key_pem, "-----BEGIN PUBLIC KEY-----\n", ""),
-      "-----END PUBLIC KEY-----\n", ""
-    ),
-    "\n", ""
-  )
-
-  # This is the correct approach: hash the raw DER bytes of the public key
-  # base64sha256 in Terraform 1.x: sha256(string_as_utf8_bytes) — NOT what we want for binary
-  # Use external data source for correctness:
-  ca_cert_hash = "sha256:${data.external.ca_cert_hash.result["hash"]}"
-}
-
 data "external" "ca_cert_hash" {
-  program = ["bash", "-c", "openssl x509 -in ${path.module}/ca.crt -pubkey -noout | openssl pkey -pubin -outform DER | openssl dgst -sha256 -hex | awk '{print \"{\\\"hash\\\": \\\"\" $2 \"\\\"}\"}' "]
+  program = ["bash", "-c", <<-EOT
+    hash=$(openssl x509 -in "${path.module}/ca.crt" -pubkey \
+      | openssl rsa -pubin -outform der 2>/dev/null \
+      | openssl dgst -sha256 -hex \
+      | awk '{print $2}')
+    printf '{"hash":"%s"}' "$hash"
+  EOT
+  ]
 
   depends_on = [local_file.ca_crt]
 }
-
-
 
 resource "local_sensitive_file" "ca_key" {
   content         = tls_private_key.ca.private_key_pem
@@ -57,7 +47,7 @@ resource "local_file" "ca_crt" {
 }
 
 resource "local_file" "ca_crt_hash" {
-  content         = local.ca_cert_hash
+  content         = "sha256:${data.external.ca_cert_hash.result["hash"]}"
   filename        = "${path.module}/ca.crt.hash"
   file_permission = "0644"
 }
