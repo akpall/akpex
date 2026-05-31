@@ -3,33 +3,33 @@ export ROOT_PATH := $(dir $(abspath $(lastword $(MAKEFILE_LIST))))
 default: dhall-variables
 	$(MAKE) matchbox-certificates
 	$(MAKE) kubernetes-certificates
-	$(MAKE) libvirt-nodes-apply
+	$(MAKE) libvirt-nodes
 	$(MAKE) matchbox-assets-upload
-	$(MAKE) matchbox-apply
+	$(MAKE) matchbox
 .PHONY: default
 
 clean: dhall-variables
-	$(MAKE) matchbox-destroy
-	$(MAKE) libvirt-nodes-destroy
+	$(MAKE) matchbox-clean
+	$(MAKE) libvirt-nodes-clean
 	$(MAKE) kubernetes-certificates-clean
 	$(MAKE) matchbox-certificates-clean
 .PHONY: clean
 
-libvirt-nodes-apply: dhall-variables
-	$(MAKE) -C libvirt-nodes apply
-.PHONY: libvirt-nodes-apply
+libvirt-nodes: dhall-variables
+	$(MAKE) -C libvirt-nodes
+.PHONY: libvirt-nodes
 
-libvirt-nodes-destroy: dhall-variables
-	$(MAKE) -C libvirt-nodes destroy
-.PHONY: libvirt-nodes-destroy
+libvirt-nodes-clean: dhall-variables
+	$(MAKE) -C libvirt-nodes clean
+.PHONY: libvirt-nodes-clean
 
-matchbox-apply: dhall-variables
-	$(MAKE) -C matchbox apply
-.PHONY: matchbox-apply
+matchbox: dhall-variables
+	$(MAKE) -C matchbox
+.PHONY: matchbox
 
-matchbox-destroy: dhall-variables
-	$(MAKE) -C matchbox destroy
-.PHONY: matchbox-destroy
+matchbox-clean: dhall-variables
+	$(MAKE) -C matchbox clean
+.PHONY: matchbox-clean
 
 matchbox-assets-download: dhall-variables
 	./get-flatcar $(FLATCAR_CHANNEL) $(FLATCAR_VERSION) matchbox-assets
@@ -47,7 +47,7 @@ matchbox-assets-upload: dhall-variables
 	  sleep 1; \
 	done
 
-certificates: $(TLS_FILES) dhall-variables
+certificates: dhall-variables kubernetes-certificates matchbox-certificates
 .PHONY: certificates
 
 kubernetes-certificates: dhall-variables

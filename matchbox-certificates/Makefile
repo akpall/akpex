@@ -1,12 +1,14 @@
-default:
-	$(MAKE) init
-	$(MAKE) apply
+default: apply
+.PHONY: default
 
-apply:
+apply: init
 	tofu apply
+.PHONY: apply
 
 init:
 	tofu init
+.PHONY: init
 
-clean:
+clean: init
 	tofu destroy
+.PHONY: clean
