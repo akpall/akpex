@@ -16,7 +16,6 @@ clean: dhall-variables
 .PHONY: clean
 
 libvirt-nodes-apply: dhall-variables
-	echo $${TF_VAR_nodes_path}
 	$(MAKE) -C libvirt-nodes apply
 .PHONY: libvirt-nodes-apply
 
@@ -52,19 +51,19 @@ certificates: $(TLS_FILES) dhall-variables
 .PHONY: certificates
 
 kubernetes-certificates: dhall-variables
-	$(MAKE) -C scripts/kubernetes-certificates
+	$(MAKE) -C kubernetes-certificates
 .PHONY: kubernetes-certificates
 
 kubernetes-certificates-clean: dhall-variables
-	$(MAKE) -C scripts/kubernetes-certificates clean
+	$(MAKE) -C kubernetes-certificates clean
 .PHONY: kubernetes-certificates-clean
 
 matchbox-certificates: dhall-variables
-	$(MAKE) -C scripts/matchbox-certificates
+	$(MAKE) -C matchbox-certificates
 .PHONY: matchbox-certificates
 
 matchbox-certificates-clean: dhall-variables
-	$(MAKE) -C scripts/matchbox-certificates clean
+	$(MAKE) -C matchbox-certificates clean
 .PHONY: matchbox-certificates-clean
 
 kube-bench: dhall-variables
@@ -87,12 +86,20 @@ nodes.yaml: nodes.dhall
 	  --file nodes.dhall \
 	  --output nodes.yaml
 
+variables.json: variables.dhall
+	dhall-to-json \
+	  --file variables.dhall \
+	  --output variables.json
+
 variables.yaml: variables.dhall
 	dhall-to-yaml \
 	  --file variables.dhall \
 	  --output variables.yaml
 
-dhall-variables: nodes.yaml variables.yaml
-	$(eval export TF_VAR_nodes_path := $(shell yq -r '.nodes_path' variables.yaml))
-	$(eval export TF_VAR_variables_path := $(shell yq -r '.variables_path' variables.yaml))
+dhall-variables: nodes.yaml variables.json variables.yaml
+	$(eval export TF_VAR_nodes_path := $(shell jq -r '.nodes_path' variables.json))
+	$(eval export TF_VAR_variables_path := $(shell jq -r '.variables_path' variables.json))
+	$(eval export MATCHBOX_IP := $(shell jq -r '.matchbox_ip' variables.json))
+	$(eval export FLATCAR_CHANNEL := $(shell jq -r '.flatcar_channel' variables.json))
+	$(eval export FLATCAR_VERSION := $(shell jq -r '.flatcar_version' variables.json))
 .PHONY: dhall-variables

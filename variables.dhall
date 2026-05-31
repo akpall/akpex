@@ -88,35 +88,35 @@ let ssh_authorized_key
 
 let matchbox_ca_crt_path
     : Text
-    = env:ROOT_PATH as Text ++ "scripts/matchbox-certificates/ca.crt"
+    = env:ROOT_PATH as Text ++ "matchbox-certificates/ca.crt"
 
 let matchbox_client_crt_path
     : Text
-    = env:ROOT_PATH as Text ++ "scripts/matchbox-certificates/client.crt"
+    = env:ROOT_PATH as Text ++ "matchbox-certificates/client.crt"
 
 let matchbox_client_key_path
     : Text
-    = env:ROOT_PATH as Text ++ "scripts/matchbox-certificates/client.key"
+    = env:ROOT_PATH as Text ++ "matchbox-certificates/client.key"
 
 let matchbox_server_crt_path
     : Text
-    = env:ROOT_PATH as Text ++ "scripts/matchbox-certificates/server.crt"
+    = env:ROOT_PATH as Text ++ "matchbox-certificates/server.crt"
 
 let matchbox_server_key_path
     : Text
-    = env:ROOT_PATH as Text ++ "scripts/matchbox-certificates/server.key"
+    = env:ROOT_PATH as Text ++ "matchbox-certificates/server.key"
 
 let kubernetes_ca_crt_path
     : Text
-    = env:ROOT_PATH as Text ++ "scripts/kubernetes-certificates/ca.crt"
+    = env:ROOT_PATH as Text ++ "kubernetes-certificates/ca.crt"
 
 let kubernetes_ca_key_path
     : Text
-    = env:ROOT_PATH as Text ++ "scripts/kubernetes-certificates/ca.key"
+    = env:ROOT_PATH as Text ++ "kubernetes-certificates/ca.key"
 
 let kubernetes_ca_crt_hash_path
     : Text
-    = env:ROOT_PATH as Text ++ "scripts/kubernetes-certificates/ca.crt.hash"
+    = env:ROOT_PATH as Text ++ "kubernetes-certificates/ca.crt.hash"
 
 let kubernetes_encryption_key
     : Text
