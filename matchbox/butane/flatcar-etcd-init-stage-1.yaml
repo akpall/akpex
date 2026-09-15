@@ -61,38 +61,6 @@ storage:
       contents:
         inline: |
           ${indent(10, KUBERNETES_CA_KEY)}
-
-    - path: /etc/kubernetes/audit-policy.yaml
-      mode: 0600
-      contents:
-        inline: |
-          apiVersion: audit.k8s.io/v1
-          kind: Policy
-          rules:
-            - level: Metadata
-              resources:
-                - group: ""
-                  resources: ["secrets", "configmaps"]
-                - group: "authentication.k8s.io"
-                  resources: ["tokenreviews"]
-            - level: Metadata
-              resources:
-                - group: ""
-                  resources:
-                    - pods/exec
-                    - pods/portforward
-                    - pods/proxy
-                    - services/proxy
-            - level: RequestResponse
-              verbs: ["create", "update", "patch", "delete", "deletecollection"]
-              resources:
-                - group: ""
-                  resources: ["pods"]
-                - group: "apps"
-                  resources: ["deployments", "replicasets", "statefulsets", "daemonsets"]
-            - level: Metadata
-              omitStages:
-                - RequestReceived
     - path: /etc/kubernetes/kubeadm-config.yaml
       mode: 0600
       contents:
@@ -103,63 +71,6 @@ storage:
             extraArgs:
               - name: kubelet-certificate-authority
                 value: /etc/kubernetes/pki/ca.crt
-              - name: profiling
-                value: "false"
-              - name: audit-log-path
-                value: /var/log/apiserver/audit.log
-              - name: audit-log-maxage
-                value: "30"
-              - name: audit-log-maxbackup
-                value: "10"
-              - name: audit-log-maxsize
-                value: "100"
-              - name: audit-policy-file
-                value: /etc/kubernetes/audit-policy.yaml
-              - name: request-timeout
-                value: "300s"
-              - name: service-account-extend-token-expiration
-                value: "false"
-              - name: anonymous-auth
-                value: "false"
-              - name: enable-admission-plugins
-                value: "DenyServiceExternalIPs,NodeRestriction,EventRateLimit,AlwaysPullImages"
-              - name: tls-cipher-suites
-                value: "TLS_AES_128_GCM_SHA256,TLS_AES_256_GCM_SHA384,TLS_CHACHA20_POLY1305_SHA256,TLS_ECDHE_ECDSA_WITH_AES_128_GCM_SHA256,TLS_ECDHE_ECDSA_WITH_AES_256_GCM_SHA384,TLS_ECDHE_ECDSA_WITH_CHACHA20_POLY1305,TLS_ECDHE_ECDSA_WITH_CHACHA20_POLY1305_SHA256,TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256,TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384,TLS_ECDHE_RSA_WITH_CHACHA20_POLY1305,TLS_ECDHE_RSA_WITH_CHACHA20_POLY1305_SHA256"
-              - name: admission-control-config-file
-                value: /etc/kubernetes/admission/admission-control-config.yaml
-              - name: encryption-provider-config
-                value: /etc/kubernetes/encryption/encryption-config.yaml
-            extraVolumes:
-              - name: admission-config
-                hostPath: /etc/kubernetes/admission
-                mountPath: /etc/kubernetes/admission
-                readOnly: true
-                pathType: DirectoryOrCreate
-              - name: encryption-config
-                hostPath: /etc/kubernetes/encryption
-                mountPath: /etc/kubernetes/encryption
-                readOnly: true
-                pathType: DirectoryOrCreate
-              - name: audit-policy
-                hostPath: /etc/kubernetes/audit-policy.yaml
-                mountPath: /etc/kubernetes/audit-policy.yaml
-                readOnly: true
-                pathType: File
-              - name: audit-log
-                hostPath: /var/log/apiserver
-                mountPath: /var/log/apiserver
-                readOnly: false
-                pathType: DirectoryOrCreate
-          controllerManager:
-            extraArgs:
-              - name: terminated-pod-gc-threshold
-                value: "10"
-              - name: profiling
-                value: "false"
-          scheduler:
-            extraArgs:
-              - name: profiling
-                value: "false"
           controlPlaneEndpoint: ${KUBERNETES_HA_IP}:6443
           ---
           apiVersion: kubeadm.k8s.io/v1beta4
@@ -171,41 +82,6 @@ storage:
                 - signing
                 - authentication
           certificateKey: "${KUBERNETES_CERTIFICATE_KEY}"
-    - path: /etc/kubernetes/admission/event-rate-limit.yaml
-      mode: 0600
-      contents:
-        inline: |
-          apiVersion: eventratelimit.admission.k8s.io/v1alpha1
-          kind: Configuration
-          limits:
-            - type: Server
-              qps: 5000
-              burst: 20000
-    - path: /etc/kubernetes/admission/admission-control-config.yaml
-      mode: 0600
-      contents:
-        inline: |
-          apiVersion: apiserver.config.k8s.io/v1
-          kind: AdmissionConfiguration
-          plugins:
-            - name: EventRateLimit
-              path: /etc/kubernetes/admission/event-rate-limit.yaml
-    - path: /etc/kubernetes/encryption/encryption-config.yaml
-      mode: 0600
-      contents:
-        inline: |
-          apiVersion: apiserver.config.k8s.io/v1
-          kind: EncryptionConfiguration
-          resources:
-            - resources:
-                - secrets
-                - configmaps
-              providers:
-                - aescbc:
-                    keys:
-                      - name: key1
-                        secret: ${KUBERNETES_ENCRYPTION_KEY}
-                - identity: {}
     # /etc/keepalived/check_apiserver.sh
     - path: /etc/keepalived/check_apiserver.sh
       mode: 0755
@@ -367,31 +243,6 @@ systemd:
         ExecStart=/usr/bin/chown -R core:core /home/core/.kube
         [Install]
         WantedBy=multi-user.target
-    - name: kubelet-config-permissions.path
-      enabled: true
-      contents: |
-        [Unit]
-        Description=Watch kubelet config.yaml for changes
-
-        [Path]
-        PathExists=/var/lib/kubelet/config.yaml
-        PathChanged=/var/lib/kubelet/config.yaml
-        TriggerLimitIntervalSec=0
-
-        [Install]
-        WantedBy=multi-user.target
-
-    - name: kubelet-config-permissions.service
-      contents: |
-        [Unit]
-        Description=Fix kubelet config.yaml permissions
-        After=kubelet.service
-        StartLimitIntervalSec=0
-
-        [Service]
-        Type=oneshot
-        ExecStart=/bin/chmod 600 /var/lib/kubelet/config.yaml
-        RemainAfterExit=no
     - name: keepalived.service
       enabled: true
     - name: haproxy.service

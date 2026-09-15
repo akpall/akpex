@@ -98,3 +98,7 @@ dhall-variables: nodes.json variables.json
 	$(eval export TF_VAR_nodes_path := $(shell jq -r '.nodes_path' variables.json))
 	$(eval export TF_VAR_variables_path := $(shell jq -r '.variables_path' variables.json))
 .PHONY: dhall-variables
+
+certificates-generate: dhall-variables
+	$(MAKE) -C certificates
+.PHONY: certificates-generate
