@@ -1,5 +1,15 @@
 locals {
   kubernetes_ha_ip = "192.168.100.253"
-  matchbox_ip = "192.168.100.254"
+
+  matchbox_ip                  = "192.168.100.254"
   matchbox-server-ip_addresses = [local.matchbox_ip]
+
+  flatcar_network_ip_address           = "192.168.100.1"
+  flatcar_network_ip_dhcp_ranges_end   = "192.168.100.252"
+  flatcar_network_ip_dhcp_ranges_start = "192.168.100.5"
+  flatcar_network_ip_netmask           = "255.255.255.0"
+  flatcar_network_mode                 = "nat"
+  flatcar_network_name                 = "flatcar_network"
+  flatcar_network_nat_ports_end        = 65535
+  flatcar_network_nat_ports_start      = 1024
 }
