@@ -20,3 +20,21 @@ resource "tls_self_signed_cert" "kubernetes-ca" {
     "crl_signing",
   ]
 }
+
+data "external" "ca_cert_hash" {
+  program = ["bash", "-c", <<-EOT
+    set -euo pipefail
+    cert=$(jq -r '.cert')
+    hash=$(printf '%s' "$cert" \
+      | openssl x509 -pubkey -noout \
+      | openssl rsa -pubin -outform der 2>/dev/null \
+      | openssl dgst -sha256 -hex \
+      | awk '{print $2}')
+    printf '{"hash":"%s"}' "$hash"
+  EOT
+  ]
+
+  query = {
+    cert = tls_self_signed_cert.kubernetes-ca.cert_pem
+  }
+}
