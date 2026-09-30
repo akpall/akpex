@@ -1,7 +1,9 @@
 resource "libvirt_volume" "flatcar_disk" {
-  name     = "${var.vm_name}-data.qcow2"
+  for_each = var.flatcar-etcd-nodes
+
+  name     = "${each.key}-data.qcow2"
   pool     = "default"
-  capacity = var.disk_capacity_gb * 1024 * 1024 * 1024
+  capacity = each.value.disk_capacity_gb * 1024 * 1024 * 1024
   target = {
     format = {
       type = "qcow2"
@@ -10,10 +12,12 @@ resource "libvirt_volume" "flatcar_disk" {
 }
 
 resource "libvirt_domain" "flatcar_node" {
-  name        = var.vm_name
-  memory      = var.memory
+  for_each = var.flatcar-etcd-nodes
+
+  name        = each.key
+  memory      = each.value.memory
   memory_unit = "MiB"
-  vcpu        = var.vcpu
+  vcpu        = each.value.vcpu
   type        = "kvm"
   autostart   = true
   running     = true
@@ -49,7 +53,7 @@ resource "libvirt_domain" "flatcar_node" {
           }
         }
         mac = {
-          address = var.mac_address
+          address = each.value.mac_address
         }
       }
     ]
@@ -60,8 +64,8 @@ resource "libvirt_domain" "flatcar_node" {
         }
         source = {
           volume = {
-            pool   = resource.libvirt_volume.flatcar_disk.pool
-            volume = resource.libvirt_volume.flatcar_disk.name
+            pool   = resource.libvirt_volume.flatcar_disk[each.key].pool
+            volume = resource.libvirt_volume.flatcar_disk[each.key].name
           }
         }
         driver = {
