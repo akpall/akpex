@@ -1,8 +1,10 @@
 resource "libvirt_domain" "flatcar_node" {
-  name        = var.vm_name
-  memory      = var.memory
+  for_each = var.flatcar-worker-nodes
+
+  name        = each.key
+  memory      = each.value.memory
   memory_unit = "MiB"
-  vcpu        = var.vcpu
+  vcpu        = each.value.vcpu
   type        = "kvm"
   autostart   = true
   running     = true
@@ -38,7 +40,7 @@ resource "libvirt_domain" "flatcar_node" {
           }
         }
         mac = {
-          address = var.mac_address
+          address = each.value.mac_address
         }
       }
     ]

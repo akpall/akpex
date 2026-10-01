@@ -56,4 +56,37 @@ locals {
       vm_name          = "flatcar-etcd-node2"
     }
   ]
+
+  flatcar-worker-nodes = [
+    {
+      mac_address = "52:54:00:00:00:03"
+      memory = 8192
+      vcpu = 2
+      vm_name = "flatcar-worker-node0"
+    },
+    {
+      mac_address = "52:54:00:00:00:04"
+      memory = 8192
+      vcpu = 2
+      vm_name = "flatcar-worker-node1"
+    },
+    {
+      mac_address = "52:54:00:00:00:05"
+      memory = 8192
+      vcpu = 2
+      vm_name = "flatcar-worker-node2"
+    },
+    {
+      mac_address = "52:54:00:00:00:06"
+      memory = 8192
+      vcpu = 2
+      vm_name = "flatcar-worker-node3"
+    },
+    {
+      mac_address = "52:54:00:00:00:07"
+      memory = 8192
+      vcpu = 2
+      vm_name = "flatcar-worker-node4"
+    }
+  ]
 }
