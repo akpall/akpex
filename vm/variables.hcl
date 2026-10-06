@@ -13,6 +13,8 @@ locals {
   flatcar_network_nat_ports_end        = 65535
   flatcar_network_nat_ports_start      = 1024
   flatcar_version                      = "4757.2.0"
+  flatcar_production_qemu_image        = "${local.flatcar_production_url}/flatcar_production_qemu_image.img"
+  flatcar_production_url               = "https://${local.flatcar_channel}.release.flatcar-linux.net/amd64-usr/${local.flatcar_version}"
 
   keepalived_password = 12345678
   keepalived_version  = "2.3.4"

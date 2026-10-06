@@ -8,7 +8,7 @@ resource "libvirt_volume" "flatcar_base" {
   pool = "default"
   create = {
     content = {
-      url = "https://${var.flatcar_channel}.release.flatcar-linux.net/amd64-usr/${var.flatcar_version}/flatcar_production_qemu_image.img"
+      url = var.flatcar_production_qemu_image
     }
   }
 

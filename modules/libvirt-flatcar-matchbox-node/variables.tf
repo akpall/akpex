@@ -15,3 +15,4 @@ variable "vm_name" {}
 variable "ssh_authorized_keys" {
   type = list(string)
 }
+variable "flatcar_production_qemu_image" {}
