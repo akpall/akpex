@@ -16,3 +16,6 @@ variable "ssh_authorized_keys" {
   type = list(string)
 }
 variable "flatcar_production_qemu_image" {}
+variable "flatcar_urls" {
+  type = list(string)
+}

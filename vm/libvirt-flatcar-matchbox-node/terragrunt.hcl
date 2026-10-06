@@ -38,4 +38,9 @@ inputs = {
   ssh_authorized_keys           = local.vars.locals.ssh_authorized_keys
   vcpu                          = 2
   vm_name                       = "flatcar-matchbox-node"
+  flatcar_urls = [
+    local.vars.locals.flatcar_production_image_bin,
+    local.vars.locals.flatcar_production_pxe_image_cpio,
+    local.vars.locals.flatcar_production_pxe_vmlinuz
+  ]
 }
