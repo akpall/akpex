@@ -36,4 +36,5 @@ inputs = {
   matchbox_ca_crt      = dependency.matchbox-ca.outputs.matchbox-ca-pub
   matchbox_server_crt  = dependency.matchbox-ca.outputs.matchbox-server-pub
   matchbox_server_key  = dependency.matchbox-ca.outputs.matchbox-server-key
+  ssh_authorized_keys = local.vars.locals.ssh_authorized_keys
 }

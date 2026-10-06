@@ -31,7 +31,7 @@ locals {
   matchbox_ip                  = "192.168.100.254"
   matchbox_rpc_endpoint        = "${local.matchbox_ip}:8081"
 
-  ssh_authorized_key = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIOpw3cIAdtWOYUkb6UOAIcLuRzItoo4oZMzr/hzZYq4E openpgp:0xFAAA0172"
+  ssh_authorized_keys = ["ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIOpw3cIAdtWOYUkb6UOAIcLuRzItoo4oZMzr/hzZYq4E openpgp:0xFAAA0172"]
 
   flatcar-etcd-nodes = [
     {
@@ -60,33 +60,33 @@ locals {
   flatcar-worker-nodes = [
     {
       mac_address = "52:54:00:00:00:03"
-      memory = 8192
-      vcpu = 2
-      vm_name = "flatcar-worker-node0"
+      memory      = 8192
+      vcpu        = 2
+      vm_name     = "flatcar-worker-node0"
     },
     {
       mac_address = "52:54:00:00:00:04"
-      memory = 8192
-      vcpu = 2
-      vm_name = "flatcar-worker-node1"
+      memory      = 8192
+      vcpu        = 2
+      vm_name     = "flatcar-worker-node1"
     },
     {
       mac_address = "52:54:00:00:00:05"
-      memory = 8192
-      vcpu = 2
-      vm_name = "flatcar-worker-node2"
+      memory      = 8192
+      vcpu        = 2
+      vm_name     = "flatcar-worker-node2"
     },
     {
       mac_address = "52:54:00:00:00:06"
-      memory = 8192
-      vcpu = 2
-      vm_name = "flatcar-worker-node3"
+      memory      = 8192
+      vcpu        = 2
+      vm_name     = "flatcar-worker-node3"
     },
     {
       mac_address = "52:54:00:00:00:07"
-      memory = 8192
-      vcpu = 2
-      vm_name = "flatcar-worker-node4"
+      memory      = 8192
+      vcpu        = 2
+      vm_name     = "flatcar-worker-node4"
     }
   ]
 }

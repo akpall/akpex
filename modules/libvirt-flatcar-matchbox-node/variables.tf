@@ -12,3 +12,6 @@ variable "matchbox_server_key" {}
 variable "memory" {}
 variable "vcpu" {}
 variable "vm_name" {}
+variable "ssh_authorized_keys" {
+  type = list(string)
+}

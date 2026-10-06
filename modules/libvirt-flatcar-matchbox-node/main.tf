@@ -1,19 +1,6 @@
-data "ct_config" "flatcar_matchbox" {
-  content = templatefile("${path.module}/flatcar-matchbox.yaml", {
-    MATCHBOX_CA_CRT      = var.matchbox_ca_crt
-    MATCHBOX_CIDR        = var.matchbox_cidr
-    MATCHBOX_DNS_SERVERS = var.matchbox_dns_servers
-    MATCHBOX_GATEWAY     = var.matchbox_gateway
-    MATCHBOX_IP          = var.matchbox_ip
-    MATCHBOX_SERVER_CRT  = var.matchbox_server_crt
-    MATCHBOX_SERVER_KEY  = var.matchbox_server_key
-  })
-  strict = true
-}
-
 resource "libvirt_ignition" "flatcar_matchbox" {
   name    = "${var.vm_name}.ign"
-  content = data.ct_config.flatcar_matchbox.rendered
+  content = data.ignition_config.flatcar-matchbox.rendered
 }
 
 resource "libvirt_volume" "flatcar_base" {
@@ -141,7 +128,22 @@ resource "libvirt_domain" "flatcar_matchbox" {
       }
     ]
 
-    graphics = null
+    graphics = [
+      {
+        spice = {
+
+        }
+      }
+    ]
+    videos = [
+      {
+        model = {
+          type    = "virtio"
+          primary = "yes"
+          heads   = 1
+        }
+      }
+    ]
   }
 
   lifecycle {
