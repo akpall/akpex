@@ -5,6 +5,11 @@ include "root" {
 
 dependency "matchbox-ca" {
   config_path = "../matchbox-ca/"
+
+  mock_outputs = {
+    ca-key = "ca-key"
+    ca-crt = "ca-crt"
+  }
 }
 
 terraform {
@@ -22,8 +27,8 @@ inputs = {
     "key_encipherment",
     "client_auth"
   ]
-  common_name = "matchbox-client-certificate"
+  common_name           = "matchbox-server-certificate"
   validity_period_hours = 8760
-  ca_private_key_pem = dependency.matchbox-ca.outputs.ca-key
-  ca_cert_pem = dependency.matchbox-ca.outputs.ca-crt
+  ca_private_key_pem    = dependency.matchbox-ca.outputs.ca-key
+  ca_cert_pem           = dependency.matchbox-ca.outputs.ca-crt
 }

@@ -42,6 +42,8 @@ locals {
       memory           = 2048
       vcpu             = 2
       vm_name          = "flatcar-etcd-node0"
+      type             = "init"
+      ip_address       = "192.168.100.2"
     },
     {
       disk_capacity_gb = 20
@@ -49,6 +51,8 @@ locals {
       memory           = 2048
       vcpu             = 2
       vm_name          = "flatcar-etcd-node1"
+      type             = "join"
+      ip_address       = "192.168.100.3"
     },
     {
       disk_capacity_gb = 20
@@ -56,6 +60,8 @@ locals {
       memory           = 2048
       vcpu             = 2
       vm_name          = "flatcar-etcd-node2"
+      type             = "join"
+      ip_address       = "192.168.100.4"
     }
   ]
 
@@ -65,30 +71,35 @@ locals {
       memory      = 8192
       vcpu        = 2
       vm_name     = "flatcar-worker-node0"
+      ip_address  = "192.168.100.5"
     },
     {
       mac_address = "52:54:00:00:00:04"
       memory      = 8192
       vcpu        = 2
       vm_name     = "flatcar-worker-node1"
+      ip_address  = "192.168.100.6"
     },
     {
       mac_address = "52:54:00:00:00:05"
       memory      = 8192
       vcpu        = 2
       vm_name     = "flatcar-worker-node2"
+      ip_address  = "192.168.100.7"
     },
     {
       mac_address = "52:54:00:00:00:06"
       memory      = 8192
       vcpu        = 2
       vm_name     = "flatcar-worker-node3"
+      ip_address  = "192.168.100.8"
     },
     {
       mac_address = "52:54:00:00:00:07"
       memory      = 8192
       vcpu        = 2
       vm_name     = "flatcar-worker-node4"
+      ip_address  = "192.168.100.9"
     }
   ]
 }
