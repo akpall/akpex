@@ -2,6 +2,14 @@ locals {
   provider_libvirt_version  = "~> 0.9.9"
   provider_ignition_version = "~> 2.7.2"
   provider_matchbox_version = "~> 0.5.4"
+
+  flatcar_network_cidr = "192.168.100.0/24"
+  flatcar_network = {
+    netmask = cidrnetmask(local.flatcar_network_cidr)
+    gateway = cidrhost(local.flatcar_network_cidr,1)
+    dhcp_start = cidrhost(local.flatcar_network_cidr,2)
+    dhcp_end = cidrhost(local.flatcar_network_cidr,-2)
+  }
 }
 
 unit "matchbox-ca" {
@@ -84,10 +92,10 @@ unit "flatcar-libvirt-network" {
 
   values = {
     name                     = "flatcar_network"
-    ip_address               = "192.168.100.1"
-    ip_dhcp_ranges_start     = "192.168.100.5"
-    ip_dhcp_ranges_end       = "192.168.100.254"
-    ip_netmask               = "255.255.255.0"
+    ip_address               = local.flatcar_network.gateway
+    ip_dhcp_ranges_start     = local.flatcar_network.dhcp_start
+    ip_dhcp_ranges_end       = local.flatcar_network.dhcp_end
+    ip_netmask               = local.flatcar_network.netmask
     provider_libvirt_version = local.provider_libvirt_version
   }
 }
