@@ -3,13 +3,13 @@ locals {
   provider_ignition_version = "~> 2.7.2"
   provider_matchbox_version = "~> 0.5.4"
 
-  flatcar_network_cidr = "192.168.100.0/24"
-  flatcar_network = {
-    netmask = cidrnetmask(local.flatcar_network_cidr)
-    gateway = cidrhost(local.flatcar_network_cidr,1)
-    dhcp_start = cidrhost(local.flatcar_network_cidr,2)
-    dhcp_end = cidrhost(local.flatcar_network_cidr,-2)
-  }
+  flatcar_network_block       = "192.168.100.0/24"
+  flatcar_network_cidr        = tonumber(split("/", local.flatcar_network_block)[1])
+  flatcar_network_dhcp_end    = cidrhost(local.flatcar_network_block, -2)
+  flatcar_network_dhcp_start  = cidrhost(local.flatcar_network_block, 2)
+  flatcar_network_dns_servers = [local.flatcar_network_gateway]
+  flatcar_network_gateway     = cidrhost(local.flatcar_network_block, 1)
+  flatcar_network_netmask     = cidrnetmask(local.flatcar_network_block)
 }
 
 unit "matchbox-ca" {
