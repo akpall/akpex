@@ -1,5 +1,5 @@
 terraform {
-  source = "${get_repo_root()}/modules/libvirt-network"
+  source = "${get_repo_root()}/modules/generate-libvirt-network"
 }
 
 inputs = {
