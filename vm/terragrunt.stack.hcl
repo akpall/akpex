@@ -6,7 +6,7 @@ locals {
   flatcar_network_block         = "192.168.100.0/24"
   flatcar_network_cidr          = tonumber(split("/", local.flatcar_network_block)[1])
   flatcar_network_dhcp_end      = cidrhost(local.flatcar_network_block, -2)
-  flatcar_network_dhcp_start    = cidrhost(local.flatcar_network_block, 3)
+  flatcar_network_dhcp_start    = cidrhost(local.flatcar_network_block, 6)
   flatcar_network_dns_servers   = [local.flatcar_network_gateway]
   flatcar_network_gateway       = cidrhost(local.flatcar_network_block, 1)
   flatcar_network_netmask       = cidrnetmask(local.flatcar_network_block)
@@ -33,6 +33,27 @@ locals {
       memory           = 2048
       vcpu             = 2
       ip               = cidrhost(local.flatcar_network_block, 2)
+    }
+    "flatcar-etcd-node1" = {
+      disk_capacity_gb = 20
+      mac_address      = "52:54:00:00:00:01"
+      memory           = 2048
+      vcpu             = 2
+      ip               = cidrhost(local.flatcar_network_block, 3)
+    }
+    "flatcar-etcd-node2" = {
+      disk_capacity_gb = 20
+      mac_address      = "52:54:00:00:00:02"
+      memory           = 2048
+      vcpu             = 2
+      ip               = cidrhost(local.flatcar_network_block, 4)
+    }
+    "flatcar-etcd-node3" = {
+      disk_capacity_gb = 20
+      mac_address      = "52:54:00:00:00:03"
+      memory           = 2048
+      vcpu             = 2
+      ip               = cidrhost(local.flatcar_network_block, 5)
     }
   }
 
