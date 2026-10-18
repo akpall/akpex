@@ -9,7 +9,6 @@ locals {
   flatcar_network_dhcp_start    = cidrhost(local.flatcar_network_block, 3)
   flatcar_network_dns_servers   = [local.flatcar_network_gateway]
   flatcar_network_gateway       = cidrhost(local.flatcar_network_block, 1)
-  flatcar_network_matchbox_node = cidrhost(local.flatcar_network_block, 2)
   flatcar_network_netmask       = cidrnetmask(local.flatcar_network_block)
 
   flatcar_channel                      = "stable"
@@ -33,7 +32,7 @@ locals {
       mac_address      = "52:54:00:00:00:00"
       memory           = 2048
       vcpu             = 2
-      ip               = local.flatcar_network_matchbox_node
+      ip               = cidrhost(local.flatcar_network_block, 2)
     }
   }
 
