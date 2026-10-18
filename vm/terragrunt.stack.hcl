@@ -1,6 +1,6 @@
 locals {
   provider_libvirt_version  = "~> 0.9.9"
-  provider_ignition_version = ">= 2.6.0, <2.7.0"
+  provider_ignition_version = "~> 2.6.0"
   provider_matchbox_version = "~> 0.5.4"
 
   flatcar_network_block         = "192.168.100.0/24"
