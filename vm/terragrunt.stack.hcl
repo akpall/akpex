@@ -3,13 +3,13 @@ locals {
   provider_ignition_version = "~> 2.6.0"
   provider_matchbox_version = "~> 0.5.4"
 
-  flatcar_network_block         = "192.168.100.0/24"
-  flatcar_network_cidr          = tonumber(split("/", local.flatcar_network_block)[1])
-  flatcar_network_dhcp_end      = cidrhost(local.flatcar_network_block, -2)
-  flatcar_network_dhcp_start    = cidrhost(local.flatcar_network_block, 11)
-  flatcar_network_dns_servers   = [local.flatcar_network_gateway]
-  flatcar_network_gateway       = cidrhost(local.flatcar_network_block, 1)
-  flatcar_network_netmask       = cidrnetmask(local.flatcar_network_block)
+  flatcar_network_block       = "192.168.100.0/24"
+  flatcar_network_cidr        = tonumber(split("/", local.flatcar_network_block)[1])
+  flatcar_network_dhcp_end    = cidrhost(local.flatcar_network_block, -2)
+  flatcar_network_dhcp_start  = cidrhost(local.flatcar_network_block, 11)
+  flatcar_network_dns_servers = [local.flatcar_network_gateway]
+  flatcar_network_gateway     = cidrhost(local.flatcar_network_block, 1)
+  flatcar_network_netmask     = cidrnetmask(local.flatcar_network_block)
 
   flatcar_channel                      = "stable"
   flatcar_initrd                       = "/assets/flatcar/${local.flatcar_version}/flatcar_production_pxe_image.cpio.gz"
@@ -26,14 +26,15 @@ locals {
   flatcar_production_url               = "https://${local.flatcar_channel}.release.flatcar-linux.net/amd64-usr/${local.flatcar_version}"
   flatcar_version                      = "4757.2.1"
 
-  nodes = {
-    "flatcar-matchbox-node" = {
-      disk_capacity_gb = 20
-      mac_address      = "52:54:00:00:00:00"
-      memory           = 2048
-      vcpu             = 2
-      ip               = cidrhost(local.flatcar_network_block, 2)
-    }
+  flatcar-matchbox-node = {
+    disk_capacity_gb = 20
+    mac_address      = "52:54:00:00:00:00"
+    memory           = 2048
+    vcpu             = 2
+    ip               = cidrhost(local.flatcar_network_block, 2)
+  }
+
+  flatcar-etcd-nodes = {
     "flatcar-etcd-node1" = {
       disk_capacity_gb = 20
       mac_address      = "52:54:00:00:00:01"
@@ -55,35 +56,38 @@ locals {
       vcpu             = 2
       ip               = cidrhost(local.flatcar_network_block, 5)
     }
-    "flatcar-worker-node0" = {
-      mac_address      = "52:54:00:00:00:04"
-      memory           = 2048
-      vcpu             = 2
-      ip               = cidrhost(local.flatcar_network_block, 6)
-    }
+  }
+
+  flatcar-worker-nodes = {
     "flatcar-worker-node1" = {
-      mac_address      = "52:54:00:00:00:05"
-      memory           = 2048
-      vcpu             = 2
-      ip               = cidrhost(local.flatcar_network_block, 7)
+      mac_address = "52:54:00:00:00:04"
+      memory      = 2048
+      vcpu        = 2
+      ip          = cidrhost(local.flatcar_network_block, 6)
     }
     "flatcar-worker-node2" = {
-      mac_address      = "52:54:00:00:00:06"
-      memory           = 2048
-      vcpu             = 2
-      ip               = cidrhost(local.flatcar_network_block, 8)
+      mac_address = "52:54:00:00:00:05"
+      memory      = 2048
+      vcpu        = 2
+      ip          = cidrhost(local.flatcar_network_block, 7)
     }
     "flatcar-worker-node3" = {
-      mac_address      = "52:54:00:00:00:07"
-      memory           = 2048
-      vcpu             = 2
-      ip               = cidrhost(local.flatcar_network_block, 9)
+      mac_address = "52:54:00:00:00:06"
+      memory      = 2048
+      vcpu        = 2
+      ip          = cidrhost(local.flatcar_network_block, 8)
     }
     "flatcar-worker-node4" = {
-      mac_address      = "52:54:00:00:00:08"
-      memory           = 2048
-      vcpu             = 2
-      ip               = cidrhost(local.flatcar_network_block, 10)
+      mac_address = "52:54:00:00:00:07"
+      memory      = 2048
+      vcpu        = 2
+      ip          = cidrhost(local.flatcar_network_block, 9)
+    }
+    "flatcar-worker-node5" = {
+      mac_address = "52:54:00:00:00:08"
+      memory      = 2048
+      vcpu        = 2
+      ip          = cidrhost(local.flatcar_network_block, 10)
     }
   }
 
@@ -208,7 +212,7 @@ unit "flatcar-matchbox-node" {
   }
 
   values = {
-    disk_capacity_gb              = local.nodes.flatcar-matchbox-node.disk_capacity_gb
+    disk_capacity_gb              = local.flatcar-matchbox-node.disk_capacity_gb
     flatcar_channel               = local.flatcar_channel
     flatcar_production_qemu_image = local.flatcar_production_qemu_image
     flatcar_urls = [
@@ -217,15 +221,26 @@ unit "flatcar-matchbox-node" {
       local.flatcar_production_pxe_vmlinuz
     ]
     flatcar_version           = local.flatcar_version
-    mac_address               = local.nodes.flatcar-matchbox-node.mac_address
+    mac_address               = local.flatcar-matchbox-node.mac_address
     matchbox_cidr             = local.flatcar_network_cidr
     matchbox_dns_servers      = local.flatcar_network_dns_servers
     matchbox_gateway          = local.flatcar_network_gateway
-    matchbox_ip               = local.nodes.flatcar-matchbox-node.ip
-    memory                    = local.nodes.flatcar-matchbox-node.memory
+    matchbox_ip               = local.flatcar-matchbox-node.ip
+    memory                    = local.flatcar-matchbox-node.memory
     ssh_authorized_keys       = local.ssh_authorized_keys
-    vcpu                      = local.nodes.flatcar-matchbox-node.vcpu
+    vcpu                      = local.flatcar-matchbox-node.vcpu
     vm_name                   = "flatcar-matchbox-node"
+    provider_libvirt_version  = local.provider_libvirt_version
+    provider_ignition_version = local.provider_ignition_version
+  }
+}
+
+unit "flatcar-etcd-nodes" {
+  source = "../units/generate-etcd-nodes"
+  path   = "flatcar-etcd-nodes"
+
+  values = {
+    nodes                     = local.flatcar-etcd-nodes
     provider_libvirt_version  = local.provider_libvirt_version
     provider_ignition_version = local.provider_ignition_version
   }

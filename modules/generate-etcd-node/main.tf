@@ -1,5 +1,5 @@
 resource "libvirt_volume" "flatcar_disk" {
-  for_each = var.flatcar-etcd-nodes
+  for_each = var.nodes
 
   name     = "${each.key}-data.qcow2"
   pool     = "default"
@@ -12,7 +12,7 @@ resource "libvirt_volume" "flatcar_disk" {
 }
 
 resource "libvirt_domain" "flatcar_node" {
-  for_each = var.flatcar-etcd-nodes
+  for_each = var.nodes
 
   name        = each.key
   memory      = each.value.memory
