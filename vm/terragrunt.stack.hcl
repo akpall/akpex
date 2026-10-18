@@ -6,7 +6,7 @@ locals {
   flatcar_network_block         = "192.168.100.0/24"
   flatcar_network_cidr          = tonumber(split("/", local.flatcar_network_block)[1])
   flatcar_network_dhcp_end      = cidrhost(local.flatcar_network_block, -2)
-  flatcar_network_dhcp_start    = cidrhost(local.flatcar_network_block, 6)
+  flatcar_network_dhcp_start    = cidrhost(local.flatcar_network_block, 11)
   flatcar_network_dns_servers   = [local.flatcar_network_gateway]
   flatcar_network_gateway       = cidrhost(local.flatcar_network_block, 1)
   flatcar_network_netmask       = cidrnetmask(local.flatcar_network_block)
@@ -54,6 +54,36 @@ locals {
       memory           = 2048
       vcpu             = 2
       ip               = cidrhost(local.flatcar_network_block, 5)
+    }
+    "flatcar-worker-node0" = {
+      mac_address      = "52:54:00:00:00:04"
+      memory           = 2048
+      vcpu             = 2
+      ip               = cidrhost(local.flatcar_network_block, 6)
+    }
+    "flatcar-worker-node1" = {
+      mac_address      = "52:54:00:00:00:05"
+      memory           = 2048
+      vcpu             = 2
+      ip               = cidrhost(local.flatcar_network_block, 7)
+    }
+    "flatcar-worker-node2" = {
+      mac_address      = "52:54:00:00:00:06"
+      memory           = 2048
+      vcpu             = 2
+      ip               = cidrhost(local.flatcar_network_block, 8)
+    }
+    "flatcar-worker-node3" = {
+      mac_address      = "52:54:00:00:00:07"
+      memory           = 2048
+      vcpu             = 2
+      ip               = cidrhost(local.flatcar_network_block, 9)
+    }
+    "flatcar-worker-node4" = {
+      mac_address      = "52:54:00:00:00:08"
+      memory           = 2048
+      vcpu             = 2
+      ip               = cidrhost(local.flatcar_network_block, 10)
     }
   }
 
